@@ -89,6 +89,56 @@ def delete_user(id):
     return jsonify({'message': 'User deleted'})
 
 
+# CRUD Routes for UsersInGroups
+
+# Create a new user in group
+@app.route('/users_in_groups', methods=['POST'])
+def create_user_in_group():
+    data = request.get_json()
+    new_user_in_group = UsersInGroups(userID=data['userID'], groupID=data['groupID'],
+                                      startingDate=data['startingDate'])
+    db.session.add(new_user_in_group)
+    db.session.commit()
+    return jsonify({'message': 'New user added to the group'}), 201
+
+# Read all users in groups
+@app.route('/users_in_groups', methods=['GET'])
+def get_users_in_groups():
+    users_in_groups = UsersInGroups.query.all()
+    output = []
+    for user_in_group in users_in_groups:
+        user_in_group_data = {'userID': user_in_group.userID, 'groupID': user_in_group.groupID, 
+                              'startingDate': user_in_group.startingDate}
+        output.append(user_in_group_data)
+    return jsonify({'users_in_groups': output})
+
+# Read a single user in group by userID and groupID
+@app.route('/users_in_groups/<userID>/<groupID>', methods=['GET'])
+def get_user_in_group(userID, groupID):
+    user_in_group = UsersInGroups.query.filter_by(userID=userID, groupID=groupID).first()
+    return jsonify({'userID': user_in_group.userID, 'groupID': user_in_group.groupID, 
+                    'startingDate': user_in_group.startingDate})
+
+# Update a user in group
+@app.route('/users_in_groups/<userID>/<groupID>', methods=['PUT'])
+def update_user_in_group(userID, groupID):
+    user_in_group = UsersInGroups.query.filter_by(userID=userID, groupID=groupID).first()
+    data = request.get_json()
+    user_in_group.startingDate = data.get('startingDate', user_in_group.startingDate)
+    db.session.commit()
+    return jsonify({'message': 'User in group updated'})
+
+# Delete a user in group
+@app.route('/users_in_groups/<userID>/<groupID>', methods=['DELETE'])
+def delete_user_in_group(userID, groupID):
+    user_in_group = UsersInGroups.query.filter_by(userID=userID, groupID=groupID).first()
+    db.session.delete(user_in_group)
+    db.session.commit()
+    return jsonify({'message': 'User in group deleted'})
+
+
+
+
 
 
 # CRUD Routes for Groups 

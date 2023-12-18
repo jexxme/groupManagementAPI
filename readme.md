@@ -1,6 +1,6 @@
 # LBV - Lerngruppen Bildung und Verwaltung API
 
-Die LBV (Lerngruppen Bildung und Verwaltung) API ist eine RESTful-Webanwendung, die entwickelt wurde, um die Verwaltung von Lerngruppen und Benutzern zu erleichtern. Sie ermöglicht die Erstellung, Aktualisierung und Löschung von Benutzern, Gruppen und Terminen. Diese Dokumentation bietet eine umfassende Übersicht über die verfügbaren Endpunkte, ihre Verwendung und die erwarteten Datenstrukturen.
+Die LBV (Lerngruppen Bildung und Verwaltung) API ist eine RESTful-Webanwendung, die entwickelt wurde, um die Verwaltung von Lerngruppen und Benutzern zu erleichtern. Sie ermöglicht die Erstellung, Aktualisierung und Löschung von Benutzern, Gruppen, Terminen und Beziehungen zwischen Benutzern und Gruppen. Diese Dokumentation bietet eine umfassende Übersicht über die verfügbaren Endpunkte, ihre Verwendung und die erwarteten Datenstrukturen.
 
 ## Inhaltsverzeichnis
 
@@ -25,6 +25,11 @@ Die LBV (Lerngruppen Bildung und Verwaltung) API ist eine RESTful-Webanwendung, 
    - [Abrufen eines einzelnen Termins](#abrufen-eines-einzelnen-termins)
    - [Aktualisieren eines Termins](#aktualisieren-eines-termins)
    - [Löschen eines Termins](#löschen-eines-termins)
+7. [Benutzer in Gruppen (UsersInGroups)](#benutzer-in-gruppen-usersingroups)
+   - [Hinzufügen eines Benutzers zu einer Gruppe](#hinzufügen-eines-benutzers-zu-einer-gruppe)
+   - [Abrufen aller Benutzer in einer Gruppe](#abrufen-aller-benutzer-in-einer-gruppe)
+   - [Aktualisieren des Startdatums eines Benutzers in einer Gruppe](#aktualisieren-des-startdatums-eines-benutzers-in-einer-gruppe)
+   - [Entfernen eines Benutzers aus einer Gruppe](#entfernen-eines-benutzers-aus-einer-gruppe)
 
 ## Allgemeine Informationen
 
@@ -33,6 +38,7 @@ Die LBV-API wurde entwickelt, um die Verwaltung von Lerngruppen und Benutzern in
 - **Benutzerverwaltung:** Erstellen, Aktualisieren, Abrufen und Löschen von Benutzerkonten.
 - **Gruppenverwaltung:** Erstellen, Aktualisieren, Abrufen und Löschen von Lerngruppen.
 - **Terminverwaltung:** Erstellen, Aktualisieren, Abrufen und Löschen von Terminen für Lerngruppen.
+- **Verwaltung von Benutzern in Gruppen:** Hinzufügen, Abrufen, Aktualisieren und Entfernen von Benutzern in Gruppen.
 
 Die API verwendet das JSON-Format für Anfragen und Antworten.
 
@@ -60,7 +66,7 @@ Die API sollte nun auf `http://localhost:5000` gestartet sein.
 
 ## Verwendung
 
-Die LBV-API ermöglicht die Verwaltung von Benutzern, Gruppen und Terminen über RESTful-Endpunkte. Jeder Endpunkt akzeptiert HTTP-Anfragemethoden wie GET, POST, PUT und DELETE. Die API erwartet JSON-Daten in den Anfragen und gibt JSON-Antworten zurück.
+Die LBV-API ermöglicht die Verwaltung von Benutzern, Gruppen, Terminen und Benutzern in Gruppen über RESTful-Endpunkte. Jeder Endpunkt akzeptiert HTTP-Anfragemethoden wie GET, POST, PUT und DELETE. Die API erwartet JSON-Daten in den Anfragen und gibt JSON-Antworten zurück.
 
 ## Benutzer (Users)
 
@@ -132,6 +138,8 @@ Erstellt eine neue Lerngruppe und gibt eine Bestätigungsnachricht zurück.
 
 **JSON-Daten:**
 
+
+
 ```json
 {
     "ownerID": 1,
@@ -184,9 +192,7 @@ Löscht eine Lerngruppe anhand ihrer `groupID`.
 ### Erstellen eines Termins
 
 - **Endpoint:** `/dates`
-- **Methode
-
-:** `POST`
+- **Methode:** `POST`
 
 Erstellt einen neuen Termin für eine Lerngruppe und gibt eine Bestätigungsnachricht zurück.
 
@@ -238,6 +244,54 @@ Aktualisiert die Details eines Termins anhand seiner `dateID`. Geben Sie die zu 
 - **Methode:** `DELETE`
 
 Löscht einen Termin anhand seiner `dateID`.
+
+## Benutzer in Gruppen (UsersInGroups)
+
+### Hinzufügen eines Benutzers zu einer Gruppe
+
+- **Endpoint:** `/users_in_groups`
+- **Methode:** `POST`
+
+Fügt einen Benutzer zu einer Lerngruppe hinzu und gibt eine Bestätigungsnachricht zurück.
+
+**JSON-Daten:**
+
+```json
+{
+    "userID": 1,
+    "groupID": 1,
+    "startingDate": "2023-12-01"
+}
+```
+
+### Abrufen aller Benutzer in einer Gruppe
+
+- **Endpoint:** `/users_in_groups/<groupID>`
+- **Methode:** `GET`
+
+Gibt eine Liste aller Benutzer in einer Lerngruppe zurück, basierend auf der `groupID`.
+
+### Aktualisieren des Startdatums eines Benutzers in einer Gruppe
+
+- **Endpoint:** `/users_in_groups/<userID>/<groupID>`
+- **Methode:** `PUT`
+
+Aktualisiert das Startdatum eines Benutzers in einer Gruppe basierend auf seiner `userID` und `groupID`. Geben Sie das zu aktualisierende Startdatum im JSON-Format an.
+
+**JSON-Daten:**
+
+```json
+{
+    "startingDate": "2023-12-15"
+}
+```
+
+### Entfernen eines Benutzers aus einer Gruppe
+
+- **Endpoint:** `/users_in_groups/<userID>/<groupID>`
+- **Methode:** `DELETE`
+
+Entfernt einen Benutzer aus einer Lerngruppe basierend auf seiner `userID` und `groupID`.
 
 ## Authentifizierung
 
