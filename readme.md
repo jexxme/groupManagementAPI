@@ -42,7 +42,6 @@ Die API verwendet das JSON-Format für Anfragen und Antworten.
 
    ```bash
    git clone https://github.com/jexxme/apiForOSP
-   cd lbv-api
    ```
 
 2. Installiere die erforderlichen Python-Pakete aus der `requirements.txt`:
