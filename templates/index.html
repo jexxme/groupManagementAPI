@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LBV API Overview Test Suite</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-4">
+    <h1 class="mb-4">LBV API Overview Test Suite</h1>
+
+    <h2 class="mt-4">Benutzer</h2>
+    <!-- Users Section -->
+    <div class="accordion" id="usersAccordion">
+        <!-- List of All Users -->
+        <div class="card">
+            <div class="card-header" id="headingUsers">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseUsers" aria-expanded="true" aria-controls="collapseUsers">
+                        Alle Benutzer
+                    </button>
+                </h2>
+            </div>
+
+            <div id="collapseUsers" class="collapse" aria-labelledby="headingUsers" data-parent="#usersAccordion">
+                <div class="card-body">
+                    <!-- Users List in Table Format -->
+                    <h3 class="mb-3">Liste aller Benutzer</h3>
+                    <table class="table table-bordered">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Vorname</th>
+                                <th>Email</th>
+                                <th>Ist Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                                <tr>
+                                    <td>{{ user.firstName }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>{{ 'Yes' if user.isAdmin else 'No' }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Operations -->
+        <div class="card">
+            <div class="card-header" id="headingUserOperations">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseUserOperations" aria-expanded="false" aria-controls="collapseUserOperations">
+                        Benutzer Operationen
+                    </button>
+                </h2>
+            </div>
+
+            <div id="collapseUserOperations" class="collapse" aria-labelledby="headingUserOperations" data-parent="#usersAccordion">
+                <div class="card-body">
+                    <!-- Add User Form -->
+                    <h3><span class="badge badge-danger">POST</span> Benutzer hinzufügen</h3>
+                    <form action="/users" method="post" id="addUserForm">
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="firstName">Vorname:</label>
+                            <input type="text" class="form-control" id="firstName" name="firstName" required>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="password">Passwort:</label>
+                            <input type="text" class="form-control" id="password" name="password" required>
+                        </div>
+                    
+                        <div class="form-check mb-3">
+                            <input type="checkbox" class="form-check-input" id="isAdmin" name="isAdmin">
+                            <label class="form-check-label" for="isAdmin">Ist Admin</label>
+                        </div>
+                    
+                        <button type="submit" class="btn btn-primary">Benutzer hinzufügen</button>
+                    </form>
+                    <br>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Groups Section -->
+    <h2 class="mt-4">Gruppen</h2>
+    <div class="accordion" id="groupsAccordion">
+        <!-- List of All Groups -->
+        <div class="card">
+            <div class="card-header" id="headingGroups">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseGroups" aria-expanded="false" aria-controls="collapseGroups">
+                        Alle Gruppen
+                    </button>
+                </h2>
+            </div>
+
+            <div id="collapseGroups" class="collapse" aria-labelledby="headingGroups" data-parent="#groupsAccordion">
+                <div class="card-body">
+                    <!-- Groups List Here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Group Operations -->
+        <div class="card">
+            <div class="card-header" id="headingGroupOperations">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseGroupOperations" aria-expanded="false" aria-controls="collapseGroupOperations">
+                        Gruppen Operationen
+                    </button>
+                </h2>
+            </div>
+
+            <div id="collapseGroupOperations" class="collapse" aria-labelledby="headingGroupOperations" data-parent="#groupsAccordion">
+                <div class="card-body">
+                    <!-- Add Group Form and Other Operations Here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

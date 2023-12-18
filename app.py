@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import jsonify
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
-
+from flask import render_template
 
 app = Flask(__name__)
 
@@ -45,9 +45,14 @@ class Date(db.Model):
 
 
 # / route for hello world
+
+
 @app.route('/')
 def hello_world():
-    return 'Hello, World!'
+    users = User.query.all()
+    groups = Group.query.all()
+    return render_template('index.html', users=users, groups=groups)
+
 
 # Authentication Routes
 
