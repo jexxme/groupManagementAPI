@@ -30,6 +30,9 @@ Die LBV (Lerngruppen Bildung und Verwaltung) API ist eine RESTful-Webanwendung, 
    - [Abrufen aller Benutzer in einer Gruppe](#abrufen-aller-benutzer-in-einer-gruppe)
    - [Aktualisieren des Startdatums eines Benutzers in einer Gruppe](#aktualisieren-des-startdatums-eines-benutzers-in-einer-gruppe)
    - [Entfernen eines Benutzers aus einer Gruppe](#entfernen-eines-benutzers-aus-einer-gruppe)
+8. [Authentifizierung](#authentifizierung)
+9. [Beispiele](#beispiele)
+
 
 ## Allgemeine Informationen
 
@@ -295,7 +298,58 @@ Entfernt einen Benutzer aus einer Lerngruppe basierend auf seiner `userID` und `
 
 ## Authentifizierung
 
-_Wurde noch nicht implementiert_
+Die Authentifizierung in der LBV-API ist ein entscheidender Aspekt, um die Sicherheit und Integrität der Anwendung zu gewährleisten. Es wird ein JWT (JSON Web Token)-basiertes Authentifizierungssystem verwendet, das sicherstellt, dass nur berechtigte Benutzer Zugriff auf bestimmte Endpunkte haben. Nachfolgend finden Sie Details zur Implementierung und Verwendung der Authentifizierungsfunktionen.
+
+### Login und JWT-Token
+
+- **Endpoint:** `/login`
+- **Methode:** `POST`
+
+Beim Login wird ein JWT-Token generiert, das für nachfolgende Anfragen verwendet wird. Der Token enthält die Benutzer-ID und die Rolle des Benutzers (Admin oder regulärer Benutzer).
+
+**JSON-Daten für Login-Anfrage:**
+
+```json
+{
+    "email": "benutzer@example.com",
+    "password": "Passwort"
+}
+```
+
+### Token-Verwendung
+
+- Der JWT-Token muss bei jeder Anfrage, die eine Authentifizierung erfordert, im `Authorization`-Header mit dem Präfix `Bearer` mitgeschickt werden.
+- Das System unterscheidet zwischen normalen Benutzern und Administratoren. Administratoren haben erweiterte Berechtigungen, wie z.B. das Löschen und Bearbeiten anderer Benutzerkonten.
+
+### Authentifizierung an Endpunkten
+
+- **Admin-spezifische Endpunkte:** Einige Endpunkte sind nur für Administratoren zugänglich. Diese Endpunkte erfordern einen JWT-Token mit Admin-Rechten.
+- **Benutzerspezifische Endpunkte:** Benutzer können ihre eigenen Kontodetails sehen und aktualisieren. Ein JWT-Token, das die Identität des Benutzers bestätigt, ist erforderlich.
+- **Öffentliche Endpunkte:** Einige Endpunkte, wie das Erstellen eines neuen Benutzerkontos, erfordern keine Authentifizierung.
+
+### Beispiel für eine authentifizierte Anfrage:
+
+```python
+import requests
+
+url = "http://localhost:5000/beispiel-endpunkt"
+headers = {
+    'Authorization': 'Bearer Ihr_JWT_Token_Hier'
+}
+response = requests.get(url, headers=headers)
+```
+
+### Sicherheitshinweise
+
+- Der JWT-Token sollte geheim gehalten und sicher aufbewahrt werden.
+- Passwörter werden verschlüsselt gespeichert. Die Übertragung von Passwörtern sollte stets über sichere Verbindungen erfolgen.
+
+Diese Authentifizierungsmechanismen tragen dazu bei, die LBV-API sicher und zuverlässig für ihre Benutzer zu machen. Sie sorgen dafür, dass jeder Benutzer nur auf die für ihn bestimmten Ressourcen und Funktionen zugreifen kann.
+
+
+## TODO
+-Alle Routen durch JWT-Token schützen 
+-Bisher erst nach dem Login
 
 ## Beispiele
 
