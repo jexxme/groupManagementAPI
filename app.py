@@ -3,8 +3,6 @@
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from flask import jsonify
-from flask_restx import Api
-from flask_restx import Resource, fields
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 
