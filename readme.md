@@ -240,8 +240,6 @@ Aktualisiert die Details eines Termins anhand seiner `dateID`. Geben Sie die zu 
 
 Löscht einen Termin anhand seiner `dateID`.
 
-Dies ist eine umfassende Dokumentation der LBV-API, die Ihnen ermöglicht, Benutzer, Gruppen und Termine zu verwalten. Stellen Sie sicher, dass Sie die richtigen Berechtigungen und Authentifizierungsmethoden implementieren, um sicherzustellen, dass Ihre Anwendung sicher und geschützt ist.
-
 ## Authentifizierung
 
 _Wurde noch nicht implementiert_
