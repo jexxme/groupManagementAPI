@@ -9,8 +9,8 @@
     <!-- include favicon -->
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <style>
         .badge-post {
             background-color: #ffcc00;
@@ -67,14 +67,17 @@
 
 <body class="container mt-4">
     <h1 class="mb-4 position-relative">LBV-API Admin Dashboard
-        <span class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-primary text-light" style="font-size: 0.35em;">
+        <span class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-primary text-light"
+            style="font-size: 0.35em;">
             v0.1
         </span>
-      </h1>
-      
+    </h1>
+
     <h2 class="mt-4">Benutzer</h2>
     <!-- Users Section -->
     <div class="accordion" id="usersAccordion">
+
+
         <!-- List of All Users -->
         <div class="card">
             <div class="card-header" id="headingUsers">
@@ -86,6 +89,14 @@
                 </h2>
             </div>
 
+
+
+
+
+
+
+
+            
             <div id="collapseUsers" class="collapse" aria-labelledby="headingUsers" data-parent="#usersAccordion">
                 <div class="card-body">
                     <!-- Users List in Table Format -->
@@ -161,7 +172,7 @@
                                     }
                                 })
                                 .catch((error) => {
-                                    console.error('Error:', error);
+                                    showErrorToast('Benutzer nicht gefunden.');
                                 });
                         });
                     </script>
@@ -230,8 +241,7 @@
                             })
                                 .then(response => response.json())
                                 .then(data => {
-                                    alert(data.message);
-                                    window.location.reload(); // Reload the page to update the users list
+                                    showSuccessToast(data.message);
                                 })
                                 .catch((error) => {
                                     console.error('Error:', error);
@@ -309,7 +319,7 @@
                                         document.getElementById('editIsAdmin').checked = data.isAdmin;
                                         document.getElementById('editUserForm').style.display = 'block';
                                     } else {
-                                        alert('Benutzer nicht gefunden.');
+                                        showErrorToast('Benutzer nicht gefunden.');
                                     }
                                 })
                                 .catch((error) => {
@@ -337,7 +347,7 @@
                             })
                                 .then(response => response.json())
                                 .then(data => {
-                                    alert(data.message);
+                                    showSuccessToast(data.message);
                                 })
                                 .catch((error) => {
                                     console.error('Error:', error);
@@ -349,77 +359,79 @@
         </div>
         <!-- End of User Information Update -->
 
-<!-- User Deletion -->
-<div class="card">
-    <div class="card-header" id="headingUserDeletion">
-        <h2 class="mb-0">
-            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
-                    data-target="#collapseUserDeletion" aria-expanded="false" aria-controls="collapseUserDeletion">
-                <span class="badge badge-danger">DELETE</span> Benutzer löschen
-            </button>
-        </h2>
-    </div>
+        <!-- User Deletion -->
+        <div class="card">
+            <div class="card-header" id="headingUserDeletion">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                        data-target="#collapseUserDeletion" aria-expanded="false" aria-controls="collapseUserDeletion">
+                        <span class="badge badge-danger">DELETE</span> Benutzer löschen
+                    </button>
+                </h2>
+            </div>
 
-    <div id="collapseUserDeletion" class="collapse" aria-labelledby="headingUserDeletion" data-parent="#usersAccordion">
-        <div class="card-body">
-            <!-- Fetch User to Delete Form -->
-            <form id="fetchUserToDeleteForm">
-                <div class="form-group">
-                    <label for="deleteUserID">Benutzer-ID:</label>
-                    <input type="text" class="form-control" id="deleteUserID" name="deleteUserID" required>
-                </div>
-                <button type="button" class="btn btn-primary" id="fetchUserToDeleteButton">Benutzerdaten abrufen</button>
-            </form>
+            <div id="collapseUserDeletion" class="collapse" aria-labelledby="headingUserDeletion"
+                data-parent="#usersAccordion">
+                <div class="card-body">
+                    <!-- Fetch User to Delete Form -->
+                    <form id="fetchUserToDeleteForm">
+                        <div class="form-group">
+                            <label for="deleteUserID">Benutzer-ID:</label>
+                            <input type="text" class="form-control" id="deleteUserID" name="deleteUserID" required>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="fetchUserToDeleteButton">Benutzerdaten
+                            abrufen</button>
+                    </form>
 
-            <!-- Display User Information -->
-            <div id="userToDeleteDisplay" class="mt-3"></div>
+                    <!-- Display User Information -->
+                    <div id="userToDeleteDisplay" class="mt-3"></div>
 
-            <!-- Delete User Button -->
-            <button type="button" class="btn btn-danger mt-3" id="deleteUserButton" style="display:none;">Benutzer löschen</button>
+                    <!-- Delete User Button -->
+                    <button type="button" class="btn btn-danger mt-3" id="deleteUserButton"
+                        style="display:none;">Benutzer löschen</button>
 
-            <script>
-                document.getElementById('fetchUserToDeleteButton').addEventListener('click', function(event) {
-                    var userId = document.getElementById('deleteUserID').value;
-                    fetch(`/users/${userId}`, {
-                        headers: {'Authorization': 'Bearer ' + adminToken}
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data) {
-                            document.getElementById('userToDeleteDisplay').innerHTML = `
+                    <script>
+                        document.getElementById('fetchUserToDeleteButton').addEventListener('click', function (event) {
+                            var userId = document.getElementById('deleteUserID').value;
+                            fetch(`/users/${userId}`, {
+                                headers: { 'Authorization': 'Bearer ' + adminToken }
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data) {
+                                        document.getElementById('userToDeleteDisplay').innerHTML = `
                                 <p>Benutzer-ID: ${data.userID}</p>
                                 <p>Vorname: ${data.firstName}</p>
                                 <p>Email: ${data.email}</p>`;
-                            document.getElementById('deleteUserButton').style.display = 'block';
-                        } else {
-                            alert('Benutzer nicht gefunden.');
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('Error:', error);
-                    });
-                });
+                                        document.getElementById('deleteUserButton').style.display = 'block';
+                                    } else {
+                                        showErrorToast('Benutzer nicht gefunden.');
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error('Error:', error);
+                                });
+                        });
 
-                document.getElementById('deleteUserButton').addEventListener('click', function() {
-                    var userId = document.getElementById('deleteUserID').value;
-                    fetch(`/users/${userId}`, {
-                        method: 'DELETE',
-                        headers: {'Authorization': 'Bearer ' + adminToken}
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        alert(data.message);
-                        window.location.reload(); // Reload to update the UI
-                    })
-                    .catch((error) => {
-                        console.error('Error:', error);
-                    });
-                });
-            </script>
+                        document.getElementById('deleteUserButton').addEventListener('click', function () {
+                            var userId = document.getElementById('deleteUserID').value;
+                            fetch(`/users/${userId}`, {
+                                method: 'DELETE',
+                                headers: { 'Authorization': 'Bearer ' + adminToken }
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    showSuccessToast(data.message);
+                                })
+                                .catch((error) => {
+                                    console.error('Error:', error);
+                                });
+                        });
+                    </script>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-<!-- End of User Deletion -->
+        <!-- End of User Deletion -->
 
     </div>
 
@@ -432,7 +444,7 @@
                 <h2 class="mb-0">
                     <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
                         data-target="#collapseGroups" aria-expanded="false" aria-controls="collapseGroups">
-                        Alle Gruppen
+                        <span class="badge badge-get">GET</span> Alle Gruppen
                     </button>
                 </h2>
             </div>
@@ -465,9 +477,102 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+
+
+
+
+
+    <div id="toastContainer">
+        <!-- Toasts will be added here -->
+    </div>
+
+
+    <style>
+        #toastContainer {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            margin-right: 20px;
+            margin-bottom: 20px;
+            z-index: 11;
+        }
+
+        .toast {
+            border-radius: 5px;
+            margin-top: 10px;
+            opacity: 1;
+        }
+
+        .toast-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .toast-error {
+            background-color: #dc3545;
+            color: white;
+        }
+    </style>
+
+
+    <script>
+        function createToast(message, isSuccess) {
+            var toast = document.createElement('div');
+            toast.className = 'toast align-items-center' + (isSuccess ? ' bg-success text-white' : ' bg-danger text-white');
+            toast.role = 'alert';
+            toast.ariaLive = 'assertive';
+            toast.ariaAtomic = 'true';
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">${message}</div>
+                </div>
+            `;
+
+            toast.addEventListener('hidden.bs.toast', function () {
+                toast.remove();
+            });
+
+            document.getElementById('toastContainer').appendChild(toast);
+            return toast;
+        }
+
+        function showSuccessToast(message) {
+            var toastEl = createToast(message, true);
+            new bootstrap.Toast(toastEl, { delay: 2000 }).show();
+        }
+
+        function showErrorToast(message) {
+            var toastEl = createToast(message, false);
+            new bootstrap.Toast(toastEl, { delay: 5000 }).show();
+        }
+
+        // Example usage
+        // showSuccessToast('This is a success message!');
+        // showErrorToast('This is an error message!');
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+        crossorigin="anonymous"></script>
 
 
 
