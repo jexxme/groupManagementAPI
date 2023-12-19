@@ -7,6 +7,7 @@ Die LBV (Lerngruppen Bildung und Verwaltung) API ist eine RESTful-Webanwendung, 
 1. [Allgemeine Informationen](#allgemeine-informationen)
 2. [Installation](#installation)
 3. [Verwendung](#verwendung)
+TODO Dashboard
 4. [Benutzer (Users)](#benutzer-users)
    - [Erstellen eines Benutzers](#erstellen-eines-benutzers)
    - [Abrufen aller Benutzer](#abrufen-aller-benutzer)
@@ -31,6 +32,7 @@ Die LBV (Lerngruppen Bildung und Verwaltung) API ist eine RESTful-Webanwendung, 
    - [Aktualisieren des Startdatums eines Benutzers in einer Gruppe](#aktualisieren-des-startdatums-eines-benutzers-in-einer-gruppe)
    - [Entfernen eines Benutzers aus einer Gruppe](#entfernen-eines-benutzers-aus-einer-gruppe)
 8. [Authentifizierung](#authentifizierung)
+TODO Tests
 9. [Beispiele](#beispiele)
 
 
