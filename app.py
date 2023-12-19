@@ -43,22 +43,11 @@ class Date(db.Model):
     maxUsers = db.Column(db.Integer)
 
 
-
-# / route for hello world
-
-
-@app.route('/')
-def hello_world():
-    users = User.query.all()
-    groups = Group.query.all()
-    return render_template('index.html', users=users, groups=groups)
-
-
 # Authentication Routes
-
 from functools import wraps
 from flask_jwt_extended import verify_jwt_in_request, get_jwt
 
+# Custom decorator for admin-only routes
 def admin_required(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
@@ -69,6 +58,13 @@ def admin_required(fn):
         else:
             return fn(*args, **kwargs)
     return wrapper
+
+# / route for dashboard
+@app.route('/')
+def hello_world():
+    users = User.query.all()
+    groups = Group.query.all()
+    return render_template('index.html', users=users, groups=groups)
 
 
 @app.route('/login', methods=['POST'])

@@ -5,8 +5,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LBV API Overview Test Suite</title>
-    <!-- Bootstrap CSS -->
+    <title>LBV API Admin Dashboard</title>
+    <!-- include favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
@@ -38,6 +40,29 @@
             /* Text color, adjust if needed */
         }
     </style>
+    <script>
+        let adminToken = '';
+    
+        function getAdminToken() {
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({email: 'dashboard', password: 'dashboard2023'})
+            })
+            .then(response => response.json())
+            .then(data => {
+                adminToken = data.access_token;
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    
+        // Call the function on site load
+        window.onload = getAdminToken;
+    </script>    
 </head>
 
 <body class="container mt-4">
@@ -288,34 +313,34 @@
                                 });
                         });
 
-                        document.getElementById('editUserForm').addEventListener('submit', function (event) {
-                            event.preventDefault();
-                            var userId = document.getElementById('updateUserID').value;
-                            var updatedData = {
-                                email: document.getElementById('editEmail').value,
-                                firstName: document.getElementById('editFirstName').value,
-                                password: document.getElementById('editPassword').value,
-                                isAdmin: document.getElementById('editIsAdmin').checked
-                            };
+                        document.getElementById('editUserForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var userId = document.getElementById('updateUserID').value;
+        var updatedData = {
+            email: document.getElementById('editEmail').value,
+            firstName: document.getElementById('editFirstName').value,
+            password: document.getElementById('editPassword').value,
+            isAdmin: document.getElementById('editIsAdmin').checked
+        };
 
+        fetch(`/users/${userId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + adminToken  // Include the token in the header
+            },
+            body: JSON.stringify(updatedData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    });
+</script>
 
-
-                            fetch(`/users/${userId}`, {
-                                method: 'PUT',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify(updatedData)
-                            })
-                                .then(response => response.json())
-                                .then(data => {
-                                    alert(data.message);
-                                })
-                                .catch((error) => {
-                                    console.error('Error:', error);
-                                });
-                        });
-                    </script>
                 </div>
             </div>
         </div>
