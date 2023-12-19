@@ -198,6 +198,7 @@ def delete_user(id):
 
 # Create a new group
 @app.route('/groups', methods=['POST'])
+@jwt_required()
 def create_group():
     data = request.get_json()
     new_group = Group(ownerID=data['ownerID'], title=data['title'],
@@ -227,9 +228,26 @@ def get_group(groupID):
                     'title': group.title, 'description': group.description,
                     'maxUsers': group.maxUsers})
 
+
 # Update a group
 @app.route('/groups/<groupID>', methods=['PUT'])
+@jwt_required()
 def update_group(groupID):
+
+    # Get the current user's identity
+    current_user_id = get_jwt_identity()
+    claims = get_jwt()
+    is_admin = claims.get('is_admin', False)
+
+    # Check if the user is updating their own account or if they are an admin
+    if not is_admin:
+        return jsonify({'message': 'Unauthorized to update this group. Admin required'}), 403
+    
+    # Return if the user is not the owner
+    group = Group.query.get_or_404(groupID)
+    if str(current_user_id) != str(group.ownerID):
+        return jsonify({'message': 'Unauthorized to update this group. Log in as the Owner'}), 403
+
     group = Group.query.get_or_404(groupID)
     data = request.get_json()
     group.ownerID = data.get('ownerID', group.ownerID)
