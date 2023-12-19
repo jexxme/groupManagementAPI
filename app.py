@@ -92,6 +92,8 @@ def login():
     return jsonify(access_token=access_token)
 
 
+
+# TEST ROUTES FOR AUTHENTICATION
 # Protected route for users
 @app.route('/protected', methods=['GET'])
 @jwt_required()
@@ -100,11 +102,15 @@ def protected():
     current_user = get_jwt_identity()
     return jsonify(logged_in_as=current_user), 200
 
+# Protected route for admins
 @app.route('/admin-only', methods=['GET'])
 @admin_required
 def admin_only_route():
     # Admin-only logic
     return jsonify(msg="Welcome, admin!")
+
+
+
 
 
 
@@ -115,7 +121,7 @@ def admin_only_route():
 def create_user():
     data = request.get_json()
     new_user = User(email=data['email'], firstName=data['firstName'],
-                    password=data['password'], isAdmin=data.get('isAdmin', False))
+                    password=data['password'], isAdmin=False)
     db.session.add(new_user)
     db.session.commit()
     return jsonify({'message': 'New user created'}), 201
