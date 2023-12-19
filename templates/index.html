@@ -20,7 +20,7 @@
         }
 
         .badge-get {
-            background-color: #00d439;
+            background-color: #00cd37;
             /* Replace with your desired color */
             color: #fff;
             /* Text color, adjust if needed */
@@ -65,6 +65,14 @@
     </script>
 </head>
 
+
+
+
+
+
+
+
+
 <body class="container mt-4">
     <h1 class="mb-4 position-relative">LBV-API Admin Dashboard
         <span class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-primary text-light"
@@ -96,7 +104,6 @@
 
 
 
-            
             <div id="collapseUsers" class="collapse" aria-labelledby="headingUsers" data-parent="#usersAccordion">
                 <div class="card-body">
                     <!-- Users List in Table Format -->
@@ -110,21 +117,48 @@
                                 <th>Admin</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {% for user in users %}
-                            <tr>
-                                <td>{{ user.userID }}</td>
-                                <td>{{ user.firstName }}</td>
-                                <td>{{ user.email }}</td>
-                                <td>{{ user.password }}</td>
-                                <td>{{ 'Ja' if user.isAdmin else 'Nein' }}</td>
-                            </tr>
-                            {% endfor %}
+                        <tbody id="usersTableBody">
+                            <!-- User rows will be added here dynamically -->
                         </tbody>
                     </table>
                 </div>
             </div>
+
         </div>
+
+
+
+        <script>
+            function fetchUsers() {
+                fetch('/users', {
+                    headers: { 'Authorization': 'Bearer ' + adminToken }
+                })
+                    .then(response => response.json())
+                    .then(users => {
+                        const tableBody = document.getElementById('usersTableBody');
+                        tableBody.innerHTML = ''; // Clear existing content
+                        users.forEach(user => {
+                            const row = `<tr>
+                                        <td>${user.userID}</td>
+                                        <td>${user.firstName}</td>
+                                        <td>${user.email}</td>
+                                        <td>${user.password}</td>
+                                        <td>${user.isAdmin ? 'Ja' : 'Nein'}</td>
+                                     </tr>`;
+                            tableBody.innerHTML += row;
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching users:', error);
+                    });
+            }
+
+            document.getElementById('headingUsers').addEventListener('click', fetchUsers);
+        </script>
+
+
+
+
 
 
         <!-- User Information Retrieval -->
@@ -435,6 +469,33 @@
 
     </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- Groups Section -->
     <h2 class="mt-4">Gruppen</h2>
     <div class="accordion" id="groupsAccordion">
@@ -476,6 +537,28 @@
             </div>
         </div>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -553,6 +636,24 @@
         // showSuccessToast('This is a success message!');
         // showErrorToast('This is an error message!');
     </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -141,9 +141,10 @@ def get_users():
     output = []
     for user in users:
         user_data = {'userID': user.userID, 'email': user.email, 
-                     'firstName': user.firstName, 'isAdmin': user.isAdmin}
+                     'firstName': user.firstName, 'password': user.password,
+                     'isAdmin': user.isAdmin}
         output.append(user_data)
-    return jsonify({'users': output})
+    return jsonify(output)
 
 # Read a single user by userID
 @app.route('/users/<id>', methods=['GET'])
