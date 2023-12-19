@@ -163,7 +163,7 @@ def update_user(id):
 
     # Check if the user is updating their own account or if they are an admin
     if str(current_user_id) != id and not is_admin:
-        return jsonify({'message': 'Unauthorized to update this user'}), 403
+        return jsonify({'message': 'Unauthorized to update this user. Log in as this user or admin'}), 403
 
     user = User.query.get_or_404(id)
     data = request.get_json()
@@ -192,6 +192,62 @@ def delete_user(id):
     db.session.commit()
     return jsonify({'message': 'User deleted'})
 
+
+
+# CRUD Routes for Groups 
+
+# Create a new group
+@app.route('/groups', methods=['POST'])
+def create_group():
+    data = request.get_json()
+    new_group = Group(ownerID=data['ownerID'], title=data['title'],
+                      description=data['description'], maxUsers=data['maxUsers'])
+    db.session.add(new_group)
+    db.session.commit()
+    return jsonify({'message': 'New group created'}), 201
+
+
+# Read all groups
+@app.route('/groups', methods=['GET'])
+def get_groups():
+    groups = Group.query.all()
+    output = []
+    for group in groups:
+        group_data = {'groupID': group.groupID, 'ownerID': group.ownerID, 
+                      'title': group.title, 'description': group.description,
+                      'maxUsers': group.maxUsers}
+        output.append(group_data)
+    return jsonify({'groups': output})
+
+# Read a single group by groupID
+@app.route('/groups/<groupID>', methods=['GET'])
+def get_group(groupID):
+    group = Group.query.get_or_404(groupID)
+    return jsonify({'groupID': group.groupID, 'ownerID': group.ownerID, 
+                    'title': group.title, 'description': group.description,
+                    'maxUsers': group.maxUsers})
+
+# Update a group
+@app.route('/groups/<groupID>', methods=['PUT'])
+def update_group(groupID):
+    group = Group.query.get_or_404(groupID)
+    data = request.get_json()
+    group.ownerID = data.get('ownerID', group.ownerID)
+    group.title = data.get('title', group.title)
+    group.description = data.get('description', group.description)
+    group.maxUsers = data.get('maxUsers', group.maxUsers)
+    db.session.commit()
+    return jsonify({'message': 'Group updated'})
+
+
+# Delete a group
+@admin_required
+@app.route('/groups/<groupID>', methods=['DELETE'])
+def delete_group(groupID):
+    group = Group.query.get_or_404(groupID)
+    db.session.delete(group)
+    db.session.commit()
+    return jsonify({'message': 'Group deleted'})
 
 # CRUD Routes for UsersInGroups
 
@@ -252,61 +308,6 @@ def get_users_in_group(groupID):
         output.append(user_in_group_data)
     return jsonify({'users_in_group': output})
 
-
-# CRUD Routes for Groups 
-
-# Create a new group
-@app.route('/groups', methods=['POST'])
-def create_group():
-    data = request.get_json()
-    new_group = Group(ownerID=data['ownerID'], title=data['title'],
-                      description=data['description'], maxUsers=data['maxUsers'])
-    db.session.add(new_group)
-    db.session.commit()
-    return jsonify({'message': 'New group created'}), 201
-
-
-# Read all groups
-@app.route('/groups', methods=['GET'])
-def get_groups():
-    groups = Group.query.all()
-    output = []
-    for group in groups:
-        group_data = {'groupID': group.groupID, 'ownerID': group.ownerID, 
-                      'title': group.title, 'description': group.description,
-                      'maxUsers': group.maxUsers}
-        output.append(group_data)
-    return jsonify({'groups': output})
-
-# Read a single group by groupID
-@app.route('/groups/<groupID>', methods=['GET'])
-def get_group(groupID):
-    group = Group.query.get_or_404(groupID)
-    return jsonify({'groupID': group.groupID, 'ownerID': group.ownerID, 
-                    'title': group.title, 'description': group.description,
-                    'maxUsers': group.maxUsers})
-
-# Update a group
-@app.route('/groups/<groupID>', methods=['PUT'])
-def update_group(groupID):
-    group = Group.query.get_or_404(groupID)
-    data = request.get_json()
-    group.ownerID = data.get('ownerID', group.ownerID)
-    group.title = data.get('title', group.title)
-    group.description = data.get('description', group.description)
-    group.maxUsers = data.get('maxUsers', group.maxUsers)
-    db.session.commit()
-    return jsonify({'message': 'Group updated'})
-
-
-# Delete a group
-@admin_required
-@app.route('/groups/<groupID>', methods=['DELETE'])
-def delete_group(groupID):
-    group = Group.query.get_or_404(groupID)
-    db.session.delete(group)
-    db.session.commit()
-    return jsonify({'message': 'Group deleted'})
 
 
 # CRUD Routes for Dates
