@@ -346,7 +346,7 @@ response = requests.get(url, headers=headers)
 - Der JWT-Token sollte geheim gehalten und sicher aufbewahrt werden.
 - Passwörter werden verschlüsselt gespeichert. Die Übertragung von Passwörtern sollte stets über sichere Verbindungen erfolgen.
 
-Diese Authentifizierungsmechanismen tragen dazu bei, die LBV-API sicher und zuverlässig für ihre Benutzer zu machen. Sie sorgen dafür, dass jeder Benutzer nur auf die für ihn bestimmten Ressourcen und Funktionen zugreifen kann.
+Diese Authentifizierungsmechanismen tragen dazu bei, die LBV-API sicher und zuverlässig für  Benutzer zu machen. Sie sorgen dafür, dass jeder Benutzer nur auf die für ihn bestimmten Ressourcen und Funktionen zugreifen kann.
 
 
 ## TODO
