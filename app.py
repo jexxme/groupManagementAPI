@@ -6,6 +6,7 @@ from flask import jsonify
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from flask import render_template
+import re
 
 app = Flask(__name__)
 
@@ -108,19 +109,25 @@ def admin_only_route():
 
 
 
-
+2
 
 # CRUD Routes for Users
 
-# Create a new user
+
 @app.route('/users', methods=['POST'])
 def create_user():
     data = request.get_json()
+
+    # Email pattern check
+    if not re.search(r"@[gG][sS][oO]\.schule\.koeln$", data['email']):
+        return jsonify({'message': 'Es sind nur E-Mails von @gso.schule.koeln erlaubt'}), 400
+
     new_user = User(email=data['email'], firstName=data['firstName'],
                     password=data['password'], isAdmin=False)
     db.session.add(new_user)
     db.session.commit()
-    return jsonify({'message': 'New user created'}), 201
+    return jsonify({'message': 'Neuer Benutzer erstellt'}), 201
+
 
 
 # Create new admin user
@@ -132,7 +139,7 @@ def create_admin():
                     password=data['password'], isAdmin=True)
     db.session.add(new_user)
     db.session.commit()
-    return jsonify({'message': 'New admin created'}), 201
+    return jsonify({'message': 'Neuer Admin erstellt'}), 201
 
 # Read all users
 @app.route('/users', methods=['GET'])
@@ -163,7 +170,7 @@ def update_user(id):
 
     # Check if the user is updating their own account or if they are an admin
     if str(current_user_id) != id and not is_admin:
-        return jsonify({'message': 'Unauthorized to update this user. Log in as this user or admin'}), 403
+        return jsonify({'message': 'Sie sind nicht authorisiert um diesen Benutzer zu bearbeiten!'}), 403
 
     user = User.query.get_or_404(id)
     data = request.get_json()
@@ -181,7 +188,7 @@ def update_user(id):
         user.isAdmin = data.get('isAdmin', user.isAdmin)
 
     db.session.commit()
-    return jsonify({'message': 'User updated'})
+    return jsonify({'message': 'Benutzer aktualisiert'})
 
 # Delete a user
 @app.route('/users/<id>', methods=['DELETE'])
@@ -190,7 +197,7 @@ def delete_user(id):
     user = User.query.get_or_404(id)
     db.session.delete(user)
     db.session.commit()
-    return jsonify({'message': 'User deleted'})
+    return jsonify({'message': 'Benutzer gelöscht'})
 
 
 
@@ -205,7 +212,14 @@ def create_group():
                       description=data['description'], maxUsers=data['maxUsers'])
     db.session.add(new_group)
     db.session.commit()
-    return jsonify({'message': 'New group created'}), 201
+
+    #  TODO: Add the owner to the group
+
+    # Retrieve the groupID of the newly created group
+    groupID = new_group.groupID
+
+    # Return the groupID and a message
+    return jsonify({'message': 'Neue Gruppe erstellt', 'groupID': groupID}), 201
 
 
 # Read all groups
@@ -241,12 +255,12 @@ def update_group(groupID):
 
     # Check if the user is updating their own account or if they are an admin
     if not is_admin:
-        return jsonify({'message': 'Unauthorized to update this group. Admin required'}), 403
+        return jsonify({'message': 'Sie sind nicht authorisiert um diese Gruppe zu bearbeiten!'}), 403
     
     # Return if the user is not the owner
     group = Group.query.get_or_404(groupID)
     if str(current_user_id) != str(group.ownerID):
-        return jsonify({'message': 'Unauthorized to update this group. Log in as the Owner'}), 403
+        return jsonify({'message': 'Sie sind nicht authorisiert um diese Gruppe zu bearbeiten!'}), 403
 
     group = Group.query.get_or_404(groupID)
     data = request.get_json()
@@ -255,7 +269,7 @@ def update_group(groupID):
     group.description = data.get('description', group.description)
     group.maxUsers = data.get('maxUsers', group.maxUsers)
     db.session.commit()
-    return jsonify({'message': 'Group updated'})
+    return jsonify({'message': 'Gruppe aktualisiert'})
 
 
 # Delete a group
@@ -265,7 +279,7 @@ def delete_group(groupID):
     group = Group.query.get_or_404(groupID)
     db.session.delete(group)
     db.session.commit()
-    return jsonify({'message': 'Group deleted'})
+    return jsonify({'message': 'Gruppe gelöscht'})
 
 # CRUD Routes for UsersInGroups
 
@@ -277,7 +291,7 @@ def create_user_in_group():
                                       startingDate=data['startingDate'])
     db.session.add(new_user_in_group)
     db.session.commit()
-    return jsonify({'message': 'New user added to the group'}), 201
+    return jsonify({'message': 'Benutzer wurde der Gruppe hinzugefügt'}), 201
 
 # Read all users in groups
 @app.route('/users_in_groups', methods=['GET'])
