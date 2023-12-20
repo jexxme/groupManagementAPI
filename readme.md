@@ -7,33 +7,34 @@ Die LBV (Lerngruppen Bildung und Verwaltung) API ist eine RESTful-Webanwendung, 
 1. [Allgemeine Informationen](#allgemeine-informationen)
 2. [Installation](#installation)
 3. [Verwendung](#verwendung)
-TODO Dashboard
-4. [Benutzer (Users)](#benutzer-users)
+4. [Dashboard](#dashboard)
+5. [Benutzer (Users)](#benutzer-users)
    - [Erstellen eines Benutzers](#erstellen-eines-benutzers)
+   - [Erstellen eines Administrators](#erstellen-eines-administrators)
    - [Abrufen aller Benutzer](#abrufen-aller-benutzer)
    - [Abrufen eines einzelnen Benutzers](#abrufen-eines-einzelnen-benutzers)
    - [Aktualisieren eines Benutzers](#aktualisieren-eines-benutzers)
    - [Löschen eines Benutzers](#löschen-eines-benutzers)
-5. [Gruppen (Groups)](#gruppen-groups)
+6. [Gruppen (Groups)](#gruppen-groups)
    - [Erstellen einer Gruppe](#erstellen-einer-gruppe)
    - [Abrufen aller Gruppen](#abrufen-aller-gruppen)
    - [Abrufen einer einzelnen Gruppe](#abrufen-einer-einzelnen-gruppe)
    - [Aktualisieren einer Gruppe](#aktualisieren-einer-gruppe)
    - [Löschen einer Gruppe](#löschen-einer-gruppe)
-6. [Termine (Dates)](#termine-dates)
+7. [Termine (Dates)](#termine-dates)
    - [Erstellen eines Termins](#erstellen-eines-termins)
    - [Abrufen aller Termine](#abrufen-aller-termine)
    - [Abrufen eines einzelnen Termins](#abrufen-eines-einzelnen-termins)
    - [Aktualisieren eines Termins](#aktualisieren-eines-termins)
    - [Löschen eines Termins](#löschen-eines-termins)
-7. [Benutzer in Gruppen (UsersInGroups)](#benutzer-in-gruppen-usersingroups)
+8. [Benutzer in Gruppen (UsersInGroups)](#benutzer-in-gruppen-usersingroups)
    - [Hinzufügen eines Benutzers zu einer Gruppe](#hinzufügen-eines-benutzers-zu-einer-gruppe)
    - [Abrufen aller Benutzer in einer Gruppe](#abrufen-aller-benutzer-in-einer-gruppe)
    - [Aktualisieren des Startdatums eines Benutzers in einer Gruppe](#aktualisieren-des-startdatums-eines-benutzers-in-einer-gruppe)
    - [Entfernen eines Benutzers aus einer Gruppe](#entfernen-eines-benutzers-aus-einer-gruppe)
-8. [Authentifizierung](#authentifizierung)
+9. [Authentifizierung](#authentifizierung)
 TODO Tests
-9. [Beispiele](#beispiele)
+10. [Beispiele](#beispiele)
 
 
 ## Allgemeine Informationen
@@ -80,25 +81,164 @@ Die LBV-API ermöglicht die Verwaltung von Benutzern, Gruppen, Terminen und Benu
 - **Endpoint:** `/users`
 - **Methode:** `POST`
 
-Erstellt einen neuen Benutzer und gibt eine Bestätigungsnachricht zurück.
+Erstellt einen neuen Benutzer. Die E-Mail-Adresse des Benutzers muss das Format `@gso.schule.koeln` aufweisen. Gibt eine Bestätigungsnachricht zurück, wenn der Benutzer erfolgreich erstellt wurde. Andernfalls wird eine Fehlermeldung ausgegeben, falls die E-Mail-Adresse nicht dem erforderlichen Muster entspricht.
 
-**JSON-Daten:**
+**Anforderungs-JSON-Format:**
 
 ```json
 {
-    "email": "benutzer@example.com",
+    "email": "benutzer@gso.schule.koeln",
     "firstName": "Vorname",
     "password": "Passwort",
     "isAdmin": false
 }
 ```
 
+**Erfolgsantwort:**
+
+- **Code:** 201 (Created)
+- **Inhalt:** 
+  ```json
+  { "message": "Neuer Benutzer erstellt" }
+  ```
+
+**Fehlerantwort:**
+
+- **Code:** 400 (Bad Request)
+- **Inhalt:** 
+  ```json
+  { "message": "Es sind nur E-Mails von @gso.schule.koeln erlaubt" }
+  ```
+
+**Beispiel:**
+
+- **Anfrage:**
+
+  ```json
+  {
+      "email": "max.mustermann@gso.schule.koeln",
+      "firstName": "Max",
+      "password": "meinPasswort123",
+      "isAdmin": false
+  }
+  ```
+
+- **Antwort bei Erfolg:**
+
+  ```json
+  { "message": "Neuer Benutzer erstellt" }
+  ```
+
+- **Antwort bei ungültiger E-Mail-Adresse:**
+
+  ```json
+  { "message": "Es sind nur E-Mails von @gso.schule.koeln erlaubt" }
+  ```
+
+### Erstellen eines Administrators
+
+- **Endpoint:** `/admin`
+- **Methode:** `POST`
+
+Erstellt einen neuen Administrator. Diese Aktion erfordert Administratorrechte. Gibt eine Bestätigungsnachricht zurück, wenn der Administrator erfolgreich erstellt wurde.
+
+**Anforderungen:**
+
+- Der anfragende Benutzer muss über Administratorrechte verfügen.
+- Die Anfrage muss über einen gültigen JWT-Token mit entsprechenden Administratorrechten verfügen.
+
+**Anforderungs-JSON-Format:**
+
+```json
+{
+    "email": "admin@example.com",
+    "firstName": "Admin",
+    "password": "sicheresPasswort"
+}
+```
+
+**Erfolgsantwort:**
+
+- **Code:** 201 (Created)
+- **Inhalt:** 
+  ```json
+  { "message": "Neuer Admin erstellt" }
+  ```
+
+**Fehlerantwort:**
+
+- **Code:** 401 (Unauthorized) / 403 (Forbidden)
+- **Inhalt:** 
+  ```json
+  { "message": "Unauthorized: Administratorrechte erforderlich" }
+  ```
+
+**Beispiel:**
+
+- **Anfrage:**
+
+  ```json
+  {
+      "email": "neuer.admin@example.com",
+      "firstName": "NeuerAdmin",
+      "password": "adminPasswort123"
+  }
+  ```
+
+- **Antwort bei Erfolg:**
+
+  ```json
+  { "message": "Neuer Admin erstellt" }
+  ```
+
+- **Antwort bei fehlender Autorisierung:**
+
+  ```json
+  { "message": "Unauthorized: Administratorrechte erforderlich" }
+  ```
+
 ### Abrufen aller Benutzer
 
 - **Endpoint:** `/users`
 - **Methode:** `GET`
 
-Gibt eine Liste aller Benutzer zurück.
+Ruft eine Liste aller Benutzer ab. Jeder Benutzer wird mit seiner Benutzer-ID, E-Mail-Adresse, dem Vornamen, dem Passwort und seinem Admin-Status zurückgegeben.
+
+**Anforderungen:**
+
+- Wird noch herausgefunden...
+
+**Erfolgsantwort:**
+
+- **Code:** 200 (OK)
+- **Inhalt:** Liste aller Benutzer in JSON-Format
+  ```json
+  [
+      {
+          "userID": 1,
+          "email": "benutzer1@example.com",
+          "firstName": "Max",
+          "password": "passwort123",
+          "isAdmin": false
+      },
+      {
+          "userID": 2,
+          "email": "benutzer2@example.com",
+          "firstName": "Anna",
+          "password": "passwort321",
+          "isAdmin": true
+      }
+      // Weitere Benutzer...
+  ]
+  ```
+
+**Beispiel für die Verwendung:**
+
+Eine GET-Anfrage an den Endpoint `/users` liefert die Liste aller Benutzer in der Datenbank:
+
+```bash
+curl -X GET http://127.0.0.1:5000/users
+```
 
 ### Abrufen eines einzelnen Benutzers
 

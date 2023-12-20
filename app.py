@@ -128,8 +128,6 @@ def create_user():
     db.session.commit()
     return jsonify({'message': 'Neuer Benutzer erstellt'}), 201
 
-
-
 # Create new admin user
 @app.route('/admin', methods=['POST'])
 @admin_required
