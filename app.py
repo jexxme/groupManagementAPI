@@ -112,7 +112,6 @@ def admin_only_route():
 
 # CRUD Routes for Users
 # Create new user
-
 @app.route('/users', methods=['POST'])
 def create_user():
     data = request.get_json()
