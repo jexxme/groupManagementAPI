@@ -106,13 +106,7 @@ def admin_only_route():
     # Admin-only logic
     return jsonify(msg="Welcome, admin!")
 
-
-
-
-2
-
 # CRUD Routes for Users
-
 
 @app.route('/users', methods=['POST'])
 def create_user():
@@ -127,6 +121,7 @@ def create_user():
     db.session.add(new_user)
     db.session.commit()
     return jsonify({'message': 'Neuer Benutzer erstellt'}), 201
+
 
 # Create new admin user
 @app.route('/admin', methods=['POST'])
