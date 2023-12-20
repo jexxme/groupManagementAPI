@@ -112,6 +112,7 @@ def admin_only_route():
 
 # CRUD Routes for Users
 # Create new user
+
 @app.route('/users', methods=['POST'])
 def create_user():
     data = request.get_json()
@@ -119,6 +120,11 @@ def create_user():
     # Email pattern check
     if not re.search(r"@[gG][sS][oO]\.schule\.koeln$", data['email']):
         return jsonify({'message': 'Es sind nur E-Mails von @gso.schule.koeln erlaubt'}), 400
+
+    # Check if email already exists
+    existing_user = User.query.filter_by(email=data['email']).first()
+    if existing_user:
+        return jsonify({'message': 'Ein Benutzer mit dieser E-Mail-Adresse existiert bereits'}), 409  # 409 Conflict
 
     new_user = User(email=data['email'], firstName=data['firstName'],
                     password=data['password'], isAdmin=False)

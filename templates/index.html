@@ -273,13 +273,28 @@
                                 },
                                 body: JSON.stringify(formData)
                             })
-                                .then(response => response.json())
-                                .then(data => {
-                                    showSuccessToast(data.message);
+                                .then(response => {
+                                    if (response.status === 201) {
+                                        // Handle successful response
+                                        return response.json().then(data => {
+                                            showSuccessToast(data.message);
+                                        });
+                                    } else if (response.status === 400 || response.status === 409) {
+                                        // Handle specific error responses (400 Bad Request or 409 Conflict)
+                                        return response.json().then(data => {
+                                            showErrorToast(data.message);
+                                        });
+                                    } else {
+                                        // Handle other unexpected statuses
+                                        throw new Error('Unexpected response status: ' + response.status);
+                                    }
                                 })
                                 .catch((error) => {
                                     console.error('Error:', error);
+                                    showErrorToast(error.message);
                                 });
+
+
 
 
                         });
@@ -624,12 +639,12 @@
 
         function showSuccessToast(message) {
             var toastEl = createToast(message, true);
-            new bootstrap.Toast(toastEl, { delay: 2000 }).show();
+            new bootstrap.Toast(toastEl, { delay: 5000 }).show();
         }
 
         function showErrorToast(message) {
             var toastEl = createToast(message, false);
-            new bootstrap.Toast(toastEl, { delay: 5000 }).show();
+            new bootstrap.Toast(toastEl, { delay: 10000 }).show();
         }
 
         // Example usage

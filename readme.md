@@ -76,12 +76,13 @@ Die LBV-API ermöglicht die Verwaltung von Benutzern, Gruppen, Terminen und Benu
 
 ## Benutzer (Users)
 
+
 ### Erstellen eines Benutzers
 
 - **Endpoint:** `/users`
 - **Methode:** `POST`
 
-Erstellt einen neuen Benutzer. Die E-Mail-Adresse des Benutzers muss das Format `@gso.schule.koeln` aufweisen. Gibt eine Bestätigungsnachricht zurück, wenn der Benutzer erfolgreich erstellt wurde. Andernfalls wird eine Fehlermeldung ausgegeben, falls die E-Mail-Adresse nicht dem erforderlichen Muster entspricht.
+Erstellt einen neuen Benutzer. Die E-Mail-Adresse des Benutzers muss das Format `@gso.schule.koeln` aufweisen. Außerdem wird überprüft, ob die E-Mail-Adresse bereits existiert. Wenn ja, wird ein Fehler zurückgegeben.
 
 **Anforderungs-JSON-Format:**
 
@@ -89,8 +90,7 @@ Erstellt einen neuen Benutzer. Die E-Mail-Adresse des Benutzers muss das Format 
 {
     "email": "benutzer@gso.schule.koeln",
     "firstName": "Vorname",
-    "password": "Passwort",
-    "isAdmin": false
+    "password": "Passwort"
 }
 ```
 
@@ -102,12 +102,20 @@ Erstellt einen neuen Benutzer. Die E-Mail-Adresse des Benutzers muss das Format 
   { "message": "Neuer Benutzer erstellt" }
   ```
 
-**Fehlerantwort:**
+**Fehlerantwort bei ungültiger E-Mail-Adresse:**
 
 - **Code:** 400 (Bad Request)
 - **Inhalt:** 
   ```json
   { "message": "Es sind nur E-Mails von @gso.schule.koeln erlaubt" }
+  ```
+
+**Fehlerantwort bei bereits existierender E-Mail-Adresse:**
+
+- **Code:** 409 (Conflict)
+- **Inhalt:** 
+  ```json
+  { "message": "Ein Benutzer mit dieser E-Mail-Adresse existiert bereits" }
   ```
 
 **Beispiel:**
@@ -118,8 +126,7 @@ Erstellt einen neuen Benutzer. Die E-Mail-Adresse des Benutzers muss das Format 
   {
       "email": "max.mustermann@gso.schule.koeln",
       "firstName": "Max",
-      "password": "meinPasswort123",
-      "isAdmin": false
+      "password": "meinPasswort123"
   }
   ```
 
@@ -135,6 +142,13 @@ Erstellt einen neuen Benutzer. Die E-Mail-Adresse des Benutzers muss das Format 
   { "message": "Es sind nur E-Mails von @gso.schule.koeln erlaubt" }
   ```
 
+- **Antwort bei bereits existierender E-Mail-Adresse:**
+
+  ```json
+  { "message": "Ein Benutzer mit dieser E-Mail-Adresse existiert bereits" }
+  ```
+
+
 ### Erstellen eines Administrators
 
 - **Endpoint:** `/admin`
@@ -146,6 +160,7 @@ Erstellt einen neuen Administrator. Diese Aktion erfordert Administratorrechte. 
 
 - Der anfragende Benutzer muss über Administratorrechte verfügen.
 - Die Anfrage muss über einen gültigen JWT-Token mit entsprechenden Administratorrechten verfügen.
+- Für mehr Details siehe [Authentifizierung](#authentifizierung).
 
 **Anforderungs-JSON-Format:**
 
