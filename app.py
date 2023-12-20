@@ -55,7 +55,7 @@ def admin_required(fn):
         verify_jwt_in_request()
         claims = get_jwt()
         if not claims.get('is_admin', False):
-            return jsonify(msg="Admins only!"), 403
+            return jsonify(msg="Administratorrechte erforderlich!"), 403
         else:
             return fn(*args, **kwargs)
     return wrapper
@@ -255,14 +255,19 @@ def update_group(groupID):
     claims = get_jwt()
     is_admin = claims.get('is_admin', False)
 
-    # Check if the user is updating their own account or if they are an admin
-    if not is_admin:
-        return jsonify({'message': 'Sie sind nicht authorisiert um diese Gruppe zu bearbeiten!'}), 403
-    
     # Return if the user is not the owner
     group = Group.query.get_or_404(groupID)
     if str(current_user_id) != str(group.ownerID):
-        return jsonify({'message': 'Sie sind nicht authorisiert um diese Gruppe zu bearbeiten!'}), 403
+
+        
+
+        # Return if the user is not an admin
+        if not is_admin:
+            return jsonify({'message': 'Sie sind nicht authorisiert um diese Gruppe zu bearbeiten!'}), 403
+
+    
+
+
 
     group = Group.query.get_or_404(groupID)
     data = request.get_json()
