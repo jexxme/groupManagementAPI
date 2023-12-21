@@ -294,6 +294,19 @@ def delete_group(groupID):
     db.session.commit()
     return jsonify({'message': 'Gruppe gelöscht'})
 
+
+# Read all members of a group
+@app.route('/groups/<groupID>/members', methods=['GET'])
+@jwt_required()
+def get_members(groupID):
+    members = UsersInGroups.query.filter_by(groupID=groupID).all()
+    output = []
+    for member in members:
+        member_data = {'userID': member.userID, 'groupID': member.groupID, 
+                       'startingDate': member.startingDate}
+        output.append(member_data)
+    return jsonify(output)
+
 # CRUD Routes for UsersInGroups
 # Create a new user in group
 @app.route('/users_in_groups', methods=['POST'])
@@ -340,6 +353,7 @@ def get_users_in_groups():
 
 # Read a single user in group by userID and groupID
 @app.route('/users_in_groups/<userID>/<groupID>', methods=['GET'])
+@jwt_required()
 def get_user_in_group(userID, groupID):
     user_in_group = UsersInGroups.query.filter_by(userID=userID, groupID=groupID).first()
     return jsonify({'userID': user_in_group.userID, 'groupID': user_in_group.groupID, 
@@ -361,35 +375,14 @@ def get_groups_for_user(userID):
     return jsonify(output)
 
 
-# Update a user in group
-@app.route('/users_in_groups/<userID>/<groupID>', methods=['PUT'])
-def update_user_in_group(userID, groupID):
-    user_in_group = UsersInGroups.query.filter_by(userID=userID, groupID=groupID).first()
-    data = request.get_json()
-    user_in_group.startingDate = data.get('startingDate', user_in_group.startingDate)
-    db.session.commit()
-    return jsonify({'message': 'User in group updated'})
-
 # Delete a user in group
-@admin_required
 @app.route('/users_in_groups/<userID>/<groupID>', methods=['DELETE'])
+@jwt_required()
 def delete_user_in_group(userID, groupID):
     user_in_group = UsersInGroups.query.filter_by(userID=userID, groupID=groupID).first()
     db.session.delete(user_in_group)
     db.session.commit()
     return jsonify({'message': 'User in group deleted'})
-
-# View all members of a group
-@app.route('/users_in_groups/<groupID>', methods=['GET'])
-def get_users_in_group(groupID):
-    users_in_group = UsersInGroups.query.filter_by(groupID=groupID).all()
-    output = []
-    for user_in_group in users_in_group:
-        user_in_group_data = {'userID': user_in_group.userID, 'groupID': user_in_group.groupID, 
-                              'startingDate': user_in_group.startingDate}
-        output.append(user_in_group_data)
-    return jsonify({'users_in_group': output})
-
 
 
 # CRUD Routes for Dates

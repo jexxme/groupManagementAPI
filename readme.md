@@ -435,27 +435,31 @@ Fügt einen Benutzer zu einer Lerngruppe hinzu und gibt eine Bestätigungsnachri
 }
 ```
 
-### Abrufen aller Benutzer in einer Gruppe
+### Abrufen aller Gruppen denen ein User zugewiesen ist
 
-- **Endpoint:** `/users_in_groups/<groupID>`
+- **Endpoint:** `/users_in_groups/<userID>`
 - **Methode:** `GET`
 
-Gibt eine Liste aller Benutzer in einer Lerngruppe zurück, basierend auf der `groupID`.
+Gibt eine Liste aller Lerngruppen zurück, denen ein Benutzer basierend auf seiner `userID` zugewiesen ist.
+
+### Abrufen aller Benutzer die in einer Gruppe sind 
+Siehe /groups/members TODO
 
 ### Aktualisieren des Startdatums eines Benutzers in einer Gruppe
 
 - **Endpoint:** `/users_in_groups/<userID>/<groupID>`
 - **Methode:** `PUT`
 
-Aktualisiert das Startdatum eines Benutzers in einer Gruppe basierend auf seiner `userID` und `groupID`. Geben Sie das zu aktualisierende Startdatum im JSON-Format an.
+Aktualisiert das Startdatum eines Benutzers in einer Lerngruppe basierend auf seiner `userID` und `groupID`. Geben Sie das neue Datum im JSON-Format an.
 
 **JSON-Daten:**
 
 ```json
 {
-    "startingDate": "2023-12-15"
+    "startingDate": "2023-12-02"
 }
 ```
+
 
 ### Entfernen eines Benutzers aus einer Gruppe
 
