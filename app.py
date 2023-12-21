@@ -407,15 +407,14 @@ def create_date():
 
     # Check if the user is the owner or an admin
     if str(current_user_id) != str(group.ownerID) and not is_admin:
-        return jsonify({'message': 'Unauthorized to add dates for this group'}), 403
+        return jsonify({'message': 'Sie sind nicht authorisiert einen Termin für diese Gruppe zu erstellen'}), 403
 
     # Create the new date
-    
     new_date = Date(groupID=data['groupID'], date=parsed_date,
                     place=data['place'], maxUsers=data['maxUsers'])
     db.session.add(new_date)
     db.session.commit()
-    return jsonify({'message': 'New date created'}), 201
+    return jsonify({'message': 'Neuer Termin erstellt'}), 201
 
 
 # Read all dates
@@ -429,7 +428,7 @@ def get_dates():
                      'date': date.date, 'place': date.place,
                      'maxUsers': date.maxUsers}
         output.append(date_data)
-    return jsonify({'dates': output})
+    return jsonify(output)
 
 # Read a single date by dateID
 @app.route('/dates/<dateID>', methods=['GET'])
@@ -460,16 +459,26 @@ def update_date(dateID):
     date.maxUsers = data.get('maxUsers', date.maxUsers)
     
     db.session.commit()
-    return jsonify({'message': 'Date updated'})
+    return jsonify({'message': 'Termin bearbeitet'})
 
 
-# Delete a date
 @app.route('/dates/<dateID>', methods=['DELETE'])
+@jwt_required()
 def delete_date(dateID):
+    current_user_id = get_jwt_identity()
+    claims = get_jwt()
+    is_admin = claims.get('is_admin', False)
+
     date = Date.query.get_or_404(dateID)
+    group = Group.query.get_or_404(date.groupID)
+
+    # Check if the user is the owner of the group or an admin
+    if str(current_user_id) != str(group.ownerID) and not is_admin:
+        return jsonify({'message': 'Sie sind nicht authorisiert diesen Termin zu löschen!'}), 403
+
     db.session.delete(date)
     db.session.commit()
-    return jsonify({'message': 'Date deleted'})
+    return jsonify({'message': 'Termin gelöscht'})
 
 
 if __name__ == '__main__':
