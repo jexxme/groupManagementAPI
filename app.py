@@ -13,6 +13,7 @@ from flask import jsonify, request
 from datetime import datetime
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy.orm.exc import NoResultFound
+import dateutil.parser
 
 
 app = Flask(__name__)
@@ -386,15 +387,36 @@ def delete_user_in_group(userID, groupID):
 
 
 # CRUD Routes for Dates
-# Create a new date
 @app.route('/dates', methods=['POST'])
+@jwt_required()
 def create_date():
     data = request.get_json()
-    new_date = Date(groupID=data['groupID'], date=data['date'],
+    current_user_id = get_jwt_identity()
+    claims = get_jwt()
+    is_admin = claims.get('is_admin', False)
+
+    # Convert the date string to a datetime object
+    try:
+        parsed_date = dateutil.parser.parse(data['date'])
+    except ValueError as e:
+        return jsonify({'message': str(e)}), 400
+
+
+    # Fetch the group
+    group = Group.query.get_or_404(data['groupID'])
+
+    # Check if the user is the owner or an admin
+    if str(current_user_id) != str(group.ownerID) and not is_admin:
+        return jsonify({'message': 'Unauthorized to add dates for this group'}), 403
+
+    # Create the new date
+    
+    new_date = Date(groupID=data['groupID'], date=parsed_date,
                     place=data['place'], maxUsers=data['maxUsers'])
     db.session.add(new_date)
     db.session.commit()
     return jsonify({'message': 'New date created'}), 201
+
 
 # Read all dates
 @app.route('/dates', methods=['GET'])
@@ -436,20 +458,6 @@ def delete_date(dateID):
     db.session.delete(date)
     db.session.commit()
     return jsonify({'message': 'Date deleted'})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if __name__ == '__main__':
