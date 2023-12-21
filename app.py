@@ -300,14 +300,35 @@ def delete_group(groupID):
 @jwt_required()
 def create_user_in_group():
     data = request.get_json()
+
+    # Check if the user exists
+    try:
+        user = User.query.filter_by(userID=data['userID']).one()
+    except NoResultFound:
+        return jsonify({'message': 'Benutzer nicht gefunden'}), 404
+
+    # Check if the group exists
+    try:
+        group = Group.query.filter_by(groupID=data['groupID']).one()
+    except NoResultFound:
+        return jsonify({'message': 'Gruppe nicht gefunden'}), 404
+
+    # Check if the group is full
+    current_members_count = UsersInGroups.query.filter_by(groupID=group.groupID).count()
+    if current_members_count >= group.maxUsers:
+        return jsonify({'message': 'Gruppe ist bereits voll'}), 400
+
+    # Add the user to the group with the current date as the starting date
     new_user_in_group = UsersInGroups(userID=data['userID'], groupID=data['groupID'],
-                                      startingDate=data['startingDate'])
+                                      startingDate=datetime.utcnow())
     db.session.add(new_user_in_group)
     db.session.commit()
     return jsonify({'message': 'Benutzer wurde der Gruppe hinzugefügt'}), 201
 
-# Read all users in groups
+
+# Read all users in all groups
 @app.route('/users_in_groups', methods=['GET'])
+@jwt_required()
 def get_users_in_groups():
     users_in_groups = UsersInGroups.query.all()
     output = []
@@ -315,7 +336,7 @@ def get_users_in_groups():
         user_in_group_data = {'userID': user_in_group.userID, 'groupID': user_in_group.groupID, 
                               'startingDate': user_in_group.startingDate}
         output.append(user_in_group_data)
-    return jsonify({'users_in_groups': output})
+    return jsonify(output)
 
 # Read a single user in group by userID and groupID
 @app.route('/users_in_groups/<userID>/<groupID>', methods=['GET'])
@@ -323,6 +344,22 @@ def get_user_in_group(userID, groupID):
     user_in_group = UsersInGroups.query.filter_by(userID=userID, groupID=groupID).first()
     return jsonify({'userID': user_in_group.userID, 'groupID': user_in_group.groupID, 
                     'startingDate': user_in_group.startingDate})
+
+# TODO: Document this route
+@app.route('/users_in_groups/<int:userID>/', methods=['GET'])
+@jwt_required()
+def get_groups_for_user(userID):
+    user_groups = UsersInGroups.query.filter_by(userID=userID).all()
+    output = []
+    for user_group in user_groups:
+        group_data = {
+            'userID': user_group.userID,
+            'groupID': user_group.groupID,
+            'startingDate': user_group.startingDate
+        }
+        output.append(group_data)
+    return jsonify(output)
+
 
 # Update a user in group
 @app.route('/users_in_groups/<userID>/<groupID>', methods=['PUT'])
