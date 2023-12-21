@@ -622,7 +622,64 @@
                 </div>
             </div>
         </div>
+        <!-- Group Members Retrieval -->
+        <div class="card">
+            <div class="card-header" id="headingGroupMembers">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                        data-target="#collapseGroupMembers" aria-expanded="false" aria-controls="collapseGroupMembers">
+                        <span class="badge badge-get">GET</span> Mitglieder einer Gruppe anzeigen
+                    </button>
+                </h2>
+            </div>
 
+            <div id="collapseGroupMembers" class="collapse" aria-labelledby="headingGroupMembers"
+                data-parent="#groupsAccordion">
+                <div class="card-body">
+                    <!-- Fetch Group Members Form -->
+                    <form id="fetchGroupMembersForm">
+                        <div class="form-group">
+                            <label for="fetchGroupMembersID">Gruppen-ID:</label>
+                            <input type="text" class="form-control" id="fetchGroupMembersID" name="fetchGroupMembersID"
+                                required>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="fetchGroupMembersButton">Mitglieder
+                            abrufen</button>
+                    </form>
+
+                    <!-- Display Group Members -->
+                    <div id="groupMembersDisplay" class="mt-3"></div>
+
+                    <script>
+                        document.getElementById('fetchGroupMembersButton').addEventListener('click', function (event) {
+                            var groupId = document.getElementById('fetchGroupMembersID').value;
+                            fetch(`/groups/${groupId}/members`, {
+                                headers: { 'Authorization': 'Bearer ' + adminToken }
+                            })
+                                .then(response => response.json())
+                                .then(members => {
+                                    var display = document.getElementById('groupMembersDisplay');
+                                    if (members && members.length > 0) {
+                                        var memberList = '<ul>';
+                                        members.forEach(member => {
+                                            memberList += `<li>Benutzer-ID: ${member.userID}, Beitrittsdatum: ${new Date(member.startingDate).toLocaleDateString()}</li>`;
+                                        });
+                                        memberList += '</ul>';
+                                        display.innerHTML = memberList;
+                                    } else {
+                                        display.innerHTML = `<p>Keine Mitglieder in dieser Gruppe gefunden.</p>`;
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error('Error:', error);
+                                    showErrorToast('Fehler beim Abrufen der Mitglieder.');
+                                });
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+        <!-- End of Group Members Retrieval -->
         <!-- Group Operations -->
         <div class="card">
             <div class="card-header" id="headingGroupOperations">
@@ -707,6 +764,10 @@
                 </div>
             </div>
         </div>
+
+
+
+
 
         <!-- Group Information Update -->
         <div class="card">
@@ -805,6 +866,81 @@
         </div>
         <!-- End of Group Information Update -->
 
+        <!-- Group Deletion -->
+        <div class="card">
+            <div class="card-header" id="headingGroupDeletion">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                        data-target="#collapseGroupDeletion" aria-expanded="false"
+                        aria-controls="collapseGroupDeletion">
+                        <span class="badge badge-danger">DELETE</span> Gruppe löschen
+                    </button>
+                </h2>
+            </div>
+
+            <div id="collapseGroupDeletion" class="collapse" aria-labelledby="headingGroupDeletion"
+                data-parent="#groupsAccordion">
+                <div class="card-body">
+                    <!-- Fetch Group to Delete Form -->
+                    <form id="fetchGroupToDeleteForm">
+                        <div class="form-group">
+                            <label for="deleteGroupID">Gruppen-ID:</label>
+                            <input type="text" class="form-control" id="deleteGroupID" name="deleteGroupID" required>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="fetchGroupToDeleteButton">Gruppendaten
+                            abrufen</button>
+                    </form>
+
+                    <!-- Display Group Information -->
+                    <div id="groupToDeleteDisplay" class="mt-3"></div>
+
+                    <!-- Delete Group Button -->
+                    <button type="button" class="btn btn-danger mt-3" id="deleteGroupButton"
+                        style="display:none;">Gruppe löschen</button>
+
+                    <script>
+                        document.getElementById('fetchGroupToDeleteButton').addEventListener('click', function (event) {
+                            var groupId = document.getElementById('deleteGroupID').value;
+                            fetch(`/groups/${groupId}`, {
+                                headers: { 'Authorization': 'Bearer ' + adminToken }
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data) {
+                                        document.getElementById('groupToDeleteDisplay').innerHTML = `
+                                    <p>Gruppen-ID: ${data.groupID}</p>
+                                    <p>Titel: ${data.title}</p>
+                                    <p>Beschreibung: ${data.description}</p>`;
+                                        document.getElementById('deleteGroupButton').style.display = 'block';
+                                    } else {
+                                        showErrorToast('Gruppe nicht gefunden.');
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error('Error:', error);
+                                });
+                        });
+
+                        document.getElementById('deleteGroupButton').addEventListener('click', function () {
+                            var groupId = document.getElementById('deleteGroupID').value;
+                            fetch(`/groups/${groupId}`, {
+                                method: 'DELETE',
+                                headers: { 'Authorization': 'Bearer ' + adminToken }
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    showSuccessToast(data.message);
+                                })
+                                .catch((error) => {
+                                    console.error('Error:', error);
+                                });
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+        <!-- End of Group Deletion -->
+
 
 
 
@@ -813,6 +949,275 @@
 
 
 
+    <!-- Users in Groups Section -->
+    <h2 class="mt-4">Benutzer in Gruppen</h2>
+    <div class="accordion" id="usersInGroupsAccordion">
+
+
+
+
+
+        <!-- View All Users in Groups -->
+        <div class="card">
+            <!-- Card Header -->
+            <div class="card-header" id="headingViewUsersInGroups">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
+                        data-target="#collapseViewUsersInGroups" aria-expanded="false"
+                        aria-controls="collapseViewUsersInGroups">
+                        <span class="badge badge-get">GET</span> Alle Benutzer in Gruppen anzeigen
+                    </button>
+                </h2>
+            </div>
+
+            <!-- Card Body -->
+            <div id="collapseViewUsersInGroups" class="collapse" aria-labelledby="headingViewUsersInGroups"
+                data-parent="#usersInGroupsAccordion">
+                <div class="card-body">
+                    <!-- Display Table -->
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Benutzer-ID</th>
+                                <th>Gruppen-ID</th>
+                                <th>Beitrittsdatum</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersInGroupsTableBody">
+                            <!-- Data rows will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function fetchUsersInGroups() {
+                fetch('/users_in_groups', {
+                    headers: { 'Authorization': 'Bearer ' + adminToken }
+                })
+                    .then(response => response.json())
+                    .then(usersInGroups => {
+                        const tableBody = document.getElementById('usersInGroupsTableBody');
+                        tableBody.innerHTML = ''; // Clear existing content
+                        usersInGroups.forEach(userInGroup => {
+                            const row = `<tr>
+                                <td>${userInGroup.userID}</td>
+                                <td>${userInGroup.groupID}</td>
+                                <td>${new Date(userInGroup.startingDate).toLocaleDateString()}</td>
+                             </tr>`;
+                            tableBody.innerHTML += row;
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching users in groups:', error);
+                    });
+            }
+
+            document.getElementById('headingViewUsersInGroups').addEventListener('click', fetchUsersInGroups);
+        </script>
+
+
+
+
+        <!-- View Groups for a User -->
+        <div class="card">
+            <!-- Card Header -->
+            <div class="card-header" id="headingViewGroupsForUser">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
+                        data-target="#collapseViewGroupsForUser" aria-expanded="false"
+                        aria-controls="collapseViewGroupsForUser">
+                        <span class="badge badge-get">GET</span> Gruppen eines Benutzers anzeigen
+                    </button>
+                </h2>
+            </div>
+
+            <!-- Card Body -->
+            <div id="collapseViewGroupsForUser" class="collapse" aria-labelledby="headingViewGroupsForUser"
+                data-parent="#usersInGroupsAccordion">
+                <div class="card-body">
+                    <!-- Form to Fetch Groups for User -->
+                    <form id="fetchGroupsForUserForm">
+                        <div class="form-group">
+                            <label for="fetchUserID">Benutzer-ID:</label>
+                            <input type="text" class="form-control" id="fetchUserID" name="fetchUserID" required>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="fetchGroupsForUserButton">Gruppen
+                            abrufen</button>
+                    </form>
+
+                    <!-- Display Groups for User -->
+                    <div id="userGroupsDisplay" class="mt-3"></div>
+
+                    <script>
+                        document.getElementById('fetchGroupsForUserButton').addEventListener('click', function () {
+                            var userId = document.getElementById('fetchUserID').value;
+                            fetch(`/users_in_groups/${userId}/`, {
+                                headers: { 'Authorization': 'Bearer ' + adminToken }
+                            })
+                                .then(response => response.json())
+                                .then(groups => {
+                                    var display = document.getElementById('userGroupsDisplay');
+                                    if (groups && groups.length > 0) {
+                                        var groupList = '<ul>';
+                                        groups.forEach(group => {
+                                            groupList += `<li>Gruppen-ID: ${group.groupID}, Beitrittsdatum: ${new Date(group.startingDate).toLocaleDateString()}</li>`;
+                                        });
+                                        groupList += '</ul>';
+                                        display.innerHTML = groupList;
+                                    } else {
+                                        display.innerHTML = `<p>Keine Gruppen für diesen Benutzer gefunden.</p>`;
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching groups for user:', error);
+                                });
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add User to Group -->
+        <div class="card">
+            <!-- Card Header -->
+            <div class="card-header" id="headingAddUserToGroup">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                        data-target="#collapseAddUserToGroup" aria-expanded="false"
+                        aria-controls="collapseAddUserToGroup">
+                        <span class="badge badge-post">POST</span> Benutzer zu Gruppe hinzufügen
+                    </button>
+                </h2>
+            </div>
+
+            <!-- Card Body -->
+            <div id="collapseAddUserToGroup" class="collapse" aria-labelledby="headingAddUserToGroup"
+                data-parent="#usersInGroupsAccordion">
+                <div class="card-body">
+                    <!-- Form to Add User to Group -->
+                    <form id="addUserToGroupForm">
+                        <div class="form-group">
+                            <label for="addUserID">Benutzer-ID:</label>
+                            <input type="text" class="form-control" id="addUserID" name="addUserID" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="addGroupID">Gruppen-ID:</label>
+                            <input type="text" class="form-control" id="addGroupID" name="addGroupID" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Benutzer hinzufügen</button>
+                    </form>
+
+                    <script>
+                        document.getElementById('addUserToGroupForm').addEventListener('submit', function (event) {
+                            event.preventDefault();
+
+                            var formData = {
+                                userID: document.getElementById('addUserID').value,
+                                groupID: document.getElementById('addGroupID').value
+                            };
+
+                            fetch('/users_in_groups', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': 'Bearer ' + adminToken
+                                },
+                                body: JSON.stringify(formData)
+                            })
+                                .then(response => {
+                                    if (response.status === 201) {
+                                        return response.json().then(data => {
+                                            showSuccessToast(data.message);
+                                        });
+                                    } else {
+                                        return response.json().then(data => {
+                                            showErrorToast(data.message);
+                                        });
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    showErrorToast('Fehler beim Hinzufügen des Benutzers zur Gruppe.');
+                                });
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+
+<!-- Remove User from Group -->
+<div class="card">
+    <!-- Card Header -->
+    <div class="card-header" id="headingRemoveUserFromGroup">
+        <h2 class="mb-0">
+            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
+                    data-target="#collapseRemoveUserFromGroup" aria-expanded="false"
+                    aria-controls="collapseRemoveUserFromGroup">
+                <span class="badge badge-danger">DELETE</span> Benutzer aus Gruppe entfernen
+            </button>
+        </h2>
+    </div>
+
+    <!-- Card Body -->
+    <div id="collapseRemoveUserFromGroup" class="collapse" aria-labelledby="headingRemoveUserFromGroup"
+         data-parent="#usersInGroupsAccordion">
+        <div class="card-body">
+            <!-- Form to Remove User from Group -->
+            <form id="removeUserFromGroupForm">
+                <div class="form-group">
+                    <label for="removeUserID">Benutzer-ID:</label>
+                    <input type="text" class="form-control" id="removeUserID" name="removeUserID" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="removeGroupID">Gruppen-ID:</label>
+                    <input type="text" class="form-control" id="removeGroupID" name="removeGroupID" required>
+                </div>
+
+                <button type="submit" class="btn btn-danger">Benutzer entfernen</button>
+            </form>
+
+            <script>
+                document.getElementById('removeUserFromGroupForm').addEventListener('submit', function (event) {
+                    event.preventDefault();
+
+                    var userID = document.getElementById('removeUserID').value;
+                    var groupID = document.getElementById('removeGroupID').value;
+
+                    fetch(`/users_in_groups/${userID}/${groupID}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': 'Bearer ' + adminToken
+                        }
+                    })
+                    .then(response => {
+                        if (response.status === 200) {
+                            return response.json().then(data => {
+                                showSuccessToast(data.message);
+                            });
+                        } else {
+                            return response.json().then(data => {
+                                showErrorToast(data.message);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showErrorToast('Fehler beim Entfernen des Benutzers aus der Gruppe.');
+                    });
+                });
+            </script>
+        </div>
+    </div>
+</div>
+
+
+    </div>
+    <!-- End of Users in Groups Section -->
 
 
 
