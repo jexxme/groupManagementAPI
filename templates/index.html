@@ -97,13 +97,6 @@
                 </h2>
             </div>
 
-
-
-
-
-
-
-
             <div id="collapseUsers" class="collapse" aria-labelledby="headingUsers" data-parent="#usersAccordion">
                 <div class="card-body">
                     <!-- Users List in Table Format -->
@@ -514,12 +507,13 @@
     <!-- Groups Section -->
     <h2 class="mt-4">Gruppen</h2>
     <div class="accordion" id="groupsAccordion">
+        
         <!-- List of All Groups -->
         <div class="card">
             <div class="card-header" id="headingGroups">
                 <h2 class="mb-0">
                     <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
-                        data-target="#collapseGroups" aria-expanded="false" aria-controls="collapseGroups">
+                        data-target="#collapseGroups" aria-expanded="true" aria-controls="collapseGroups">
                         <span class="badge badge-get">GET</span> Alle Gruppen
                     </button>
                 </h2>
@@ -527,30 +521,53 @@
 
             <div id="collapseGroups" class="collapse" aria-labelledby="headingGroups" data-parent="#groupsAccordion">
                 <div class="card-body">
-                    <!-- Groups List Here -->
+                    <!-- Groups List in Table Format -->
+                    <table class="table table-bordered">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Gruppen-ID</th>
+                                <th>Besitzer-ID</th>
+                                <th>Titel</th>
+                                <th>Beschreibung</th>
+                                <th>Maximale Nutzer</th>
+                            </tr>
+                        </thead>
+                        <tbody id="groupsTableBody">
+                            <!-- Group rows will be added here dynamically -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
 
-        <!-- Group Operations -->
-        <div class="card">
-            <div class="card-header" id="headingGroupOperations">
-                <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
-                        data-target="#collapseGroupOperations" aria-expanded="false"
-                        aria-controls="collapseGroupOperations">
-                        Gruppen Operationen
-                    </button>
-                </h2>
-            </div>
+        <script>
+            function fetchGroups() {
+                fetch('/groups', {
+                    headers: { 'Authorization': 'Bearer ' + adminToken }
+                })
+                    .then(response => response.json())
+                    .then(groups => {
+                        const tableBody = document.getElementById('groupsTableBody');
+                        tableBody.innerHTML = ''; // Clear existing content
+                        groups.forEach(group => {
+                            const row = `<tr>
+                                <td>${group.groupID}</td>
+                                <td>${group.ownerID}</td>
+                                <td>${group.title}</td>
+                                <td>${group.description}</td>
+                                <td>${group.maxUsers}</td>
+                             </tr>`;
+                            tableBody.innerHTML += row;
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching groups:', error);
+                    });
+            }
 
-            <div id="collapseGroupOperations" class="collapse" aria-labelledby="headingGroupOperations"
-                data-parent="#groupsAccordion">
-                <div class="card-body">
-                    <!-- Add Group Form and Other Operations Here -->
-                </div>
-            </div>
-        </div>
+            document.getElementById('headingGroups').addEventListener('click', fetchGroups);
+        </script>
+
     </div>
 
 
