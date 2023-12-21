@@ -77,7 +77,7 @@
     <h1 class="mb-4 position-relative">LBV-API Admin Dashboard
         <span class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-primary text-light"
             style="font-size: 0.35em;">
-            v0.1
+            v0.2
         </span>
     </h1>
 
@@ -1485,27 +1485,6 @@
     <!-- End of Dates Section -->
 
     <script>
-        // JavaScript for Create Date
-        document.getElementById('createDateForm').addEventListener('submit', function (event) {
-            event.preventDefault();
-            var formData = {
-                groupID: document.getElementById('createGroupID').value,
-                date: document.getElementById('createDate').value,
-                place: document.getElementById('createPlace').value,
-                maxUsers: document.getElementById('createMaxUsers').value
-            };
-            fetch('/dates', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + adminToken
-                },
-                body: JSON.stringify(formData)
-            })
-                .then(handleResponse)
-                .catch(handleError);
-        });
-
         // JavaScript for View All Dates
         document.getElementById('headingViewAllDates').addEventListener('click', function () {
             fetch('/dates', {
