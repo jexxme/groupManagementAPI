@@ -420,6 +420,7 @@ def create_date():
 
 # Read all dates
 @app.route('/dates', methods=['GET'])
+@jwt_required()
 def get_dates():
     dates = Date.query.all()
     output = []
@@ -432,26 +433,37 @@ def get_dates():
 
 # Read a single date by dateID
 @app.route('/dates/<dateID>', methods=['GET'])
+@jwt_required()
 def get_date(dateID):
     date = Date.query.get_or_404(dateID)
     return jsonify({'id': date.id, 'groupID': date.groupID,
                     'date': date.date, 'place': date.place,
                     'maxUsers': date.maxUsers})
 
-# Update a date
+
 @app.route('/dates/<dateID>', methods=['PUT'])
+@jwt_required()
 def update_date(dateID):
     date = Date.query.get_or_404(dateID)
     data = request.get_json()
+
+    # Check if 'date' is in data and convert it to datetime object
+    if 'date' in data:
+        try:
+            data['date'] = dateutil.parser.parse(data['date'])
+        except ValueError as e:
+            return jsonify({'message': str(e)}), 400
+
     date.groupID = data.get('groupID', date.groupID)
     date.date = data.get('date', date.date)
     date.place = data.get('place', date.place)
     date.maxUsers = data.get('maxUsers', date.maxUsers)
+    
     db.session.commit()
     return jsonify({'message': 'Date updated'})
 
+
 # Delete a date
-@admin_required
 @app.route('/dates/<dateID>', methods=['DELETE'])
 def delete_date(dateID):
     date = Date.query.get_or_404(dateID)
