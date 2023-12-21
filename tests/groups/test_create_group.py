@@ -16,9 +16,9 @@ if not token:
 
 # Group data to be sent
 group_data = {
-    "ownerID": 2,  # Update with an appropriate owner ID
-    "title": "Advanced Mathematics",
-    "description": "A group for advanced mathematics students",
+    "ownerID": 3,  # Update with an appropriate owner ID
+    "title": "Einführung in die Informatik",
+    "description": "Wr programmieren in Python!",
     "maxUsers": 10,
 }
 

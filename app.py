@@ -7,6 +7,13 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from flask import render_template
 import re
+from functools import wraps
+from flask_jwt_extended import verify_jwt_in_request
+from flask import jsonify, request
+from datetime import datetime
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from sqlalchemy.orm.exc import NoResultFound
+
 
 app = Flask(__name__)
 
@@ -43,10 +50,6 @@ class Date(db.Model):
     place = db.Column(db.String(100), nullable=False)
     maxUsers = db.Column(db.Integer)
 
-
-# Authentication Routes
-from functools import wraps
-from flask_jwt_extended import verify_jwt_in_request, get_jwt
 
 # Custom decorator for admin-only routes
 def admin_required(fn):
@@ -234,7 +237,7 @@ def get_groups():
                       'title': group.title, 'description': group.description,
                       'maxUsers': group.maxUsers}
         output.append(group_data)
-    return jsonify({'groups': output})
+    return jsonify(output)
 
 # Read a single group by groupID
 @app.route('/groups/<groupID>', methods=['GET'])
@@ -245,53 +248,56 @@ def get_group(groupID):
                     'maxUsers': group.maxUsers})
 
 
-# Update a group
 @app.route('/groups/<groupID>', methods=['PUT'])
 @jwt_required()
 def update_group(groupID):
-
-    # Get the current user's identity
+    # Get the current user's identity and claims
     current_user_id = get_jwt_identity()
     claims = get_jwt()
     is_admin = claims.get('is_admin', False)
 
-    # Return if the user is not the owner
+    # Fetch the group
     group = Group.query.get_or_404(groupID)
-    if str(current_user_id) != str(group.ownerID):
 
-        
+    # Check if the user is the owner or an admin
+    if str(current_user_id) != str(group.ownerID) and not is_admin:
+        return jsonify({'message': 'Sie sind nicht authorisiert um diese Gruppe zu bearbeiten!'}), 403
 
-        # Return if the user is not an admin
-        if not is_admin:
-            return jsonify({'message': 'Sie sind nicht authorisiert um diese Gruppe zu bearbeiten!'}), 403
-
-    
-
-
-
-    group = Group.query.get_or_404(groupID)
+    # Update group details
     data = request.get_json()
     group.ownerID = data.get('ownerID', group.ownerID)
     group.title = data.get('title', group.title)
     group.description = data.get('description', group.description)
     group.maxUsers = data.get('maxUsers', group.maxUsers)
     db.session.commit()
+
     return jsonify({'message': 'Gruppe aktualisiert'})
 
-
 # Delete a group
-@admin_required
 @app.route('/groups/<groupID>', methods=['DELETE'])
+@jwt_required()
 def delete_group(groupID):
+
+    # Get the current user's identity and claims
+    current_user_id = get_jwt_identity()
+    claims = get_jwt()
+    is_admin = claims.get('is_admin', False)
+
+    # Fetch the group
     group = Group.query.get_or_404(groupID)
+
+    # Check if the user is the owner or an admin
+    if str(current_user_id) != str(group.ownerID) and not is_admin:
+        return jsonify({'message': 'Sie sind nicht authorisiert um diese Gruppe zu löschen!'}), 403
+
     db.session.delete(group)
     db.session.commit()
     return jsonify({'message': 'Gruppe gelöscht'})
 
 # CRUD Routes for UsersInGroups
-
 # Create a new user in group
 @app.route('/users_in_groups', methods=['POST'])
+@jwt_required()
 def create_user_in_group():
     data = request.get_json()
     new_user_in_group = UsersInGroups(userID=data['userID'], groupID=data['groupID'],

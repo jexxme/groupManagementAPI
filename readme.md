@@ -34,7 +34,8 @@ Die LBV (Lerngruppen Bildung und Verwaltung) API ist eine RESTful-Webanwendung, 
    - [Entfernen eines Benutzers aus einer Gruppe](#entfernen-eines-benutzers-aus-einer-gruppe)
 9. [Authentifizierung](#authentifizierung)
 TODO Tests
-10. [Beispiele](#beispiele)
+10. [Tests](#tests)
+11. [Beispiele](#beispiele)
 
 
 ## Allgemeine Informationen
@@ -47,6 +48,10 @@ Die LBV-API wurde entwickelt, um die Verwaltung von Lerngruppen und Benutzern in
 - **Verwaltung von Benutzern in Gruppen:** Hinzufügen, Abrufen, Aktualisieren und Entfernen von Benutzern in Gruppen.
 
 Die API verwendet das JSON-Format für Anfragen und Antworten.
+
+Die Authtifikation erfolgt über JWT-Token. Es gibt zwei verschiedene Arten von Benutzern: Administratoren und normale Benutzer. Administratoren haben erweiterte Rechte, wie z.B. das Löschen und Bearbeiten von Benutzerkonten.
+
+Die LBV-API wurde mit Python und Flask entwickelt. Sie verwendet eine SQLite-Datenbank, um Benutzer- und Gruppendaten zu speichern.
 
 ## Installation
 
@@ -69,6 +74,12 @@ Die API verwendet das JSON-Format für Anfragen und Antworten.
    ```
 
 Die API sollte nun auf `http://localhost:5000` gestartet sein.
+
+Das Dashboard ist unter `http://localhost:5000/` oder `http://localhost:5000/dashboard` erreichbar.
+
+## Dashboard
+
+Das Dashboard ist eine webbasierte Benutzeroberfläche für Administratoren, mit der Sie die LBV-API verwalten können. Es bietet eine Übersicht über die Datenbank und ermöglicht das Erstellen, Aktualisieren und Löschen von Benutzern, Gruppen, Terminen und Benutzern in Gruppen. Das Dashboard ist unter `http://localhost:5000/dashboard` verfügbar.
 
 ## Verwendung
 
@@ -503,10 +514,13 @@ response = requests.get(url, headers=headers)
 
 Diese Authentifizierungsmechanismen tragen dazu bei, die LBV-API sicher und zuverlässig für  Benutzer zu machen. Sie sorgen dafür, dass jeder Benutzer nur auf die für ihn bestimmten Ressourcen und Funktionen zugreifen kann.
 
+## Tests
+
+_TODO_
 
 ## TODO
--Alle Routen durch JWT-Token schützen 
--Bisher erst nach dem Login
+- Alle Routen durch JWT-Token schützen 
+  - Bisher erst nach dem Login
 
 ## Beispiele
 
