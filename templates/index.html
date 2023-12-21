@@ -507,7 +507,7 @@
     <!-- Groups Section -->
     <h2 class="mt-4">Gruppen</h2>
     <div class="accordion" id="groupsAccordion">
-        
+
         <!-- List of All Groups -->
         <div class="card">
             <div class="card-header" id="headingGroups">
@@ -568,6 +568,247 @@
             document.getElementById('headingGroups').addEventListener('click', fetchGroups);
         </script>
 
+
+        <!-- Group Information Retrieval -->
+        <div class="card">
+            <div class="card-header" id="headingGroupInfo">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                        data-target="#collapseGroupInfo" aria-expanded="false" aria-controls="collapseGroupInfo">
+                        <span class="badge badge-get">GET</span> Gruppeninformation abrufen
+                    </button>
+                </h2>
+            </div>
+
+            <div id="collapseGroupInfo" class="collapse" aria-labelledby="headingGroupInfo"
+                data-parent="#groupsAccordion">
+                <div class="card-body">
+                    <!-- Retrieve Group Form -->
+                    <form id="getGroupForm">
+                        <div class="form-group">
+                            <label for="groupID">Gruppen-ID:</label>
+                            <input type="text" class="form-control" id="groupID" name="groupID" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Gruppe abrufen</button>
+                    </form>
+                    <!-- Group Information Display -->
+                    <div id="groupInfoDisplay" class="mt-3"></div>
+
+                    <script>
+                        document.getElementById('getGroupForm').addEventListener('submit', function (event) {
+                            event.preventDefault();
+
+                            var groupId = document.getElementById('groupID').value;
+                            fetch(`/groups/${groupId}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    var display = document.getElementById('groupInfoDisplay');
+                                    if (data) {
+                                        display.innerHTML = `
+                                    <p>Gruppen-ID: ${data.groupID}</p>
+                                    <p>Besitzer-ID: ${data.ownerID}</p>
+                                    <p>Titel: ${data.title}</p>
+                                    <p>Beschreibung: ${data.description}</p>
+                                    <p>Maximale Nutzer: ${data.maxUsers}</p>`;
+                                    } else {
+                                        display.innerHTML = `<p>Gruppe nicht gefunden.</p>`;
+                                    }
+                                })
+                                .catch((error) => {
+                                    showErrorToast('Gruppe nicht gefunden.');
+                                });
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+
+        <!-- Group Operations -->
+        <div class="card">
+            <div class="card-header" id="headingGroupOperations">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                        data-target="#collapseGroupOperations" aria-expanded="false"
+                        aria-controls="collapseGroupOperations">
+                        <span class="badge badge-post">POST</span> Gruppe hinzufügen
+                    </button>
+                </h2>
+            </div>
+
+            <div id="collapseGroupOperations" class="collapse" aria-labelledby="headingGroupOperations"
+                data-parent="#groupsAccordion">
+                <div class="card-body">
+                    <!-- Add Group Form -->
+                    <form id="addGroupForm">
+                        <div class="form-group">
+                            <label for="ownerID">Besitzer-ID:</label>
+                            <input type="number" class="form-control" id="ownerID" name="ownerID" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="title">Titel:</label>
+                            <input type="text" class="form-control" id="title" name="title" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Beschreibung:</label>
+                            <input type="text" class="form-control" id="description" name="description" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="maxUsers">Maximale Nutzer:</label>
+                            <input type="number" class="form-control" id="maxUsers" name="maxUsers" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Gruppe hinzufügen</button>
+                    </form>
+
+                    <script>
+                        document.getElementById('addGroupForm').addEventListener('submit', function (event) {
+                            event.preventDefault();
+
+                            var formData = {
+                                ownerID: document.getElementById('ownerID').value,
+                                title: document.getElementById('title').value,
+                                description: document.getElementById('description').value,
+                                maxUsers: document.getElementById('maxUsers').value
+                            };
+
+                            fetch('/groups', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': 'Bearer ' + adminToken
+                                },
+                                body: JSON.stringify(formData)
+                            })
+                                .then(response => {
+                                    if (response.status === 201) {
+                                        // Handle successful response
+                                        return response.json().then(data => {
+                                            showSuccessToast(data.message);
+                                        });
+                                    } else if (response.status === 400 || response.status === 409) {
+                                        // Handle specific error responses (400 Bad Request or 409 Conflict)
+                                        return response.json().then(data => {
+                                            showErrorToast(data.message);
+                                        });
+                                    } else {
+                                        // Handle other unexpected statuses
+                                        throw new Error('Unexpected response status: ' + response.status);
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error('Error:', error);
+                                    showErrorToast(error.message);
+                                });
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+
+        <!-- Group Information Update -->
+        <div class="card">
+            <div class="card-header" id="headingGroupUpdate">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                        data-target="#collapseGroupUpdate" aria-expanded="false" aria-controls="collapseGroupUpdate">
+                        <span class="badge badge-put">PUT</span> Gruppeninformation aktualisieren
+                    </button>
+                </h2>
+            </div>
+
+            <div id="collapseGroupUpdate" class="collapse" aria-labelledby="headingGroupUpdate"
+                data-parent="#groupsAccordion">
+                <div class="card-body">
+                    <!-- Fetch Group Form -->
+                    <form id="fetchGroupForm">
+                        <div class="form-group">
+                            <label for="fetchGroupID">Gruppen-ID:</label>
+                            <input type="text" class="form-control" id="fetchGroupID" name="fetchGroupID" required>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="fetchGroupButton">Gruppendaten
+                            abrufen</button>
+                    </form>
+
+                    <!-- Editable Group Information Form -->
+                    <form id="editGroupForm" class="mt-3" style="display:none;">
+                        <div class="form-group">
+                            <label for="editTitle">Titel:</label>
+                            <input type="text" class="form-control" id="editTitle" name="title" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editDescription">Beschreibung:</label>
+                            <input type="text" class="form-control" id="editDescription" name="description" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editMaxUsers">Maximale Nutzer:</label>
+                            <input type="number" class="form-control" id="editMaxUsers" name="maxUsers" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-success">Änderungen speichern</button>
+                    </form>
+
+                    <script>
+                        document.getElementById('fetchGroupButton').addEventListener('click', function (event) {
+                            var groupId = document.getElementById('fetchGroupID').value;
+                            fetch(`/groups/${groupId}`, {
+                                headers: { 'Authorization': 'Bearer ' + adminToken }
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data) {
+                                        document.getElementById('editTitle').value = data.title;
+                                        document.getElementById('editDescription').value = data.description;
+                                        document.getElementById('editMaxUsers').value = data.maxUsers;
+                                        document.getElementById('editGroupForm').style.display = 'block';
+                                    } else {
+                                        showErrorToast('Gruppe nicht gefunden.');
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error('Error:', error);
+                                });
+                        });
+
+                        document.getElementById('editGroupForm').addEventListener('submit', function (event) {
+                            event.preventDefault();
+                            var groupId = document.getElementById('fetchGroupID').value;
+                            var updatedData = {
+                                title: document.getElementById('editTitle').value,
+                                description: document.getElementById('editDescription').value,
+                                maxUsers: document.getElementById('editMaxUsers').value
+                            };
+
+                            fetch(`/groups/${groupId}`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': 'Bearer ' + adminToken
+                                },
+                                body: JSON.stringify(updatedData)
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    showSuccessToast(data.message);
+                                })
+                                .catch((error) => {
+                                    console.error('Error:', error);
+                                });
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+        <!-- End of Group Information Update -->
+
+
+
+
+        <!-- Ende Gruppen Verwaltung -->
     </div>
 
 

@@ -3,7 +3,7 @@ import requests
 # Constants
 BASE_URL = "http://127.0.0.1:5000"
 CREDENTIALS = {"email": "test", "password": "test"}  # Replace with valid credentials
-GROUP_ID = 14  # Group ID for testing
+GROUP_ID = 15  # Group ID for testing
 
 # Function to get JWT token
 def get_jwt_token(credentials):

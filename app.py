@@ -220,6 +220,10 @@ def create_group():
     db.session.commit()
 
     #  TODO: Add the owner to the group
+    new_user_in_group = UsersInGroups(userID=data['ownerID'], groupID=new_group.groupID,
+                                      startingDate=datetime.utcnow())
+    db.session.add(new_user_in_group)
+    db.session.commit()
 
     # Retrieve the groupID of the newly created group
     groupID = new_group.groupID
