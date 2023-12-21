@@ -382,7 +382,7 @@ def delete_user_in_group(userID, groupID):
     user_in_group = UsersInGroups.query.filter_by(userID=userID, groupID=groupID).first()
     db.session.delete(user_in_group)
     db.session.commit()
-    return jsonify({'message': 'User in group deleted'})
+    return jsonify({'message': 'Benutzer wurde aus der Gruppe entfernt'})
 
 
 # CRUD Routes for Dates
