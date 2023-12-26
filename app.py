@@ -155,6 +155,7 @@ def create_admin():
 
 # Read all users
 @app.route('/users', methods=['GET'])
+@admin_required
 def get_users():
     users = User.query.all()
     output = []
