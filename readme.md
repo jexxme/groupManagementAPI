@@ -55,23 +55,41 @@ Die LBV-API wurde mit Python und Flask entwickelt. Sie verwendet eine SQLite-Dat
 
 ## Installation
 
-1. Klone das LBV-API-Repository von GitHub:
+Befolgen Sie diese Schritte, um die LBV-API auf Ihrem lokalen System einzurichten und auszuführen.
 
-   ```bash
-   git clone https://github.com/jexxme/apiForOSP
+#### Schritt 1: Klonen des Repositories
+Zuerst müssen Sie das LBV-API-Repository von GitHub auf Ihren Computer klonen. Öffnen Sie ein Terminal und führen Sie den folgenden Befehl aus:
+
+```bash
+git clone https://github.com/jexxme/groupManagementAPI
+```
+
+#### Schritt 2: Installieren der Abhängigkeiten
+Wechseln Sie in das Verzeichnis des geklonten Repositories und installieren Sie die erforderlichen Python-Pakete mit pip. Diese Pakete sind in der `requirements.txt` Datei aufgelistet.
+
+```bash
+cd groupManagementAPI
+pip install -r requirements.txt
+```
+
+#### Schritt 3: Einrichten der Umgebungsvariablen
+Erstellen Sie eine `.env`-Datei im Wurzelverzeichnis des Projekts, um Ihre Umgebungsvariablen sicher zu speichern. Fügen Sie insbesondere den JWT Secret Key hinzu:
+
+1. Erstellen Sie eine neue Datei namens `.env` im Hauptverzeichnis des Projekts.
+2. Fügen Sie die folgende Zeile hinzu und ersetzen Sie `IhrGeheimerSchlüssel` durch Ihren eigenen sicheren Schlüssel:
+
+   ```
+   JWT_SECRET_KEY=IhrGeheimerSchlüssel
    ```
 
-2. Installiere die erforderlichen Python-Pakete aus der `requirements.txt`:
+#### Schritt 4: Starten der Anwendung
+Nachdem Sie die Umgebungsvariablen eingerichtet haben, können Sie die Anwendung starten. Führen Sie dazu den folgenden Befehl im Wurzelverzeichnis des Projekts aus:
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+```bash
+python run.py
+```
 
-3. Führe die Anwendung aus:
 
-   ```bash
-   python run.py
-   ```
 
 Die API sollte nun auf `http://localhost:5000` gestartet sein.
 
