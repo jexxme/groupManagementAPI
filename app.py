@@ -59,7 +59,7 @@ def admin_required(fn):
         verify_jwt_in_request()
         claims = get_jwt()
         if not claims.get('is_admin', False):
-            return jsonify(msg="Administratorrechte erforderlich!"), 403
+            return jsonify({'message':"Administratorrechte erforderlich!"}), 403
         else:
             return fn(*args, **kwargs)
     return wrapper
@@ -80,7 +80,7 @@ def login():
     # Validate user credentials
     user = User.query.filter_by(email=email, password=password).first()
     if user is None:
-        return jsonify({"msg": "Bad username or password"}), 401
+        return jsonify({"message": "Bad username or password"}), 401
 
     # Create JWT token with additional user information
     user_claims = {

@@ -553,14 +553,14 @@ Diese Authentifizierungsmechanismen tragen dazu bei, die LBV-API sicher und zuve
 ## Tests
 Die Testfälle werden nachfolgend nach Kategorie gruppiert und beschrieben, um einen klaren Überblick über die entsprechenden Testfunktionen zu bieten.
 
-### Authentifizierung
+### Authentifizierung (/tests/auth/)
 | Testdatei                 | Testbeschreibung                                      |
 |---------------------------|-------------------------------------------------------|
 | `test_add_admin_to_db.py` | Überprüft das Hinzufügen eines Administrators zur Datenbank. |
 | `test_admin_login.py`     | Überprüft den Login-Prozess für Administratoren.              |
 | `test_user_login.py`      | Überprüft den Login-Prozess für Benutzer.                      |
 
-### Termine (Dates)
+### Termine (/tests/dates)
 | Testdatei                | Testbeschreibung                                      |
 |--------------------------|-------------------------------------------------------|
 | `test_add_date.py`       | Überprüft das Hinzufügen eines Datums.                         |
@@ -569,7 +569,7 @@ Die Testfälle werden nachfolgend nach Kategorie gruppiert und beschrieben, um e
 | `test_get_single_date.py`| Überprüft das Abrufen eines einzelnen Datums.                  |
 | `test_update_a_date.py`  | Überprüft das Aktualisieren eines Datums.                      |
 
-### Gruppen (Groups)
+### Gruppen (/tests/groups)
 | Testdatei                        | Testbeschreibung                                      |
 |----------------------------------|-------------------------------------------------------|
 | `test_create_group.py`           | Überprüft das Erstellen einer Gruppe.                          |
@@ -579,13 +579,13 @@ Die Testfälle werden nachfolgend nach Kategorie gruppiert und beschrieben, um e
 | `test_get_groups.py`             | Überprüft das Abrufen aller Gruppen.                           |
 | `test_update_group.py`           | Überprüft das Aktualisieren einer Gruppeninformation.          |
 
-### Benutzer (Users)
+### Benutzer (/tests/users)
 | Testdatei            | Testbeschreibung                                      |
 |----------------------|-------------------------------------------------------|
 | `test_add_user.py`   | Überprüft das Hinzufügen eines Benutzers.                      |
 | `test_update_user.py`| Überprüft das Aktualisieren eines Benutzerprofils.             |
 
-### Benutzer in Gruppen (Users in Groups)
+### Benutzer in Gruppen (/tests/users_in_groups)
 | Testdatei                           | Testbeschreibung                                      |
 |-------------------------------------|-------------------------------------------------------|
 | `test_create_user_in_group.py`      | Überprüft das Hinzufügen eines Benutzers zu einer Gruppe.      |
@@ -594,10 +594,3 @@ Die Testfälle werden nachfolgend nach Kategorie gruppiert und beschrieben, um e
 | `test_read_all_groups_of_a_user.py` | Überprüft das Abrufen aller Gruppen, zu denen ein Benutzer gehört. |
 | `test_read_all_users_in_all_groups.py` | Überprüft das Abrufen aller Benutzer in allen Gruppen.   |
 | `test_read_single_user_in_group.py` | Überprüft das Abrufen der Informationen eines einzelnen Benutzers in einer Gruppe. |
-## TODO
-- Alle Routen durch JWT-Token schützen 
-  - Bisher erst nach dem Login
-
-## Beispiele
-
-_TODO_
