@@ -517,19 +517,7 @@ Beim Login wird ein JWT-Token generiert, das für nachfolgende Anfragen verwende
 - **Benutzerspezifische Endpunkte:** Benutzer können ihre eigenen Kontodetails sehen und aktualisieren. Ein JWT-Token, das die Identität des Benutzers bestätigt, ist erforderlich.
 - **Öffentliche Endpunkte:** Einige Endpunkte, wie das Erstellen eines neuen Benutzerkontos, erfordern keine Authentifizierung.
 
-### Beispiel für eine authentifizierte Anfrage in Python:
-
-```python
-import requests
-
-url = "http://localhost:5000/beispiel-endpunkt"
-headers = {
-    'Authorization': 'Bearer Ihr_JWT_Token_Hier'
-}
-response = requests.get(url, headers=headers)
-```
-
-## Beispiel für eine authentifizierte Anfrage in JavaScript:
+### Beispiel für eine authentifizierte Anfrage in JavaScript:
 
 ```javascript
 const url = "http://localhost:5000/beispiel-endpunkt";
@@ -541,6 +529,18 @@ fetch(url, { headers: headers })
     .then(response => response.json())
     .then(data => console.log(data))
     .catch(error => console.error('Fehler bei der Anfrage:', error));
+```
+
+### Beispiel für eine authentifizierte Anfrage in Python:
+
+```python
+import requests
+
+url = "http://localhost:5000/beispiel-endpunkt"
+headers = {
+    'Authorization': 'Bearer Ihr_JWT_Token_Hier'
+}
+response = requests.get(url, headers=headers)
 ```
 
 ### Sicherheitshinweise
