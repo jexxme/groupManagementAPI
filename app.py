@@ -11,11 +11,14 @@ from flask_jwt_extended import (
 )
 from sqlalchemy.orm.exc import NoResultFound
 import dateutil.parser
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 
 app = Flask(__name__)
 
-app.config['JWT_SECRET_KEY'] = 'Fd%h2Zf9x-:P9E=$L7?ZbZN@_&zvUzBX,Uw?AT8_'  # Change this to a random secret key
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 jwt = JWTManager(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
