@@ -1,24 +1,21 @@
 # Filename: app.py
 
-from flask import Flask, request
-from flask_sqlalchemy import SQLAlchemy
-from flask import jsonify
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
-from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
-from flask import render_template
+from datetime import datetime
 import re
 from functools import wraps
-from flask_jwt_extended import verify_jwt_in_request
-from flask import jsonify, request
-from datetime import datetime
-from flask_jwt_extended import jwt_required, get_jwt_identity
+
+from flask import Flask, jsonify, render_template, request
+from flask_sqlalchemy import SQLAlchemy
+from flask_jwt_extended import (
+    JWTManager, create_access_token, get_jwt, get_jwt_identity, jwt_required, verify_jwt_in_request
+)
 from sqlalchemy.orm.exc import NoResultFound
 import dateutil.parser
 
 
 app = Flask(__name__)
 
-app.config['JWT_SECRET_KEY'] = 'secretXYZ'  # Change this to a random secret key
+app.config['JWT_SECRET_KEY'] = 'Fd%h2Zf9x-:P9E=$L7?ZbZN@_&zvUzBX,Uw?AT8_'  # Change this to a random secret key
 jwt = JWTManager(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
@@ -141,6 +138,12 @@ def create_user():
 @admin_required
 def create_admin():
     data = request.get_json()
+
+    # Check if email already exists
+    existing_admin = User.query.filter_by(email=data['email'], isAdmin=True).first()
+    if existing_admin:
+        return jsonify({'message': 'Ein Admin mit dieser E-Mail-Adresse existiert bereits'}), 409  # 409 Conflict
+
     new_user = User(email=data['email'], firstName=data['firstName'],
                     password=data['password'], isAdmin=True)
     db.session.add(new_user)
@@ -219,7 +222,6 @@ def create_group():
     db.session.add(new_group)
     db.session.commit()
 
-    #  TODO: Add the owner to the group
     new_user_in_group = UsersInGroups(userID=data['ownerID'], groupID=new_group.groupID,
                                       startingDate=datetime.utcnow())
     db.session.add(new_user_in_group)
