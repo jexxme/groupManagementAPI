@@ -52,7 +52,21 @@ Die Authtifikation erfolgt über JWT-Token. Es gibt zwei verschiedene Arten von 
 
 Die LBV-API wurde mit Python und Flask entwickelt. Sie verwendet eine SQLite-Datenbank, um Benutzer- und Gruppendaten zu speichern.
 
-## Installation
+### Aktuelles Deployment
+
+Die LBV-Webschnittstelle ist öffentlich verfügbar unter `https://lbv.digital/`.
+
+### Verwendete Technologien
+- Python
+- Flask
+- SQLite
+- SQLAlchemy
+- JWT
+- Nginx
+- Supervisor
+- Certbot
+
+## Lokale Installation
 
 Befolgen Sie diese Schritte, um die LBV-API auf Ihrem lokalen System einzurichten und auszuführen.
 
@@ -95,12 +109,16 @@ Die API sollte nun auf `http://localhost:5000` gestartet sein.
 Das Dashboard ist unter `http://localhost:5000/` oder `http://localhost:5000/dashboard` erreichbar.
 
 ## Dashboard
+![Dashboard](media/lbv.digital_dashboard.png)
 
 Das Dashboard ist eine webbasierte Benutzeroberfläche für Administratoren, mit der Sie die LBV-API verwalten können. Es bietet eine Übersicht über die Datenbank und ermöglicht das Erstellen, Aktualisieren und Löschen von Benutzern, Gruppen, Terminen und Benutzern in Gruppen. Das Dashboard ist unter `http://localhost:5000/dashboard` verfügbar.
 
 ## Verwendung
 
 Die LBV-API ermöglicht die Verwaltung von Benutzern, Gruppen, Terminen und Benutzern in Gruppen über RESTful-Endpunkte. Jeder Endpunkt akzeptiert HTTP-Anfragemethoden wie GET, POST, PUT und DELETE. Die API erwartet JSON-Daten in den Anfragen und gibt JSON-Antworten zurück.
+
+### ERD
+![ERD](media/ERD.png) 
 
 ## Benutzer (Users)
 
