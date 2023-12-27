@@ -12,6 +12,9 @@ venv/
 # Ignore instance folder
 instance/
 
+*.db
+
+
 #  Ignore __pycache__ folder
 __pycache__/
 
