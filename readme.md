@@ -33,9 +33,8 @@ Die LBV (Lerngruppen Bildung und Verwaltung) API ist eine RESTful-Webanwendung, 
    - [Aktualisieren des Startdatums eines Benutzers in einer Gruppe](#aktualisieren-des-startdatums-eines-benutzers-in-einer-gruppe)
    - [Entfernen eines Benutzers aus einer Gruppe](#entfernen-eines-benutzers-aus-einer-gruppe)
 9. [Authentifizierung](#authentifizierung)
-TODO Tests
 10. [Tests](#tests)
-11. [Beispiele](#beispiele)
+11. [Öffentliche API](#öffentliche-api)
 
 
 ## Allgemeine Informationen
@@ -594,3 +593,97 @@ Die Testfälle werden nachfolgend nach Kategorie gruppiert und beschrieben, um e
 | `test_read_all_groups_of_a_user.py` | Überprüft das Abrufen aller Gruppen, zu denen ein Benutzer gehört. |
 | `test_read_all_users_in_all_groups.py` | Überprüft das Abrufen aller Benutzer in allen Gruppen.   |
 | `test_read_single_user_in_group.py` | Überprüft das Abrufen der Informationen eines einzelnen Benutzers in einer Gruppe. |
+
+## Öffentliche API
+
+### Aktuelles Deployment
+
+In diesem Abschnitt wird der Prozess des Deployments der Flask-API auf einem AWS EC2-Instance detailliert beschrieben. Dies beinhaltet die Einrichtung des Servers, der Sicherheitskonfiguration, der Flask-Anwendung, von Nginx als Reverse Proxy, Supervisor zur Prozessverwaltung und die Einrichtung von HTTPS.
+
+#### 1. AWS EC2-Instance einrichten
+- **EC2-Instance erstellen:**
+  - Wählen Sie das gewünschte Amazon Machine Image (AMI) und den Instance-Typ (z.B. t2.micro).
+  - Konfigurieren Sie die Instance-Details, Storage, Tags und die Sicherheitsgruppe.
+  - Erlauben Sie den SSH-Zugriff (Port 22), HTTP (Port 80) und HTTPS (Port 443) in den Sicherheitsgruppeneinstellungen.
+
+- **Zugriff auf die EC2-Instance:**
+  - Verbinden Sie sich via SSH: `ssh -i /pfad/zum/key.pem ubuntu@ec2-instance-ip`.
+
+#### 2. Flask-Anwendung einrichten
+- **Abhängigkeiten installieren:**
+  - Aktualisieren Sie die Paketlisten: `sudo apt-get update`.
+  - Installieren Sie Python, Pip und andere benötigte Pakete.
+
+- **Flask-App auf EC2-Instance übertragen:**
+  - Verwenden Sie SCP, FTP oder Git, um Ihre Flask-App-Dateien auf die EC2-Instance zu übertragen.
+
+- **Flask-App testen:**
+  - Führen Sie die Flask-App aus und überprüfen Sie den Zugriff über `http://ec2-instance-ip:port`.
+
+#### 3. Nginx als Reverse Proxy einrichten
+- **Nginx installieren:**
+  - `sudo apt-get install nginx`.
+
+- **Nginx konfigurieren:**
+  - Erstellen Sie eine Konfigurationsdatei in `/etc/nginx/sites-available/` und verlinken Sie sie mit `/etc/nginx/sites-enabled/`.
+  - Beispielkonfiguration:
+
+    ```
+    server {
+        listen 80;
+        server_name ihre_domain_oder_ip;
+
+        location / {
+            proxy_pass http://localhost:5000;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+    ```
+
+  - Überprüfen Sie die Konfiguration mit `sudo nginx -t` und starten Sie Nginx neu: `sudo systemctl restart nginx`.
+
+#### 4. Supervisor zur Prozessverwaltung einrichten
+- **Supervisor installieren:**
+  - `sudo apt-get install supervisor`.
+
+- **Supervisor-Konfiguration für Flask-App:**
+  - Erstellen Sie eine Konfigurationsdatei in `/etc/supervisor/conf.d/`.
+  - Beispielkonfiguration:
+
+    ```
+    [program:myflaskapp]
+    command=/pfad/zur/venv/bin/gunicorn -w 4 run:app -b localhost:5000
+    directory=/pfad/zur/flask-app
+    user=ubuntu
+    autostart=true
+    autorestart=true
+    stderr_logfile=/var/log/myflaskapp/myflaskapp.err.log
+    stdout_logfile=/var/log/myflaskapp/myflaskapp.out.log
+    ```
+
+  - Führen Sie `sudo supervisorctl reread`, `sudo supervisorctl update` und `sudo supervisorctl start myflaskapp` aus.
+
+#### 5. HTTPS mit Let's Encrypt und Certbot einrichten
+- **Certbot installieren:**
+  - `sudo apt-get install certbot python3-certbot-nginx`.
+
+- **SSL-Zertifikat erhalten und einrichten:**
+  - Führen Sie `sudo certbot --nginx` aus und folgen Sie den Anweisungen.
+
+- **Automatische Erneuerung einrichten:**
+  - Testen Sie den Erneuerungsprozess mit `sudo certbot renew --dry-run`.
+
+#### 6. Zusätzliche Befehle und Überprüfungen
+- **Nginx Konfiguration testen:**
+  - `sudo nginx -t`.
+
+-
+
+ **Nginx neu starten:**
+  - `sudo systemctl restart nginx`.
+
+- **Supervisor Status überprüfen:**
+  - `sudo supervisorctl status myflaskapp`.
