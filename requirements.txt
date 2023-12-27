@@ -2,3 +2,4 @@ Flask
 Flask-SQLAlchemy
 flask_jwt_extended
 python-dotenv
+python-dateutil
