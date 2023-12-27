@@ -1,5 +1,20 @@
 # LBV - Lerngruppen Bildung und Verwaltung API
 
+![GitHub](https://img.shields.io/github/license/jexxme/groupManagementAPI?style=for-the-badge)
+![GitHub last commit](https://img.shields.io/github/last-commit/jexxme/groupManagementAPI?style=for-the-badge)
+![GitHub issues](https://img.shields.io/github/issues/jexxme/groupManagementAPI?style=for-the-badge)
+![GitHub closed issues](https://img.shields.io/github/issues-closed/jexxme/groupManagementAPI?style=for-the-badge)
+
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
+![SQLite](https://img.shields.io/badge/Sqlite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
+![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-000000?style=for-the-badge&logo=sqlalchemy&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=json-web-tokens&logoColor=white)
+![Nginx](https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)
+
+
+
 Die LBV (Lerngruppen Bildung und Verwaltung) API ist eine RESTful-Webanwendung, die entwickelt wurde, um die Verwaltung von Lerngruppen und Benutzern zu erleichtern. Sie ermöglicht die Erstellung, Aktualisierung und Löschung von Benutzern, Gruppen, Terminen und Beziehungen zwischen Benutzern und Gruppen. Diese Dokumentation bietet eine umfassende Übersicht über die verfügbaren Endpunkte, ihre Verwendung und die erwarteten Datenstrukturen.
 
 ## Inhaltsverzeichnis
@@ -58,6 +73,7 @@ Die LBV-Webschnittstelle ist öffentlich verfügbar unter https://lbv.digital/.
 
 ### Verwendete Technologien
 - Python
+- Bootstrap
 - Flask
 - SQLite
 - SQLAlchemy
@@ -194,6 +210,8 @@ Erstellt einen neuen Benutzer. Die E-Mail-Adresse des Benutzers muss das Format 
   { "message": "Ein Benutzer mit dieser E-Mail-Adresse existiert bereits" }
   ```
 
+---
+
 
 ### Erstellen eines Administrators
 
@@ -258,6 +276,8 @@ Erstellt einen neuen Administrator. Diese Aktion erfordert Administratorrechte. 
   { "message": "Unauthorized: Administratorrechte erforderlich" }
   ```
 
+---
+
 ### Abrufen aller Benutzer
 
 - **Endpoint:** `/users`
@@ -301,12 +321,16 @@ Eine GET-Anfrage an den Endpoint `/users` liefert die Liste aller Benutzer in de
 curl -X GET http://127.0.0.1:5000/users
 ```
 
+---
+
 ### Abrufen eines einzelnen Benutzers
 
 - **Endpoint:** `/users/<userID>`
 - **Methode:** `GET`
 
 Gibt die Details eines einzelnen Benutzers anhand seiner `userID` zurück.
+
+---
 
 ### Aktualisieren eines Benutzers
 
@@ -325,6 +349,8 @@ Aktualisiert die Details eines Benutzers anhand seiner `userID`. Geben Sie die z
     "isAdmin": true
 }
 ```
+
+---
 
 ### Löschen eines Benutzers
 
@@ -355,6 +381,8 @@ Erstellt eine neue Lerngruppe und gibt eine Bestätigungsnachricht zurück.
 }
 ```
 
+---
+
 ### Abrufen aller Gruppen
 
 - **Endpoint:** `/groups`
@@ -362,12 +390,16 @@ Erstellt eine neue Lerngruppe und gibt eine Bestätigungsnachricht zurück.
 
 Gibt eine Liste aller Lerngruppen zurück.
 
+---
+
 ### Abrufen einer einzelnen Gruppe
 
 - **Endpoint:** `/groups/<groupID>`
 - **Methode:** `GET`
 
 Gibt die Details einer einzelnen Lerngruppe anhand ihrer `groupID` zurück.
+
+---
 
 ### Aktualisieren einer Gruppe
 
@@ -385,6 +417,8 @@ Aktualisiert die Details einer Lerngruppe anhand ihrer `groupID`. Geben Sie die 
     "maxUsers": 15
 }
 ```
+
+---
 
 ### Löschen einer Gruppe
 
@@ -413,6 +447,8 @@ Erstellt einen neuen Termin für eine Lerngruppe und gibt eine Bestätigungsnach
 }
 ```
 
+---
+
 ### Abrufen aller Termine
 
 - **Endpoint:** `/dates`
@@ -420,12 +456,16 @@ Erstellt einen neuen Termin für eine Lerngruppe und gibt eine Bestätigungsnach
 
 Gibt eine Liste aller Termine zurück.
 
+---
+
 ### Abrufen eines einzelnen Termins
 
 - **Endpoint:** `/dates/<dateID>`
 - **Methode:** `GET`
 
 Gibt die Details eines einzelnen Termins anhand seiner `dateID` zurück.
+
+---
 
 ### Aktualisieren eines Termins
 
@@ -443,6 +483,8 @@ Aktualisiert die Details eines Termins anhand seiner `dateID`. Geben Sie die zu 
     "maxUsers": 25
 }
 ```
+
+---
 
 ### Löschen eines Termins
 
@@ -470,6 +512,8 @@ Fügt einen Benutzer zu einer Lerngruppe hinzu und gibt eine Bestätigungsnachri
 }
 ```
 
+---
+
 ### Abrufen aller Gruppen denen ein User zugewiesen ist
 
 - **Endpoint:** `/users_in_groups/<userID>`
@@ -477,8 +521,12 @@ Fügt einen Benutzer zu einer Lerngruppe hinzu und gibt eine Bestätigungsnachri
 
 Gibt eine Liste aller Lerngruppen zurück, denen ein Benutzer basierend auf seiner `userID` zugewiesen ist.
 
+---
+
 ### Abrufen aller Benutzer die in einer Gruppe sind 
 Siehe /groups/members TODO
+
+---
 
 ### Aktualisieren des Startdatums eines Benutzers in einer Gruppe
 
@@ -495,6 +543,7 @@ Aktualisiert das Startdatum eines Benutzers in einer Lerngruppe basierend auf se
 }
 ```
 
+---
 
 ### Entfernen eines Benutzers aus einer Gruppe
 
@@ -507,7 +556,9 @@ Entfernt einen Benutzer aus einer Lerngruppe basierend auf seiner `userID` und `
 
 Die Authentifizierung in der LBV-API ist ein entscheidender Aspekt, um die Sicherheit und Integrität der Anwendung zu gewährleisten. Es wird ein JWT (JSON Web Token)-basiertes Authentifizierungssystem verwendet, das sicherstellt, dass nur berechtigte Benutzer Zugriff auf bestimmte Endpunkte haben. Nachfolgend finden Sie Details zur Implementierung und Verwendung der Authentifizierungsfunktionen.
 
-### Login und JWT-Token
+---
+
+### Login
 
 - **Endpoint:** `/login`
 - **Methode:** `POST`
@@ -522,6 +573,57 @@ Beim Login wird ein JWT-Token generiert, das für nachfolgende Anfragen verwende
     "password": "Passwort"
 }
 ```
+
+---
+
+### Benutzeridentität abrufen
+
+- **Endpoint:** `/whoami`
+- **Methode:** `GET`
+
+Diese geschützte Route ermöglicht es, die Identität des aktuell angemeldeten Benutzers zu überprüfen. Sie erfordert einen gültigen JWT-Token, der bei der Anmeldung erworben wird. Die Route gibt den Vornamen des Benutzers zurück, der aus dem Token extrahiert wird.
+
+**Erforderliche Header:**
+
+- `Authorization`: Bearer `JWT-Token`
+
+**Erfolgsantwort:**
+
+- **Code:** 200 (OK)
+- **Inhalt:** 
+  ```json
+  { "Vorname": "Vorname des Benutzers" }
+  ```
+
+**Fehlerantwort bei fehlendem oder ungültigem JWT-Token:**
+
+- **Code:** 401 (Unauthorized)
+- **Inhalt:** 
+  ```json
+  { "msg": "Fehlender oder ungültiger JWT-Token" }
+  ```
+
+**Beispiel:**
+
+- **Anfrage-Header:**
+
+  ```
+  Authorization: Bearer dein_jwt_token
+  ```
+
+- **Antwort bei Erfolg:**
+
+  ```json
+  { "Vorname": "Max" }
+  ```
+
+- **Antwort bei fehlendem oder ungültigem JWT-Token:**
+
+  ```json
+  { "msg": "Fehlender oder ungültiger JWT-Token" }
+  ```
+
+---
 
 ### Token-Verwendung
 
@@ -564,8 +666,6 @@ response = requests.get(url, headers=headers)
 
 - Der JWT-Token sollte geheim gehalten und sicher aufbewahrt werden.
 - Passwörter werden verschlüsselt gespeichert. Die Übertragung von Passwörtern sollte stets über sichere Verbindungen erfolgen.
-
-Diese Authentifizierungsmechanismen tragen dazu bei, die LBV-API sicher und zuverlässig für  Benutzer zu machen. Sie sorgen dafür, dass jeder Benutzer nur auf die für ihn bestimmten Ressourcen und Funktionen zugreifen kann.
 
 ## Tests
 Die Testfälle werden nachfolgend nach Kategorie gruppiert und beschrieben, um einen klaren Überblick über die entsprechenden Testfunktionen zu bieten.
