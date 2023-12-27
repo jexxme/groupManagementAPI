@@ -14,3 +14,6 @@ instance/
 
 #  Ignore __pycache__ folder
 __pycache__/
+
+
+run.py
