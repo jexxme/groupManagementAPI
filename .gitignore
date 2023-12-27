@@ -9,6 +9,9 @@ venv/
 # Ignore the local settings file
 *.env
 
+.env
+
+
 # Ignore instance folder
 instance/
 
