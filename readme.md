@@ -54,7 +54,7 @@ Die LBV-API wurde mit Python und Flask entwickelt. Sie verwendet eine SQLite-Dat
 
 ### Aktuelles Deployment
 
-Die LBV-Webschnittstelle ist öffentlich verfügbar unter `https://lbv.digital/`.
+Die LBV-Webschnittstelle ist öffentlich verfügbar unter https://lbv.digital/.
 
 ### Verwendete Technologien
 - Python
