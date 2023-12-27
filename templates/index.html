@@ -40,29 +40,16 @@
             /* Text color, adjust if needed */
         }
     </style>
-    <script>
-        let adminToken = '';
+<script>
+    let adminToken = localStorage.getItem('jwtToken');
 
-        function getAdminToken() {
-            fetch('/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email: 'dashboard', password: 'dashboard2023' })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    adminToken = data.access_token;
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-        }
+    // Check if the token exists
+    if (!adminToken) {
+        // Redirect to /login if there is no token
+        window.location.href = '/login';
+    } 
+</script>
 
-        // Call the function on site load
-        window.onload = getAdminToken;
-    </script>
 </head>
 
 
@@ -74,12 +61,32 @@
 
 
 <body class="container mt-4">
-    <h1 class="mb-4 position-relative">LBV-API Admin Dashboard
-        <span class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-primary text-light"
-            style="font-size: 0.35em;">
-            v0.3
-        </span>
-    </h1>
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center">
+        <h1 class="mb-4">
+            LBV-API Admin Dashboard
+            <span class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-primary text-light"
+                style="font-size: 0.35em;">
+                v0.3
+            </span>
+        </h1>
+        <button id="logoutButton" class="btn btn-danger mt-2 mt-sm-0">Abmelden</button>
+    </div>
+    
+    
+    
+
+    <script>
+        document.getElementById('logoutButton').addEventListener('click', function() {
+            // Remove the JWT token from local storage
+            localStorage.removeItem('jwtToken');
+    
+            // Redirect to the home page
+            window.location.href = '/';
+        });
+    </script>    
+
+
+
 
     <h2 class="mt-4">Benutzer</h2>
     <!-- Users Section -->

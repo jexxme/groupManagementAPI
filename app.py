@@ -72,6 +72,12 @@ def hello_world():
     return render_template('index.html', users=users, groups=groups)
 
 
+# Login route for GET (Login page)
+@app.route('/login', methods=['GET'])
+def login_page():
+    return render_template('login.html')
+
+
 @app.route('/login', methods=['POST'])
 def login():
     email = request.json.get('email', None)
@@ -92,6 +98,13 @@ def login():
     access_token = create_access_token(identity=user.userID, additional_claims=user_claims)
     return jsonify(access_token=access_token)
 
+
+# Dashboard route 
+@app.route('/dashboard')
+def dashboard():
+    users = User.query.all()
+    groups = Group.query.all()
+    return render_template('index.html', users=users, groups=groups)
 
 
 # TEST ROUTES FOR AUTHENTICATION
