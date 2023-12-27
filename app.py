@@ -64,6 +64,10 @@ def admin_required(fn):
             return fn(*args, **kwargs)
     return wrapper
 
+
+
+
+
 # / route for dashboard
 @app.route('/')
 def hello_world():
@@ -72,6 +76,8 @@ def hello_world():
     return render_template('index.html', users=users, groups=groups)
 
 
+
+# ROUTES FOR AUTHENTICATION
 # Login route for GET (Login page)
 @app.route('/login', methods=['GET'])
 def login_page():
@@ -99,22 +105,18 @@ def login():
     return jsonify(access_token=access_token)
 
 
-# Dashboard route 
-@app.route('/dashboard')
-def dashboard():
-    users = User.query.all()
-    groups = Group.query.all()
-    return render_template('index.html', users=users, groups=groups)
-
-
-# TEST ROUTES FOR AUTHENTICATION
 # Protected route for users
-@app.route('/protected', methods=['GET'])
+@app.route('/whoami', methods=['GET'])
 @jwt_required()
 def protected():
     # Access the identity of the current user with get_jwt_identity
     current_user = get_jwt_identity()
-    return jsonify(logged_in_as=current_user), 200
+    
+    # Get the user object from the database
+    user = db.session.query(User).get(current_user)
+    
+    # Return the "Vorname" (first name) instead of "logged_in_as"
+    return jsonify(Vorname=user.firstName), 200
 
 # Protected route for admins
 @app.route('/admin-only', methods=['GET'])
@@ -124,6 +126,13 @@ def admin_only_route():
     return jsonify(msg="Welcome, admin!")
 
 
+
+# Dashboard route 
+@app.route('/dashboard')
+def dashboard():
+    users = User.query.all()
+    groups = Group.query.all()
+    return render_template('index.html', users=users, groups=groups)
 
 
 
