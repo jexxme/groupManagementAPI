@@ -680,9 +680,7 @@ In diesem Abschnitt wird der Prozess des Deployments der Flask-API auf einem AWS
 - **Nginx Konfiguration testen:**
   - `sudo nginx -t`.
 
--
-
- **Nginx neu starten:**
+- **Nginx neu starten:**
   - `sudo systemctl restart nginx`.
 
 - **Supervisor Status überprüfen:**
