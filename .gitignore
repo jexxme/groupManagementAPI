@@ -8,3 +8,6 @@ __pycache__/
 
 
 run.py
+
+/instance
+data.db
