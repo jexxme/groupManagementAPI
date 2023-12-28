@@ -62,3 +62,4 @@
 2023-12-29 00:10:41,468:INFO:{"user_id": 5, "time": "2023-12-29T00:10:41.468804", "route": "/blacklist", "method": "PUT", "data": "N/A"}
 2023-12-29 00:10:42,393:INFO:{"user_id": 5, "time": "2023-12-29T00:10:42.393998", "route": "/banned_emails", "method": "GET", "data": "N/A"}
 2023-12-29 00:10:42,998:INFO:{"user_id": 5, "time": "2023-12-29T00:10:42.998050", "route": "/banned_emails", "method": "PUT", "data": "N/A"}
+2023-12-29 00:13:02,697:INFO:{"user_id": 5, "time": "2023-12-29T00:13:02.697047", "route": "/whoami", "method": "GET", "data": "N/A"}

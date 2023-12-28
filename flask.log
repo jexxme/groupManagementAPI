@@ -197,3 +197,5 @@ INFO:api_access_logger:{"user_id": 5, "time": "2023-12-29T00:10:42.393998", "rou
 INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 00:10:42] "GET /banned_emails HTTP/1.1" 200 -
 INFO:api_access_logger:{"user_id": 5, "time": "2023-12-29T00:10:42.998050", "route": "/banned_emails", "method": "PUT", "data": "N/A"}
 INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 00:10:42] "PUT /banned_emails HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 5, "time": "2023-12-29T00:13:02.697047", "route": "/whoami", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 00:13:02] "GET /whoami HTTP/1.1" 200 -
