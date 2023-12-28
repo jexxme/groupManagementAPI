@@ -56,7 +56,18 @@
             fetch('/whoami', {
                 headers: { 'Authorization': 'Bearer ' + adminToken }
             })
-                .then(response => response.json())
+                .then(response => {
+                    if (response.status === 401) {
+                        // Remove the JWT token from local storage
+                        localStorage.removeItem('jwtToken');
+                        // Clear adminToken
+                        adminToken = null;
+                        // Redirect to the login page
+                        window.location.href = '/login';
+                    } else {
+                        return response.json();
+                    }
+                })
                 .then(data => {
                     // Display the user's first name
                     document.getElementById('username').textContent = data.Vorname;
