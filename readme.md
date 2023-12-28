@@ -49,6 +49,7 @@ Die LBV (Lerngruppen Bildung und Verwaltung) API ist eine RESTful-Webanwendung, 
 9. [Authentifizierung](#authentifizierung)
 10. [Tests](#tests)
 11. [Öffentliche API](#öffentliche-api)
+12. [API-Zugriffsprotokollierung](#api-zugriffsprotokollierung)
 
 
 ## Allgemeine Informationen
@@ -803,6 +804,23 @@ In diesem Abschnitt wird der Prozess des Deployments der Flask-API auf einem AWS
 - **Supervisor Status überprüfen:**
   - `sudo supervisorctl status myflaskapp`.
 
+## API-Zugriffsprotokollierung
+
+In diesem Projekt haben wir eine erweiterte Protokollierungsfunktion implementiert, um detaillierte Informationen über API-Zugriffe zu erfassen. Dies ist besonders nützlich, um die Nutzung und Leistung der API zu überwachen und zu analysieren.
+
+#### Konfiguration des Hauptloggers für Flask
+Zunächst haben wir den Hauptlogger für Flask mit `logging.basicConfig` konfiguriert. Dieser schreibt Standard-Flask-Lognachrichten in die Datei `flask.log`. Die Protokollierungsebene ist auf `INFO` gesetzt, was bedeutet, dass alle Nachrichten mit dieser oder einer höheren Priorität (wie WARN oder ERROR) protokolliert werden.
+
+#### Konfiguration eines separaten Loggers für API-Zugriffe
+Um die API-Zugriffsprotokolle von den allgemeinen Flask-Logs zu trennen, haben wir einen separaten Logger namens `api_access_logger` eingerichtet. Dieser Logger schreibt in die Datei `api_access.log` und verwendet das gleiche Protokollformat wie der Hauptlogger. Mit dieser Trennung können wir API-bezogene Protokolle leichter filtern und analysieren.
+
+#### Dekorator für die Protokollierung von API-Zugriffen
+Wir haben einen Dekorator `log_access` definiert, der für jede API-Funktion angewendet wird. Dieser Dekorator erfasst nützliche Informationen über den API-Zugriff, einschließlich der Benutzer-ID (oder "Anonymous", falls nicht verfügbar), der aktuellen Zeit, der angeforderten Route, der HTTP-Methode und der übermittelten Daten (für POST-Anfragen). Diese Daten werden im JSON-Format protokolliert, um sie maschinenlesbar und leichter verarbeitbar zu machen.
+
+#### Anwendung des Dekorators auf alle REST-Methoden
+Um eine konsistente Protokollierung über alle API-Endpunkte zu gewährleisten, wenden wir den `log_access`-Dekorator automatisch auf jede REST-Methode in unserer Flask-Anwendung an. Dies wird durch Iterieren über alle URL-Regeln in `app.url_map` und Anwenden des Dekorators auf die entsprechenden Ansichtsfunktionen erreicht. Dadurch wird sichergestellt, dass jeder API-Zugriff protokolliert wird, ohne dass für jede Methode manuell Code hinzugefügt werden muss.
+
+Diese Protokollierungsfunktion bietet eine wertvolle Übersicht über die API-Nutzung und erleichtert die Fehlerbehebung und Leistungsoptimierung in unserer Flask-Anwendung.
 
 # Doku TODO
 - Profile Picture

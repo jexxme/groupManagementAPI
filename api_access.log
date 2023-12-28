@@ -1,0 +1,64 @@
+2023-12-29 00:01:54,365:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:01:54.365969", "route": "/dashboard", "method": "GET", "data": "N/A"}
+2023-12-29 00:01:54,436:INFO:{"user_id": 5, "time": "2023-12-29T00:01:54.436628", "route": "/whoami", "method": "GET", "data": "N/A"}
+2023-12-29 00:01:54,442:INFO:{"user_id": 5, "time": "2023-12-29T00:01:54.442290", "route": "/profile_picture/5", "method": "GET", "data": "N/A"}
+2023-12-29 00:01:54,445:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:01:54.444872", "route": "/dashboard", "method": "GET", "data": "N/A"}
+2023-12-29 00:01:58,177:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:01:58.177752", "route": "/dashboard", "method": "GET", "data": "N/A"}
+2023-12-29 00:01:58,225:INFO:{"user_id": 5, "time": "2023-12-29T00:01:58.225162", "route": "/whoami", "method": "GET", "data": "N/A"}
+2023-12-29 00:01:58,227:INFO:{"user_id": 5, "time": "2023-12-29T00:01:58.227731", "route": "/profile_picture/5", "method": "GET", "data": "N/A"}
+2023-12-29 00:01:58,229:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:01:58.229964", "route": "/dashboard", "method": "GET", "data": "N/A"}
+2023-12-29 00:01:59,498:INFO:{"user_id": 5, "time": "2023-12-29T00:01:59.498905", "route": "/blacklist", "method": "GET", "data": "N/A"}
+2023-12-29 00:02:06,265:INFO:{"user_id": 5, "time": "2023-12-29T00:02:06.265838", "route": "/blacklist", "method": "PUT", "data": "N/A"}
+2023-12-29 00:04:57,904:INFO:{"user_id": 5, "time": "2023-12-29T00:04:57.904602", "route": "/whoami", "method": "GET", "data": "N/A"}
+2023-12-29 00:05:32,915:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:05:32.915598", "route": "/dashboard", "method": "GET", "data": "N/A"}
+2023-12-29 00:05:33,054:INFO:{"user_id": 5, "time": "2023-12-29T00:05:33.054091", "route": "/whoami", "method": "GET", "data": "N/A"}
+2023-12-29 00:05:33,061:INFO:{"user_id": 5, "time": "2023-12-29T00:05:33.061446", "route": "/profile_picture/5", "method": "GET", "data": "N/A"}
+2023-12-29 00:05:33,065:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:05:33.065116", "route": "/dashboard", "method": "GET", "data": "N/A"}
+2023-12-29 00:05:35,425:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:05:35.425920", "route": "/dashboard", "method": "GET", "data": "N/A"}
+2023-12-29 00:05:35,475:INFO:{"user_id": 5, "time": "2023-12-29T00:05:35.475506", "route": "/whoami", "method": "GET", "data": "N/A"}
+2023-12-29 00:05:35,479:INFO:{"user_id": 5, "time": "2023-12-29T00:05:35.479632", "route": "/profile_picture/5", "method": "GET", "data": "N/A"}
+2023-12-29 00:05:35,480:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:05:35.480148", "route": "/dashboard", "method": "GET", "data": "N/A"}
+2023-12-29 00:05:36,259:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:05:36.259376", "route": "/", "method": "GET", "data": "N/A"}
+2023-12-29 00:05:36,342:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:05:36.341547", "route": "/login", "method": "GET", "data": "N/A"}
+2023-12-29 00:05:37,449:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:05:37.449340", "route": "/login", "method": "POST", "data": {"email": "jerome@admin.admin", "password": "jerome28092000"}}
+2023-12-29 00:05:37,464:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:05:37.464399", "route": "/dashboard", "method": "GET", "data": "N/A"}
+2023-12-29 00:05:37,527:INFO:{"user_id": 5, "time": "2023-12-29T00:05:37.527072", "route": "/whoami", "method": "GET", "data": "N/A"}
+2023-12-29 00:05:37,528:INFO:{"user_id": 5, "time": "2023-12-29T00:05:37.528104", "route": "/profile_picture/5", "method": "GET", "data": "N/A"}
+2023-12-29 00:05:37,531:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:05:37.531190", "route": "/dashboard", "method": "GET", "data": "N/A"}
+2023-12-29 00:05:38,383:INFO:{"user_id": 5, "time": "2023-12-29T00:05:38.383432", "route": "/users", "method": "GET", "data": "N/A"}
+2023-12-29 00:05:39,328:INFO:{"user_id": 5, "time": "2023-12-29T00:05:39.328613", "route": "/users", "method": "GET", "data": "N/A"}
+2023-12-29 00:06:56,273:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:06:56.273428", "route": "/", "method": "GET", "data": "N/A"}
+2023-12-29 00:06:56,350:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:06:56.350916", "route": "/login", "method": "GET", "data": "N/A"}
+2023-12-29 00:06:57,725:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:06:57.725958", "route": "/login", "method": "POST", "data": {"email": "jerome@admin.admin", "password": "jerome28092000"}}
+2023-12-29 00:07:08,162:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:07:08.162723", "route": "/dashboard", "method": "GET", "data": "N/A"}
+2023-12-29 00:07:08,231:INFO:{"user_id": 5, "time": "2023-12-29T00:07:08.231202", "route": "/whoami", "method": "GET", "data": "N/A"}
+2023-12-29 00:07:08,237:INFO:{"user_id": 5, "time": "2023-12-29T00:07:08.237941", "route": "/profile_picture/5", "method": "GET", "data": "N/A"}
+2023-12-29 00:07:08,238:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:07:08.238959", "route": "/dashboard", "method": "GET", "data": "N/A"}
+2023-12-29 00:07:09,915:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:07:09.915512", "route": "/", "method": "GET", "data": "N/A"}
+2023-12-29 00:07:09,970:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:07:09.970394", "route": "/login", "method": "GET", "data": "N/A"}
+2023-12-29 00:07:10,919:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:07:10.919237", "route": "/login", "method": "POST", "data": {"email": "jerome@admin.admin", "password": "jerome28092000"}}
+2023-12-29 00:07:10,933:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:07:10.932707", "route": "/dashboard", "method": "GET", "data": "N/A"}
+2023-12-29 00:07:10,983:INFO:{"user_id": 5, "time": "2023-12-29T00:07:10.983332", "route": "/whoami", "method": "GET", "data": "N/A"}
+2023-12-29 00:07:10,985:INFO:{"user_id": 5, "time": "2023-12-29T00:07:10.985967", "route": "/profile_picture/5", "method": "GET", "data": "N/A"}
+2023-12-29 00:07:10,988:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:07:10.987520", "route": "/dashboard", "method": "GET", "data": "N/A"}
+2023-12-29 00:09:19,411:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:09:19.411913", "route": "/dashboard", "method": "GET", "data": "N/A"}
+2023-12-29 00:09:19,473:INFO:{"user_id": 5, "time": "2023-12-29T00:09:19.473987", "route": "/whoami", "method": "GET", "data": "N/A"}
+2023-12-29 00:09:19,479:INFO:{"user_id": 5, "time": "2023-12-29T00:09:19.479198", "route": "/profile_picture/5", "method": "GET", "data": "N/A"}
+2023-12-29 00:09:19,481:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:09:19.481811", "route": "/dashboard", "method": "GET", "data": "N/A"}
+2023-12-29 00:10:34,583:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:10:34.583661", "route": "/", "method": "GET", "data": "N/A"}
+2023-12-29 00:10:34,693:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:10:34.693544", "route": "/login", "method": "GET", "data": "N/A"}
+2023-12-29 00:10:35,807:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:10:35.807781", "route": "/login", "method": "POST", "data": {"email": "jerome@admin.admin", "password": "jerome28092000"}}
+2023-12-29 00:10:35,821:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:10:35.821806", "route": "/dashboard", "method": "GET", "data": "N/A"}
+2023-12-29 00:10:35,883:INFO:{"user_id": 5, "time": "2023-12-29T00:10:35.883057", "route": "/whoami", "method": "GET", "data": "N/A"}
+2023-12-29 00:10:35,925:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:10:35.924952", "route": "/", "method": "GET", "data": "N/A"}
+2023-12-29 00:10:35,979:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:10:35.979379", "route": "/login", "method": "GET", "data": "N/A"}
+2023-12-29 00:10:38,420:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:10:38.420269", "route": "/login", "method": "POST", "data": {"email": "jerome@admin.admin", "password": "jerome28092000"}}
+2023-12-29 00:10:38,433:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:10:38.433232", "route": "/dashboard", "method": "GET", "data": "N/A"}
+2023-12-29 00:10:38,485:INFO:{"user_id": 5, "time": "2023-12-29T00:10:38.485346", "route": "/whoami", "method": "GET", "data": "N/A"}
+2023-12-29 00:10:38,490:INFO:{"user_id": 5, "time": "2023-12-29T00:10:38.490091", "route": "/profile_picture/5", "method": "GET", "data": "N/A"}
+2023-12-29 00:10:38,492:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:10:38.492169", "route": "/dashboard", "method": "GET", "data": "N/A"}
+2023-12-29 00:10:39,444:INFO:{"user_id": 5, "time": "2023-12-29T00:10:39.444505", "route": "/users", "method": "GET", "data": "N/A"}
+2023-12-29 00:10:40,056:INFO:{"user_id": 5, "time": "2023-12-29T00:10:40.056244", "route": "/users", "method": "GET", "data": "N/A"}
+2023-12-29 00:10:40,702:INFO:{"user_id": 5, "time": "2023-12-29T00:10:40.702057", "route": "/blacklist", "method": "GET", "data": "N/A"}
+2023-12-29 00:10:41,468:INFO:{"user_id": 5, "time": "2023-12-29T00:10:41.468804", "route": "/blacklist", "method": "PUT", "data": "N/A"}
+2023-12-29 00:10:42,393:INFO:{"user_id": 5, "time": "2023-12-29T00:10:42.393998", "route": "/banned_emails", "method": "GET", "data": "N/A"}
+2023-12-29 00:10:42,998:INFO:{"user_id": 5, "time": "2023-12-29T00:10:42.998050", "route": "/banned_emails", "method": "PUT", "data": "N/A"}

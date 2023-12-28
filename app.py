@@ -15,6 +15,10 @@ from dotenv import load_dotenv
 import os
 from werkzeug.utils import secure_filename
 from flask import send_file
+import json
+import logging
+from flask import request
+
 
 load_dotenv()
 
@@ -80,11 +84,42 @@ def admin_required(fn):
     return wrapper
 
 
+# Configure the main logger for Flask (optional)
+logging.basicConfig(filename='flask.log', level=logging.INFO)
 
+# Configure a separate logger for API access logs
+api_logger = logging.getLogger('api_access_logger')
+api_handler = logging.FileHandler('api_access.log')
+api_formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(message)s')
+api_handler.setFormatter(api_formatter)
+api_logger.addHandler(api_handler)
+api_logger.setLevel(logging.INFO)
 
+# Log decorator
+def log_access(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        user_id = get_jwt_identity() if verify_jwt_in_request(optional=True) else 'Anonymous'
+        log_data = {
+            "user_id": user_id,
+            "time": datetime.now().isoformat(),
+            "route": request.path,
+            "method": request.method,
+            "data": request.json if request.method == 'POST' else 'N/A'
+        }
+        api_logger.info(json.dumps(log_data))  # Use the separate logger for API access logs
+        return func(*args, **kwargs)
+    return wrapper
+
+# Apply the decorator to every REST method
+for rule in app.url_map.iter_rules():
+    if rule.endpoint != 'static':
+        view_func = app.view_functions[rule.endpoint]
+        app.view_functions[rule.endpoint] = log_access(view_func)
 
 # / route for dashboard
 @app.route('/')
+@log_access
 def hello_world():
     users = User.query.all()
     groups = Group.query.all()
@@ -95,11 +130,13 @@ def hello_world():
 # ROUTES FOR AUTHENTICATION
 # Login route for GET (Login page)
 @app.route('/login', methods=['GET'])
+@log_access
 def login_page():
     return render_template('login.html')
 
 
 @app.route('/login', methods=['POST'])
+@log_access
 def login():
     email = request.json.get('email', None)
     password = request.json.get('password', None)
@@ -123,6 +160,7 @@ def login():
 # Protected route for users
 @app.route('/whoami', methods=['GET'])
 @jwt_required()
+@log_access
 def protected():
     # Access the identity of the current user with get_jwt_identity
     current_user = get_jwt_identity()
@@ -136,6 +174,7 @@ def protected():
 # Protected route for admins
 @app.route('/admin-only', methods=['GET'])
 @admin_required
+@log_access
 def admin_only_route():
     # Admin-only logic
     return jsonify(msg="Welcome, admin!")
@@ -144,6 +183,7 @@ def admin_only_route():
 
 # Dashboard route 
 @app.route('/dashboard')
+@log_access
 def dashboard():
     users = User.query.all()
     groups = Group.query.all()
@@ -154,6 +194,7 @@ def dashboard():
 
 @app.route('/upload_profile_picture', methods=['POST'])
 @jwt_required()
+@log_access
 def upload_profile_picture():
     current_user_id = get_jwt_identity()
     claims = get_jwt()
@@ -201,6 +242,7 @@ def upload_profile_picture():
 
 # Profile picture download route
 @app.route('/profile_picture/<int:user_id>')
+@log_access
 def get_profile_picture(user_id):
     user_picture_path = get_user_profile_picture_path(user_id)
     if user_picture_path and os.path.exists(user_picture_path):
@@ -227,6 +269,7 @@ def update_user_profile_picture_path(user_id, path):
 
 @app.route('/blacklist', methods=['GET'])
 @admin_required
+@log_access
 def get_blacklist():
     try:
         with open(BLACKLIST_FILE_PATH, 'r') as file:
@@ -237,6 +280,7 @@ def get_blacklist():
     
 @app.route('/blacklist', methods=['PUT'])
 @admin_required
+@log_access
 def update_blacklist():
     if not request.json or 'blacklist' not in request.json:
         abort(400, description="Bitte geben Sie eine 'blacklist' Nutzlast an.")
@@ -255,6 +299,7 @@ def update_blacklist():
 
 
 @app.route('/banned_emails', methods=['GET'])
+@log_access
 def get_banned_emails():
     try:
         with open(BANNED_EMAILS_FILE_PATH, 'r') as file:
@@ -265,6 +310,7 @@ def get_banned_emails():
 
 
 @app.route('/banned_emails', methods=['PUT'])
+@log_access
 def update_banned_emails():
     if not request.json or 'banned_emails' not in request.json:
         abort(400, description="Bitte geben Sie eine 'banned_emails' Nutzlast an.")
@@ -284,6 +330,7 @@ def update_banned_emails():
 # CRUD Routes for Users
 # Create new user
 @app.route('/users', methods=['POST'])
+@log_access
 def create_user():
     data = request.get_json()
 
@@ -306,6 +353,7 @@ def create_user():
 # Create new admin user
 @app.route('/admin', methods=['POST'])
 @admin_required
+@log_access
 def create_admin():
     data = request.get_json()
 
@@ -323,6 +371,7 @@ def create_admin():
 # Read all users
 @app.route('/users', methods=['GET'])
 @admin_required
+@log_access
 def get_users():
     users = User.query.all()
     output = []
@@ -335,6 +384,7 @@ def get_users():
 
 # Read a single user by userID
 @app.route('/users/<id>', methods=['GET'])
+@log_access
 def get_user(id):
     user = User.query.get_or_404(id)
     return jsonify({'userID': user.userID, 'email': user.email, 
@@ -343,6 +393,7 @@ def get_user(id):
 
 @app.route('/users/<id>', methods=['PUT'])
 @jwt_required()
+@log_access
 def update_user(id):
     current_user_id = get_jwt_identity()
     claims = get_jwt()
@@ -373,6 +424,7 @@ def update_user(id):
 # Delete a user
 @app.route('/users/<id>', methods=['DELETE'])
 @admin_required
+@log_access
 def delete_user(id):
     user = User.query.get_or_404(id)
     db.session.delete(user)
@@ -386,6 +438,7 @@ def delete_user(id):
 # Create a new group
 @app.route('/groups', methods=['POST'])
 @jwt_required()
+@log_access
 def create_group():
     data = request.get_json()
     new_group = Group(ownerID=data['ownerID'], title=data['title'],
@@ -407,6 +460,7 @@ def create_group():
 
 # Read all groups
 @app.route('/groups', methods=['GET'])
+@log_access
 def get_groups():
     groups = Group.query.all()
     output = []
@@ -419,6 +473,7 @@ def get_groups():
 
 # Read a single group by groupID
 @app.route('/groups/<groupID>', methods=['GET'])
+@log_access
 def get_group(groupID):
     group = Group.query.get_or_404(groupID)
     return jsonify({'groupID': group.groupID, 'ownerID': group.ownerID, 
@@ -428,6 +483,7 @@ def get_group(groupID):
 
 @app.route('/groups/<groupID>', methods=['PUT'])
 @jwt_required()
+@log_access
 def update_group(groupID):
     # Get the current user's identity and claims
     current_user_id = get_jwt_identity()
@@ -454,6 +510,7 @@ def update_group(groupID):
 # Delete a group
 @app.route('/groups/<groupID>', methods=['DELETE'])
 @jwt_required()
+@log_access
 def delete_group(groupID):
 
     # Get the current user's identity and claims
@@ -476,6 +533,7 @@ def delete_group(groupID):
 # Read all members of a group
 @app.route('/groups/<groupID>/members', methods=['GET'])
 @jwt_required()
+@log_access
 def get_members(groupID):
     members = UsersInGroups.query.filter_by(groupID=groupID).all()
     output = []
@@ -489,6 +547,7 @@ def get_members(groupID):
 # Create a new user in group
 @app.route('/users_in_groups', methods=['POST'])
 @jwt_required()
+@log_access
 def create_user_in_group():
     data = request.get_json()
 
@@ -520,6 +579,7 @@ def create_user_in_group():
 # Read all users in all groups
 @app.route('/users_in_groups', methods=['GET'])
 @jwt_required()
+@log_access
 def get_users_in_groups():
     users_in_groups = UsersInGroups.query.all()
     output = []
@@ -532,6 +592,7 @@ def get_users_in_groups():
 # Read a single user in group by userID and groupID
 @app.route('/users_in_groups/<userID>/<groupID>', methods=['GET'])
 @jwt_required()
+@log_access
 def get_user_in_group(userID, groupID):
     user_in_group = UsersInGroups.query.filter_by(userID=userID, groupID=groupID).first()
     return jsonify({'userID': user_in_group.userID, 'groupID': user_in_group.groupID, 
@@ -540,6 +601,7 @@ def get_user_in_group(userID, groupID):
 # TODO: Document this route
 @app.route('/users_in_groups/<int:userID>/', methods=['GET'])
 @jwt_required()
+@log_access
 def get_groups_for_user(userID):
     user_groups = UsersInGroups.query.filter_by(userID=userID).all()
     output = []
@@ -556,6 +618,7 @@ def get_groups_for_user(userID):
 # Delete a user in group
 @app.route('/users_in_groups/<userID>/<groupID>', methods=['DELETE'])
 @jwt_required()
+@log_access
 def delete_user_in_group(userID, groupID):
     user_in_group = UsersInGroups.query.filter_by(userID=userID, groupID=groupID).first()
     db.session.delete(user_in_group)
@@ -566,6 +629,7 @@ def delete_user_in_group(userID, groupID):
 # CRUD Routes for Dates
 @app.route('/dates', methods=['POST'])
 @jwt_required()
+@log_access
 def create_date():
     data = request.get_json()
     current_user_id = get_jwt_identity()
@@ -597,6 +661,7 @@ def create_date():
 # Read all dates
 @app.route('/dates', methods=['GET'])
 @jwt_required()
+@log_access
 def get_dates():
     dates = Date.query.all()
     output = []
@@ -610,6 +675,7 @@ def get_dates():
 # Read a single date by dateID
 @app.route('/dates/<dateID>', methods=['GET'])
 @jwt_required()
+@log_access
 def get_date(dateID):
     date = Date.query.get_or_404(dateID)
     return jsonify({'id': date.id, 'groupID': date.groupID,
@@ -619,6 +685,7 @@ def get_date(dateID):
 
 @app.route('/dates/<dateID>', methods=['PUT'])
 @jwt_required()
+@log_access
 def update_date(dateID):
     date = Date.query.get_or_404(dateID)
     data = request.get_json()
@@ -641,6 +708,7 @@ def update_date(dateID):
 
 @app.route('/dates/<dateID>', methods=['DELETE'])
 @jwt_required()
+@log_access
 def delete_date(dateID):
     current_user_id = get_jwt_identity()
     claims = get_jwt()
