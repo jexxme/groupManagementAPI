@@ -4,7 +4,7 @@ from datetime import datetime
 import re
 from functools import wraps
 
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import (
     JWTManager, create_access_token, get_jwt, get_jwt_identity, jwt_required, verify_jwt_in_request
@@ -23,10 +23,15 @@ app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 app.config['UPLOAD_FOLDER'] = './userdata/pictures/profilepicture'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
-app.config['MAX_CONTENT_LENGTH'] = 3 * 1024 * 1024  # 3 MB
+app.config['MAX_CONTENT_LENGTH'] = 3 * 1024 * 1024  # 3 M
+
 
 jwt = JWTManager(app)
 db = SQLAlchemy(app)
+
+BLACKLIST_FILE_PATH = './static/blacklist.txt'
+BANNED_EMAILS_FILE_PATH = './static/banned_emails.txt'
+
 
 # Allowed file types for profile pictures
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
@@ -216,6 +221,65 @@ def update_user_profile_picture_path(user_id, path):
     user = User.query.get(user_id)
     user.profile_picture = path
     db.session.commit()
+
+
+
+
+@app.route('/blacklist', methods=['GET'])
+@admin_required
+def get_blacklist():
+    try:
+        with open(BLACKLIST_FILE_PATH, 'r') as file:
+            blacklist = file.read().splitlines()
+        return jsonify(blacklist=blacklist), 200
+    except FileNotFoundError:
+        return jsonify(message='Blacklist-Datei nicht gefunden'), 404
+    
+@app.route('/blacklist', methods=['PUT'])
+@admin_required
+def update_blacklist():
+    if not request.json or 'blacklist' not in request.json:
+        abort(400, description="Bitte geben Sie eine 'blacklist' Nutzlast an.")
+    
+    new_blacklist = request.json['blacklist']
+    if not isinstance(new_blacklist, list):
+        abort(400, description="Die 'blacklist' muss eine Liste von Wörtern sein.")
+    
+    try:
+        with open(BLACKLIST_FILE_PATH, 'w') as file:
+            file.write('\n'.join(new_blacklist))
+        return jsonify(message='Blacklist erfolgreich aktualisiert'), 200
+    except IOError as e:
+        return jsonify(message='Beim Aktualisieren der Blacklist ist ein Fehler aufgetreten'), 500
+
+
+
+@app.route('/banned_emails', methods=['GET'])
+def get_banned_emails():
+    try:
+        with open(BANNED_EMAILS_FILE_PATH, 'r') as file:
+            banned_emails = file.read().splitlines()
+        return jsonify(banned_emails=banned_emails), 200
+    except FileNotFoundError:
+        return jsonify(message='Datei mit gesperrten E-Mails nicht gefunden'), 404
+
+
+@app.route('/banned_emails', methods=['PUT'])
+def update_banned_emails():
+    if not request.json or 'banned_emails' not in request.json:
+        abort(400, description="Bitte geben Sie eine 'banned_emails' Nutzlast an.")
+    
+    new_banned_emails = request.json['banned_emails']
+    if not isinstance(new_banned_emails, list):
+        abort(400, description="Die 'banned_emails' muss eine Liste von E-Mails sein.")
+    
+    try:
+        with open(BANNED_EMAILS_FILE_PATH, 'w') as file:
+            file.write('\n'.join(new_banned_emails))
+        return jsonify(message='Gesperrte E-Mails erfolgreich aktualisiert'), 200
+    except IOError as e:
+        return jsonify(message='Beim Aktualisieren der gesperrten E-Mails ist ein Fehler aufgetreten'), 500
+
 
 # CRUD Routes for Users
 # Create new user

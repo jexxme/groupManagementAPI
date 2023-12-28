@@ -802,3 +802,8 @@ In diesem Abschnitt wird der Prozess des Deployments der Flask-API auf einem AWS
 
 - **Supervisor Status überprüfen:**
   - `sudo supervisorctl status myflaskapp`.
+
+
+# Doku TODO
+- Profile Picture
+- 

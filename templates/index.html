@@ -362,6 +362,170 @@
     </body>
 
 
+    <div class="d-flex">
+
+        <button id="triggerBlacklistModalButton" type="button"
+            class="btn btn-outline-dark d-flex align-items-center justify-content-center mr-1" data-toggle="modal"
+            data-target="#blacklistModal" data-toggle="tooltip" data-placement="top" title="Verbotene Wörter verwalten">
+            <i class="bi bi-list-stars mr-1"></i>
+            Verbotene Wörter
+        </button>
+
+        <div class="modal fade" id="blacklistModal" tabindex="-1" role="dialog" aria-labelledby="blacklistModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="blacklistModalLabel">Blacklist verwalten</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Schließen">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <textarea id="blacklistTextarea" class="form-control" rows="5"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+                        <button type="button" class="btn btn-primary" id="saveBlacklist">Speichern</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Function to load the blacklist
+                function loadBlacklist() {
+                    fetch('/blacklist', {
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById('blacklistTextarea').value = data.blacklist.join('\n');
+                        })
+                        .catch(error => console.error('Error:', error));
+                }
+
+                // Event listener for the button that triggers the modal
+                document.getElementById('triggerBlacklistModalButton').addEventListener('click', loadBlacklist);
+
+                // Function to save the updated blacklist
+                document.getElementById('saveBlacklist').addEventListener('click', function () {
+                    const updatedBlacklist = document.getElementById('blacklistTextarea').value.split('\n');
+                    fetch('/blacklist', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+                        },
+                        body: JSON.stringify({ blacklist: updatedBlacklist })
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                return response.json();
+                            } else {
+                                throw new Error('Failed to save blacklist');
+                            }
+                        })
+                        .then(data => {
+                            // Use Bootstrap's modal method to close the modal
+                            $('#blacklistModal').modal('hide'); // This still uses jQuery, but it's Bootstrap's way
+
+                            // Display success toast
+                            showSuccessToast(data.message);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            showErrorToast(error.message);
+                        });
+                });
+            });
+        </script>
+
+
+
+
+        <button id="triggerBannedEmailsModalButton" type="button"
+            class="btn btn-outline-dark d-flex align-items-center justify-content-center" data-toggle="modal"
+            data-target="#bannedEmailsModal" data-toggle="tooltip" data-placement="top" title="Gesperrte E-Mails verwalten">
+            <i class="bi bi-envelope-exclamation mr-1"></i>
+            Gesperrte E-Mails
+        </button>
+
+
+        <div class="modal fade" id="bannedEmailsModal" tabindex="-1" role="dialog"
+            aria-labelledby="bannedEmailsModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="bannedEmailsModalLabel">Banned Emails verwalten</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Schließen">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <textarea id="bannedEmailsTextarea" class="form-control" rows="5"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+                        <button type="button" class="btn btn-primary" id="saveBannedEmails">Speichern</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                function loadBannedEmails() {
+                    fetch('/banned_emails', {
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById('bannedEmailsTextarea').value = data.banned_emails.join('\n');
+                        })
+                        .catch(error => console.error('Error:', error));
+                }
+
+                document.getElementById('triggerBannedEmailsModalButton').addEventListener('click', loadBannedEmails);
+
+                document.getElementById('saveBannedEmails').addEventListener('click', function () {
+                    const updatedBannedEmails = document.getElementById('bannedEmailsTextarea').value.split('\n');
+                    fetch('/banned_emails', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+                        },
+                        body: JSON.stringify({ banned_emails: updatedBannedEmails })
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                return response.json();
+                            } else {
+                                throw new Error('Failed to save banned emails');
+                            }
+                        })
+                        .then(data => {
+                            $('#bannedEmailsModal').modal('hide');
+                            showSuccessToast(data.message);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            showErrorToast(error.message);
+                        });
+                });
+            });
+        </script>
+
+
+    </div>
+
+
     <h2 class="mt-4">Benutzer</h2>
     <!-- Users Section -->
     <div class="accordion" id="usersAccordion">
@@ -1943,7 +2107,6 @@
         </script>
     <!-- Cropper.js JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-
 </body>
 
 </html>
