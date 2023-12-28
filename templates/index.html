@@ -42,48 +42,62 @@
         }
     </style>
     <script>
-        // On Page Load
-
-        // Check if the user is logged in
         let adminToken = localStorage.getItem('jwtToken');
 
-        // Check if the token exists
-        if (!adminToken) {
-            // Redirect to /login if there is no token
-            window.location.href = '/login';
-        } else {
-            // Fetch the user's first name using the JWT token
-            fetch('/whoami', {
-                headers: { 'Authorization': 'Bearer ' + adminToken }
-            })
-                .then(response => {
-                    if (response.status === 401) {
+        function checkUserLoggedIn() {
+            // Check if the user is logged in
+            let adminToken = localStorage.getItem('jwtToken');
+
+            // Check if the token exists
+            if (!adminToken) {
+                // Redirect to /login if there is no token
+                window.location.href = '/login';
+            } else {
+                // Fetch the user's first name using the JWT token
+                fetch('/whoami', {
+                    headers: { 'Authorization': 'Bearer ' + adminToken }
+                })
+                    .then(response => {
+                        if (response.status === 401) {
+                            // Remove the JWT token from local storage
+                            localStorage.removeItem('jwtToken');
+                            // Clear adminToken
+                            adminToken = null;
+                            // Redirect to the login page
+                            window.location.href = '/login';
+                        } else {
+                            return response.json();
+                        }
+                    })
+                    .then(data => {
+                        // Display the user's first name
+                        document.getElementById('username').textContent = data.Vorname;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+
                         // Remove the JWT token from local storage
                         localStorage.removeItem('jwtToken');
-                        // Clear adminToken
-                        adminToken = null;
-                        // Redirect to the login page
-                        window.location.href = '/login';
-                    } else {
-                        return response.json();
-                    }
-                })
-                .then(data => {
-                    // Display the user's first name
-                    document.getElementById('username').textContent = data.Vorname;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
 
-                    // Remove the JWT token from local storage
-                    localStorage.removeItem('jwtToken');
-
-                    // Redirect to the home page
-                    window.location.href = '/';
-                });
+                        // Redirect to the home page
+                        window.location.href = '/';
+                    });
+            }
         }
+
+        // Call the function on page load
+        checkUserLoggedIn();
+
+        // Call the function if the window is focused after 2 minutes
+        let timeout;
+        window.addEventListener('focus', () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(checkUserLoggedIn, 120000); // 2 minutes in milliseconds
+        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <!-- Cropper.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet" />
 
 
 
@@ -136,7 +150,9 @@
 
 
 
-            <img id="profilePicture" class="rounded-circle mr-3" style="height: 38px; width: 38px; object-fit: cover;">
+            <img id="profilePicture" class="rounded-circle mr-3" style="height: 38px; width: 38px; object-fit: cover;"
+                data-toggle="modal" data-target="#profilePictureModal" alt="Click to update profile picture"
+                role="button" aria-controls="profilePictureModal">
             <script>
                 // Function to fetch and display the profile picture
                 function fetchProfilePicture() {
@@ -177,6 +193,9 @@
             </script>
 
 
+
+
+
             <button id="logoutButton" class="btn btn-outline-danger d-flex align-items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-box-arrow-right" viewBox="0 0 16 16" style="margin-right: 4px;">
@@ -203,7 +222,146 @@
         });
     </script>
 
+    <body>
+        <style>
+            .img-container {
+                max-height: 400px;
+                /* Anpassen basierend auf der Modalgröße */
+                overflow: hidden;
+                /* Scrollen hinzufügen, wenn das Bild zu hoch ist */
+            }
+        </style>
 
+        <body>
+            <div class="modal fade" id="profilePictureModal" tabindex="-1" role="dialog"
+                aria-labelledby="profilePictureModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="profilePictureModalLabel">Profilbild aktualisieren</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Schließen">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body d-flex flex-column align-items-center">
+                            <div class="img-container" style="display: none;">
+                                <img id="imagePreview" src="#" alt="Dein Profilbild" style="display: none;">
+                            </div>
+                            <input type="file" id="profilePictureInput" accept="image/jpeg, image/png" hidden>
+                            <button class="btn btn-secondary mt-3"
+                                onclick="document.getElementById('profilePictureInput').click();">
+                                Bild auswählen
+                            </button>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-primary" id="saveProfilePicture">Speichern</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <script>
+                let cropper;
+                document.getElementById('profilePictureInput').addEventListener('change', function (event) {
+                    const [file] = event.target.files;
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            const imagePreview = document.getElementById('imagePreview');
+                            const imgContainer = document.querySelector('.img-container');
+                            imagePreview.src = e.target.result;
+                            imgContainer.style.display = 'block'; // Display the image container
+                            imagePreview.style.display = 'block'; // Display the image preview
+
+                            if (cropper) {
+                                cropper.destroy();
+                            }
+                            cropper = new Cropper(imagePreview, {
+                                aspectRatio: 1,
+                                viewMode: 1,
+                                scalable: false,
+                                zoomable: false,
+                                minContainerHeight: 400, // Mindesthöhe für den Container festlegen
+                                minCanvasHeight: 400, // Mindesthöhe für die Leinwand festlegen
+                            });
+
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+
+                document.getElementById('saveProfilePicture').addEventListener('click', function () {
+                    if (cropper) {
+                        // Get cropped image data as a data URL
+                        const croppedImageData = cropper.getCroppedCanvas().toDataURL();
+                        // Convert data URL to blob
+                        fetch(croppedImageData)
+                            .then(res => res.blob())
+                            .then(blob => {
+                                // Create form data
+                                const formData = new FormData();
+                                formData.append('file', blob, 'profile_picture.png'); // Second parameter is the blob, third parameter is filename
+
+                                // Get user ID from JWT token
+                                const adminToken = localStorage.getItem('jwtToken');
+                                const decodedToken = jwt_decode(adminToken); // Use a suitable JWT decode library
+                                const userId = decodedToken.user_id; // Adjust this according to your token structure
+
+                                // Append user ID to form data
+                                formData.append('user_id', userId);
+
+                                // Make the POST request to the server
+                                fetch('/upload_profile_picture', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Authorization': `Bearer ${adminToken}`
+                                    },
+                                    body: formData
+                                })
+                                    .then(response => {
+                                        if (response.ok) {
+                                            return response.json();
+                                        } else {
+                                            throw new Error('Fehler beim Hochladen des Profilbildes');
+                                        }
+                                    })
+                                    .then(data => {
+                                        // close the modal
+                                        $('#profilePictureModal').modal('hide');
+                                        // Display success toast
+                                        showSuccessToast(data.message);
+
+                                        // Update the profile picture
+                                        fetchProfilePicture();
+
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                        alert(error.message); // Or display the error message in the UI
+                                    });
+                            });
+                    }
+                });
+
+
+
+
+
+            </script>
+            <style>
+                .img-container {
+                    max-width: 100%;
+                    display: none;
+                    /* Hide the container by default */
+                }
+            </style>
+
+
+        </body>
+
+    </body>
 
 
     <h2 class="mt-4">Benutzer</h2>
@@ -1785,6 +1943,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous">
         </script>
+    <!-- Cropper.js JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
 </body>
 
