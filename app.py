@@ -13,16 +13,25 @@ from sqlalchemy.orm.exc import NoResultFound
 import dateutil.parser
 from dotenv import load_dotenv
 import os
+from werkzeug.utils import secure_filename
+from flask import send_file
 
 load_dotenv()
 
 app = Flask(__name__)
 
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
-jwt = JWTManager(app)
-
+app.config['UPLOAD_FOLDER'] = './userdata/pictures/profilepicture'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+app.config['MAX_CONTENT_LENGTH'] = 3 * 1024 * 1024  # 3 MB
+
+jwt = JWTManager(app)
 db = SQLAlchemy(app)
+
+# Allowed file types for profile pictures
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # Database Models
 class User(db.Model):
@@ -31,6 +40,7 @@ class User(db.Model):
     firstName = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
     isAdmin = db.Column(db.Boolean, default=False)
+    profile_picture = db.Column(db.String(255))  # Path to profile picture
 
 class UsersInGroups(db.Model):
     userID = db.Column(db.Integer, db.ForeignKey('user.userID'), primary_key=True)
@@ -135,6 +145,77 @@ def dashboard():
     return render_template('index.html', users=users, groups=groups)
 
 
+
+
+@app.route('/upload_profile_picture', methods=['POST'])
+@jwt_required()
+def upload_profile_picture():
+    current_user_id = get_jwt_identity()
+    claims = get_jwt()
+    is_admin = claims.get('is_admin', False)
+
+    user_id_from_request = request.form.get('user_id')
+
+    # Stellen Sie sicher, dass user_id_from_request nicht None ist, bevor Sie es in eine Ganzzahl umwandeln
+    if user_id_from_request is None:
+        return jsonify({'message': 'Benutzer-ID fehlt'}), 400
+
+    if not is_admin and current_user_id != int(user_id_from_request):
+        return jsonify({'message': 'Nicht berechtigt, das Profilbild dieses Benutzers zu ändern'}), 403
+
+    if 'file' not in request.files:
+        return jsonify({'message': 'Kein Dateiteil vorhanden'}), 400
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({'message': 'Keine ausgewählte Datei'}), 400
+
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        user_specific_path = os.path.join(app.config['UPLOAD_FOLDER'], str(current_user_id))
+        
+        # Create a directory for the user if it doesn't exist
+        if not os.path.exists(user_specific_path):
+            os.makedirs(user_specific_path)
+
+        file_path = os.path.join(user_specific_path, filename)
+        file.save(file_path)
+
+        # Normalize the file path for cross-platform compatibility
+        normalized_file_path = os.path.normpath(file_path)
+
+        # Update user profile to include the picture path
+        update_user_profile_picture_path(current_user_id, normalized_file_path)
+
+        return jsonify({'message': 'Profilbild erfolgreich hochgeladen'}), 200
+    else:
+        return jsonify({'message': 'Ungültiger Dateityp oder Größe'}), 400
+
+
+
+
+# Profile picture download route
+@app.route('/profile_picture/<int:user_id>')
+def get_profile_picture(user_id):
+    user_picture_path = get_user_profile_picture_path(user_id)
+    if user_picture_path and os.path.exists(user_picture_path):
+        return send_file(user_picture_path)
+    else:
+        return jsonify({'message': 'Profilbild nicht gefunden'}), 404
+
+    
+def get_user_profile_picture_path(user_id):
+    user = User.query.get(user_id)
+    if user and user.profile_picture:
+        return user.profile_picture
+    else:
+        return None
+
+
+def update_user_profile_picture_path(user_id, path):
+    user = User.query.get(user_id)
+    user.profile_picture = path
+    db.session.commit()
 
 # CRUD Routes for Users
 # Create new user

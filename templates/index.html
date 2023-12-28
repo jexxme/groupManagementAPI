@@ -41,31 +41,42 @@
             /* Text color, adjust if needed */
         }
     </style>
-<script>
-    // On Page Load
+    <script>
+        // On Page Load
 
-    // Check if the user is logged in
-    let adminToken = localStorage.getItem('jwtToken');
+        // Check if the user is logged in
+        let adminToken = localStorage.getItem('jwtToken');
 
-    // Check if the token exists
-    if (!adminToken) {
-        // Redirect to /login if there is no token
-        window.location.href = '/login';
-    } else {
-        // Fetch the user's first name using the JWT token
-        fetch('/whoami', {
-            headers: { 'Authorization': 'Bearer ' + adminToken }
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Display the user's first name
-            document.getElementById('username').textContent = data.Vorname;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
-</script>
+        // Check if the token exists
+        if (!adminToken) {
+            // Redirect to /login if there is no token
+            window.location.href = '/login';
+        } else {
+            // Fetch the user's first name using the JWT token
+            fetch('/whoami', {
+                headers: { 'Authorization': 'Bearer ' + adminToken }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Display the user's first name
+                    document.getElementById('username').textContent = data.Vorname;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+
+                    // Remove the JWT token from local storage
+                    localStorage.removeItem('jwtToken');
+
+                    // Redirect to the home page
+                    window.location.href = '/';
+                });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+
+
+
+
 
 </head>
 
@@ -94,7 +105,7 @@
                     const now = new Date();
                     const hours = now.getHours();
                     let greeting = "Guten Tag"; // Default greeting
-            
+
                     if (hours < 12) {
                         greeting = "Guten Morgen";
                     } else if (hours < 14) {
@@ -104,34 +115,82 @@
                     } else {
                         greeting = "Guten Abend";
                     }
-            
+
                     document.getElementById('timeOfDayGreeting').textContent = greeting;
                 }
-            
+
                 // Update greeting on page load
                 updateTimeOfDayGreeting();
             </script>
-            
-                        <button id="logoutButton" class="btn btn-outline-danger d-flex align-items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16" style="margin-right: 4px;">
-                    <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"></path>
-                    <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"></path>
+
+
+
+            <img id="profilePicture" class="rounded-circle mr-3" style="height: 38px; width: 38px; object-fit: cover;">
+            <script>
+                // Function to fetch and display the profile picture
+                function fetchProfilePicture() {
+                    // Get the user ID from the JWT token
+                    let adminToken = localStorage.getItem('jwtToken');
+
+                    // Assuming the user ID is stored as a claim in the JWT token
+                    // Decode the token to extract the user ID
+                    let decodedToken = jwt_decode(adminToken); // Use a suitable JWT decode library
+                    let userId = decodedToken.user_id; // Adjust this according to your token structure
+
+                    // API endpoint to fetch the profile picture
+                    let profilePictureUrl = `/profile_picture/${userId}`;
+
+                    // Fetch the profile picture
+                    fetch(profilePictureUrl, {
+                        headers: { 'Authorization': `Bearer ${adminToken}` }
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                return response.blob(); // If image is found, response will be a blob
+                            } else {
+                                throw new Error('Profilbild nicht gefunden');
+                            }
+                        })
+                        .then(imageBlob => {
+                            // Convert the blob to a URL and set it as the src of the image element
+                            let imageUrl = URL.createObjectURL(imageBlob);
+                            document.getElementById('profilePicture').src = imageUrl;
+                        })
+                        .catch(error => {
+                            console.error('Error:', error.message);
+                        });
+                }
+
+                // Call the function on page load or at a suitable time
+                fetchProfilePicture();
+            </script>
+
+
+            <button id="logoutButton" class="btn btn-outline-danger d-flex align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-box-arrow-right" viewBox="0 0 16 16" style="margin-right: 4px;">
+                    <path fill-rule="evenodd"
+                        d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z">
+                    </path>
+                    <path fill-rule="evenodd"
+                        d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z">
+                    </path>
                 </svg>
                 Abmelden
             </button>
         </div>
-        
+
     </div>
-    
+
     <script>
-        document.getElementById('logoutButton').addEventListener('click', function() {
+        document.getElementById('logoutButton').addEventListener('click', function () {
             // Remove the JWT token from local storage
             localStorage.removeItem('jwtToken');
-    
+
             // Redirect to the home page
             window.location.href = '/';
         });
-    </script>    
+    </script>
 
 
 
