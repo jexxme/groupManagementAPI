@@ -123,7 +123,7 @@
             </span>
         </h1>
         <div class="d-flex align-items-center justify-content-between">
-            <span class="mr-3"><span id="timeOfDayGreeting">Guten Tag</span>, <span id="username">User</span></span>
+            <span class="mr-2"><span id="timeOfDayGreeting">Guten Tag</span>, <span id="username">User</span></span>
 
             <script>
                 function updateTimeOfDayGreeting() {
@@ -150,9 +150,10 @@
 
 
 
-            <img id="profilePicture" class="rounded-circle mr-3" style="height: 38px; width: 38px; object-fit: cover;"
+            <img id="profilePicture" class="rounded-circle mr-1" style="height: 38px; width: 38px; object-fit: cover;"
                 data-toggle="modal" data-target="#profilePictureModal" alt="Click to update profile picture"
-                role="button" aria-controls="profilePictureModal">
+                role="button" aria-controls="profilePictureModal" data-toggle="tooltip" data-placement="top"
+                title="Profilbild ändern">
             <script>
                 // Function to fetch and display the profile picture
                 function fetchProfilePicture() {
@@ -194,19 +195,16 @@
 
 
 
-
-
-            <button id="logoutButton" class="btn btn-outline-danger d-flex align-items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-box-arrow-right" viewBox="0 0 16 16" style="margin-right: 4px;">
-                    <path fill-rule="evenodd"
-                        d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z">
-                    </path>
-                    <path fill-rule="evenodd"
-                        d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z">
-                    </path>
-                </svg>
-                Abmelden
+            <a href="https://github.com/jexxme/groupManagementAPI/blob/main/readme.md" target="_blank">
+                <button id="documentionButton"
+                    class="btn btn-outline-dark d-flex align-items-center justify-content-center mr-1"
+                    style="height: 38px; width: 38px;" data-toggle="tooltip" data-placement="top" title="Dokumentation">
+                    <i class="bi bi-file-earmark-text"></i>
+                </button>
+            </a>
+            <button id="logoutButton" class="btn btn-outline-danger d-flex align-items-center justify-content-center"
+                style="height: 38px; width: 38px;" data-toggle="tooltip" data-placement="top" title="Ausloggen">
+                <i class="bi bi-box-arrow-right"></i>
             </button>
         </div>
 
