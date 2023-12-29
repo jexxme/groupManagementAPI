@@ -130,6 +130,31 @@ def get_api_logs():
     except Exception as e:
         return jsonify({'message': str(e)}), 500
 
+@app.route('/access_logs', methods=['GET'])
+@admin_required
+@log_access
+def get_access_logs():
+    try:
+        with open('/var/log/nginx/access.log', 'r') as file:
+            logs = file.readlines()
+        return jsonify({'logs': logs}), 200
+    except FileNotFoundError:
+        return jsonify({'message': 'Access Log file not found'}), 404
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+
+@app.route('/error_logs', methods=['GET'])
+@admin_required
+@log_access
+def get_error_logs():
+    try:
+        with open('/var/log/nginx/error.log', 'r') as file:
+            logs = file.readlines()
+        return jsonify({'logs': logs}), 200
+    except FileNotFoundError:
+        return jsonify({'message': 'Error Log file not found'}), 404
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
 
 
 # / route for dashboard
