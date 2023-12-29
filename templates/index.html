@@ -653,7 +653,6 @@
 
 
 
-
 <button id="triggerServerLogsModalButton" type="button"
     class="btn btn-outline-dark d-flex align-items-center justify-content-center mr-1" data-toggle="modal"
     data-target="#serverLogsModal" data-toggle="tooltip" data-placement="top" title="Serverprotokoll">
@@ -690,11 +689,6 @@ aria-hidden="true">
                     </tbody>
                 </table>
             </div>
-            <div class="d-flex justify-content-center">
-                <button id="loadMoreLogs" class="btn btn-outline-dark">
-                    <i class="bi bi-plus-lg mr-1"></i> Weitere 15 Einträge laden
-                </button>
-            </div>
         </div>
         <div class="modal-footer">
             <button id="refreshLogs" type="button" class="btn btn-outline-dark">
@@ -708,8 +702,7 @@ aria-hidden="true">
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    let logIndex = 0;
-    const logsPerPage = 15;
+    const logsPerPage = 100; // Load the newest 100 last entries
     let currentLogType = 'access';
     const ipColumn = document.getElementById('ipColumn');
 
@@ -725,7 +718,7 @@ document.addEventListener('DOMContentLoaded', function () {
         ipColumn.style.display = show ? '' : 'none';
     }
 
-    function loadServerLogs(resetIndex = false) {
+    function loadServerLogs() {
         const logType = currentLogType === 'access' ? 'access_logs' : 'error_logs';
         fetch(`/${logType}`, {
             headers: {
@@ -739,26 +732,22 @@ document.addEventListener('DOMContentLoaded', function () {
             return response.json();
         })
         .then(data => {
-            if (resetIndex) {
-                logIndex = 0;
-                document.getElementById('serverLogsTableBody').innerHTML = '';
-            }
-
+            document.getElementById('serverLogsTableBody').innerHTML = ''; // Clear previous entries
             const tbody = document.getElementById('serverLogsTableBody');
-            data.logs.slice(logIndex, logIndex + logsPerPage).reverse().forEach(log => {
+            data.logs.slice(-logsPerPage).reverse().forEach(log => { // Get the last 100 entries
                 const date = extractDateFromMessage(log);
                 const messageWithoutDate = log.replace(/\[.*?\]|\d{4}\/\d{2}\/\d{2}/, '').trim();
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td style="display: ${currentLogType === 'access' ? '' : 'none'}">${log.split(' ')[0]}</td>
+                    <td>${log.split(' ')[0]}</td>
                     <td>${date}</td>
                     <td>${messageWithoutDate}</td>
                 `;
+                if(currentLogType === 'error') {
+                    tr.children[0].style.display = 'none'; // Hide IP address for error logs
+                }
                 tbody.appendChild(tr);
             });
-
-            logIndex += logsPerPage;
-            document.getElementById('loadMoreLogs').style.display = logIndex >= data.logs.length ? 'none' : 'block';
         })
         .catch(error => {
             console.error('Fehler:', error);
@@ -768,13 +757,13 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('triggerServerLogsModalButton').addEventListener('click', function() {
         currentLogType = 'access';
         toggleIPColumn(true);
-        loadServerLogs(true);
+        loadServerLogs();
     });
 
     document.getElementById('viewAccessLogsButton').addEventListener('click', function() {
         currentLogType = 'access';
         toggleIPColumn(true);
-        loadServerLogs(true);
+        loadServerLogs();
         this.classList.add('active');
         document.getElementById('viewErrorLogsButton').classList.remove('active');
     });
@@ -782,23 +771,16 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('viewErrorLogsButton').addEventListener('click', function() {
         currentLogType = 'error';
         toggleIPColumn(false);
-        loadServerLogs(true);
+        loadServerLogs();
         this.classList.add('active');
         document.getElementById('viewAccessLogsButton').classList.remove('active');
     });
 
-    document.getElementById('loadMoreLogs').addEventListener('click', function() {
-        loadServerLogs();
-    });
-
     document.getElementById('refreshLogs').addEventListener('click', function() {
-        loadServerLogs(true);
+        loadServerLogs();
     });
 });
 </script>
-
-
-
 
 
 
