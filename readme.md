@@ -81,6 +81,7 @@ Die LBV-Webschnittstelle ist öffentlich verfügbar unter https://lbv.digital/.
 - Nginx
 - Supervisor
 - Certbot
+- Python logging
 
 ## Lokale Installation
 

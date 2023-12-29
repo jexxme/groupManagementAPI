@@ -367,7 +367,7 @@
         <button id="triggerBlacklistModalButton" type="button"
             class="btn btn-outline-dark d-flex align-items-center justify-content-center mr-1" data-toggle="modal"
             data-target="#blacklistModal" data-toggle="tooltip" data-placement="top" title="Verbotene Wörter verwalten">
-            <i class="bi bi-list-stars mr-1"></i>
+            <i class="bi bi-envelope-exclamation mr-1"></i>
             Verbotene Wörter
         </button>
 
@@ -448,9 +448,10 @@
 
 
         <button id="triggerBannedEmailsModalButton" type="button"
-            class="btn btn-outline-dark d-flex align-items-center justify-content-center" data-toggle="modal"
-            data-target="#bannedEmailsModal" data-toggle="tooltip" data-placement="top" title="Gesperrte E-Mails verwalten">
-            <i class="bi bi-envelope-exclamation mr-1"></i>
+            class="btn btn-outline-dark d-flex align-items-center justify-content-center mr-1" data-toggle="modal"
+            data-target="#bannedEmailsModal" data-toggle="tooltip" data-placement="top"
+            title="Gesperrte E-Mails verwalten">
+            <i class="bi bi-person-exclamation mr-1"></i>
             Gesperrte E-Mails
         </button>
 
@@ -521,6 +522,142 @@
                 });
             });
         </script>
+
+
+
+        <button id="triggerApiLogsModalButton" type="button"
+            class="btn btn-outline-dark d-flex align-items-center justify-content-center mr-1" data-toggle="modal"
+            data-target="#apiLogsModal" data-toggle="tooltip" data-placement="top" title="API Access Logs">
+            <i class="bi bi-journal-text mr-1"></i>
+            API-Protokoll
+        </button>
+        <div class="modal fade" id="apiLogsModal" tabindex="-1" role="dialog" aria-labelledby="apiLogsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="apiLogsModalLabel">API-Protokoll</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Benutzer-ID</th>
+                                <th>Zeit</th>
+                                <th>Route</th>
+                                <th>Methode</th>
+                            </tr>
+                        </thead>
+                        <tbody id="apiLogsTableBody">
+                            <!-- Log entries will be inserted here -->
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-center">
+                        <button id="loadMoreLogs" class="btn btn-outline-dark">
+                            <i class="bi bi-plus-lg mr-1"></i> Lade weitere 15 Einträge
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button id="refreshLogs" type="button" class="btn btn-outline-dark">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let logIndex = 0;
+            const logsPerPage = 15;
+    
+            // Function to format the time
+            function formatTime(isoString) {
+                const date = new Date(isoString);
+                return date.toLocaleString('de-DE', { hour12: false });
+            }
+    
+            // Function to load the API logs
+            function loadApiLogs(resetIndex = false) {
+                fetch('/api_logs', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const logs = data.logs.map(line => {
+                        const jsonStart = line.indexOf('{');
+                        return jsonStart !== -1 ? JSON.parse(line.substring(jsonStart)) : null;
+                    }).filter(log => log !== null).reverse();
+    
+                    if (resetIndex) {
+                        logIndex = 0;
+                        document.getElementById('apiLogsTableBody').innerHTML = '';
+                    }
+    
+                    const tbody = document.getElementById('apiLogsTableBody');
+                    logs.slice(logIndex, logIndex + logsPerPage).forEach(log => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${log.user_id}</td>
+                            <td>${formatTime(log.time)}</td>
+                            <td>${log.route}</td>
+                            <td>${log.method}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+    
+                    logIndex += logsPerPage;
+                    if (logIndex >= logs.length) {
+                        document.getElementById('loadMoreLogs').style.display = 'none';
+                    } else {
+                        document.getElementById('loadMoreLogs').style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+    
+            // Event listener for the button that triggers the modal
+            document.getElementById('triggerApiLogsModalButton').addEventListener('click', function() {
+                loadApiLogs(true);
+            });
+    
+            // Load more logs
+            document.getElementById('loadMoreLogs').addEventListener('click', function() {
+                loadApiLogs();
+            });
+    
+            // Refresh logs
+            document.getElementById('refreshLogs').addEventListener('click', function() {
+                loadApiLogs(true);
+            });
+        });
+    </script>
+    
+    
+        
+        
+
+        
+        
+
+
+
+
+
 
 
     </div>

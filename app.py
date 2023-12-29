@@ -117,6 +117,19 @@ for rule in app.url_map.iter_rules():
         view_func = app.view_functions[rule.endpoint]
         app.view_functions[rule.endpoint] = log_access(view_func)
 
+@app.route('/api_logs', methods=['GET'])
+@admin_required
+@log_access
+def get_api_logs():
+    try:
+        with open('api_access.log', 'r') as file:
+            logs = file.readlines()
+        return jsonify({'logs': logs}), 200
+    except FileNotFoundError:
+        return jsonify({'message': 'API Access Log file not found'}), 404
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+
 # / route for dashboard
 @app.route('/')
 @log_access
