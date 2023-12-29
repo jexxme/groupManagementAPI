@@ -130,31 +130,7 @@ def get_api_logs():
     except Exception as e:
         return jsonify({'message': str(e)}), 500
 
-@app.route('/nginx_error_logs', methods=['GET'])
-@admin_required
-@log_access
-def get_nginx_error_logs():
-    try:
-        with open('/var/log/nginx/error.log', 'r') as file:
-            logs = file.readlines()
-        return jsonify({'logs': logs}), 200
-    except FileNotFoundError:
-        return jsonify({'message': 'Nginx-Fehlerprotokolldatei nicht gefunden'}), 404
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
 
-@app.route('/myflaskapp_error_logs', methods=['GET'])
-@admin_required
-@log_access
-def get_myflaskapp_error_logs():
-    try:
-        with open('/var/log/myflaskapp/myflaskapp.err.log', 'r') as file:
-            logs = file.readlines()
-        return jsonify({'logs': logs}), 200
-    except FileNotFoundError:
-        return jsonify({'message': 'My Flask App-Fehlerprotokolldatei nicht gefunden'}), 404
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
 
 # / route for dashboard
 @app.route('/')
