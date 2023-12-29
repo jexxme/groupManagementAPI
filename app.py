@@ -611,7 +611,7 @@ def get_user_in_group(userID, groupID):
     return jsonify({'userID': user_in_group.userID, 'groupID': user_in_group.groupID, 
                     'startingDate': user_in_group.startingDate})
 
-# TODO: Document this route
+# Get all groups for a user
 @app.route('/users_in_groups/<int:userID>/', methods=['GET'])
 @jwt_required()
 @log_access

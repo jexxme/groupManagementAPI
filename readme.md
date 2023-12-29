@@ -360,73 +360,767 @@ Aktualisiert die Details eines Benutzers anhand seiner `userID`. Geben Sie die z
 
 Löscht einen Benutzer anhand seiner `userID`.
 
-## Gruppen (Groups)
+## Profilbild (ProfilePicture)
 
-### Erstellen einer Gruppe
+### Hochladen eines Profilbilds
+
+- **Endpoint:** `/upload_profile_picture`
+- **Methode:** `POST`
+- **Berechtigung:** Erforderliche JWT-Token (jwt_required)
+
+Diese Route ermöglicht das Hochladen eines Profilbilds für den aktuellen Benutzer. Der Benutzer muss authentifiziert sein und ein gültiges JWT-Token bereitstellen. Die Berechtigungen werden über das Token überprüft.
+
+**Anforderungs-Formulardaten:**
+
+- `user_id` (Benutzer-ID): Die Benutzer-ID, für den das Profilbild hochgeladen werden soll.
+
+**Erfolgsantwort:**
+
+- **Code:** 200 (OK)
+- **Inhalt:** 
+  ```json
+  { "message": "Profilbild erfolgreich hochgeladen" }
+  ```
+
+**Fehlerantwort bei fehlender Benutzer-ID:**
+
+- **Code:** 400 (Bad Request)
+- **Inhalt:** 
+  ```json
+  { "message": "Benutzer-ID fehlt" }
+  ```
+
+**Fehlerantwort bei fehlenden Dateidaten:**
+
+- **Code:** 400 (Bad Request)
+- **Inhalt:** 
+  ```json
+  { "message": "Kein Dateiteil vorhanden" }
+  ```
+
+**Fehlerantwort bei keiner ausgewählten Datei:**
+
+- **Code:** 400 (Bad Request)
+- **Inhalt:** 
+  ```json
+  { "message": "Keine ausgewählte Datei" }
+  ```
+
+**Fehlerantwort bei ungültigem Dateityp oder Größe:**
+
+- **Code:** 400 (Bad Request)
+- **Inhalt:** 
+  ```json
+  { "message": "Ungültiger Dateityp oder Größe" }
+  ```
+
+**Fehlerantwort bei fehlender Berechtigung:**
+
+- **Code:** 403 (Forbidden)
+- **Inhalt:** 
+  ```json
+  { "message": "Nicht berechtigt, das Profilbild dieses Benutzers zu ändern" }
+  ```
+
+**Beispiel:**
+
+- **Anforderungs-Formulardaten:**
+
+  ```
+  user_id: 5
+  file: [ausgewählte Datei]
+  ```
+
+- **Erfolgsantwort:**
+
+  ```json
+  { "message": "Profilbild erfolgreich hochgeladen" }
+  ```
+
+- **Fehlerantwort bei fehlender Benutzer-ID:**
+
+  ```json
+  { "message": "Benutzer-ID fehlt" }
+  ```
+
+- **Fehlerantwort bei fehlenden Dateidaten:**
+
+  ```json
+  { "message": "Kein Dateiteil vorhanden" }
+  ```
+
+- **Fehlerantwort bei keiner ausgewählten Datei:**
+
+  ```json
+  { "message": "Keine ausgewählte Datei" }
+  ```
+
+- **Fehlerantwort bei ungültigem Dateityp oder Größe:**
+
+  ```json
+  { "message": "Ungültiger Dateityp oder Größe" }
+  ```
+
+- **Fehlerantwort bei fehlender Berechtigung:**
+
+  ```json
+  { "message": "Nicht berechtigt, das Profilbild dieses Benutzers zu ändern" }
+  ```
+
+---
+
+### Herunterladen des Profilbilds
+
+- **Endpoint:** `/profile_picture/<int:user_id>`
+- **Methode:** `GET`
+
+Diese Route ermöglicht das Herunterladen des Profilbilds eines bestimmten Benutzers anhand seiner Benutzer-ID.
+
+**Parameter:**
+
+- `user_id` (Benutzer-ID): Die eindeutige ID des Benutzers, dessen Profilbild heruntergeladen werden soll.
+
+**Erfolgsantwort:**
+
+- Das Profilbild des Benutzers wird als Datei heruntergeladen.
+
+**Fehlerantwort bei nicht gefundenem Profilbild:**
+
+- **Code:** 404 (Not Found)
+- **Inhalt:** 
+  ```json
+  { "message": "Profilbild nicht gefunden" }
+  ```
+
+**Beispiel:**
+
+- **Anfrage:** `/profile_picture/5`
+
+- **Erfolgsantwort:** Das Profilbild des Benutzers mit der ID 5 wird als Datei heruntergeladen.
+
+- **Fehlerantwort bei nicht gefundenem Profilbild:**
+
+  ```json
+  { "message": "Profilbild nicht gefunden" }
+  ```
+
+## Verbotene Wörter (blacklist)
+
+### Abrufen der Blacklist
+
+- **Endpoint:** `/blacklist`
+- **Methode:** `GET`
+
+Diese Route ermöglicht das Abrufen der aktuellen Blacklist, die von Administratoren verwaltet wird. Die Blacklist enthält gesperrte Benutzer oder Entitäten.
+
+**Erfolgsantwort:**
+
+- **Code:** 200 (OK)
+- **Inhalt:** Eine Liste der Einträge in der Blacklist.
+
+**Fehlerantwort bei nicht gefundenem Blacklist-Datei:**
+
+- **Code:** 404 (Not Found)
+- **Inhalt:** 
+  ```json
+  { "message": "Blacklist-Datei nicht gefunden" }
+  ```
+
+**Beispiel:**
+
+- **Erfolgsantwort:**
+
+  ```json
+  {
+      "blacklist": [
+          "gesperrter_benutzer1",
+          "gesperrter_benutzer2",
+          "gesperrte_entität1"
+      ]
+  }
+  ```
+
+- **Fehlerantwort bei nicht gefundenem Blacklist-Datei:**
+
+  ```json
+  { "message": "Blacklist-Datei nicht gefunden" }
+  ```
+
+---
+
+### Aktualisieren der Blacklist
+
+- **Endpoint:** `/blacklist`
+- **Methode:** `PUT`
+
+Diese Route ermöglicht das Aktualisieren der Blacklist, die von Administratoren verwaltet wird. Die Blacklist enthält gesperrte Benutzer oder Entitäten.
+
+**Anforderungs-JSON-Format:**
+
+```json
+{
+    "blacklist": ["gesperrter_benutzer1", "gesperrter_benutzer2"]
+}
+```
+
+**Erfolgsantwort:**
+
+- **Code:** 200 (OK)
+- **Inhalt:** 
+  ```json
+  { "message": "Blacklist erfolgreich aktualisiert" }
+  ```
+
+**Fehlerantwort bei ungültiger Anfrage:**
+
+- **Code:** 400 (Bad Request)
+- **Inhalt:** 
+  ```json
+  { "message": "Bitte geben Sie eine 'blacklist' Nutzlast an." }
+  ```
+
+- **Code:** 400 (Bad Request)
+- **Inhalt:** 
+  ```json
+  { "message": "Die 'blacklist' muss eine Liste von Wörtern sein." }
+  ```
+
+**Fehlerantwort bei Fehler beim Aktualisieren der Blacklist-Datei:**
+
+- **Code:** 500 (Internal Server Error)
+- **Inhalt:** 
+  ```json
+  { "message": "Beim Aktualisieren der Blacklist ist ein Fehler aufgetreten" }
+  ```
+
+**Beispiel:**
+
+- **Anfrage:**
+
+  ```json
+  {
+      "blacklist": ["gesperrter_benutzer1", "gesperrter_benutzer2"]
+  }
+  ```
+
+- **Erfolgsantwort:**
+
+  ```json
+  { "message": "Blacklist erfolgreich aktualisiert" }
+  ```
+
+- **Fehlerantwort bei ungültiger Anfrage (fehlende Nutzlast):**
+
+  ```json
+  { "message": "Bitte geben Sie eine 'blacklist' Nutzlast an." }
+  ```
+
+- **Fehlerantwort bei ungültiger Anfrage (ungültiges Format der 'blacklist'):**
+
+  ```json
+  { "message": "Die 'blacklist' muss eine Liste von Wörtern sein." }
+  ```
+
+- **Fehlerantwort bei Fehler beim Aktualisieren der Blacklist-Datei:**
+
+  ```json
+  { "message": "Beim Aktualisieren der Blacklist ist ein Fehler aufgetreten" }
+  ```
+
+## Gesperrte Benutzer (banned_emails)
+
+### Abrufen der Gesperrten E-Mails
+
+- **Endpoint:** `/banned_emails`
+- **Methode:** `GET`
+
+Diese Route ermöglicht das Abrufen der Liste der gesperrten E-Mail-Adressen. Die Liste enthält E-Mail-Adressen, die aufgrund von Verstoß gegen die Nutzungsrichtlinien gesperrt wurden.
+
+**Erfolgsantwort:**
+
+- **Code:** 200 (OK)
+- **Inhalt:** 
+  ```json
+  { "banned_emails": ["gesperrte_email1@example.com", "gesperrte_email2@example.com"] }
+  ```
+
+**Fehlerantwort bei Nichtgefundenem Datei:**
+
+- **Code:** 404 (Not Found)
+- **Inhalt:** 
+  ```json
+  { "message": "Datei mit gesperrten E-Mails nicht gefunden" }
+  ```
+
+**Beispiel:**
+
+- **Erfolgsantwort:**
+
+  ```json
+  { "banned_emails": ["gesperrte_email1@example.com", "gesperrte_email2@example.com"] }
+  ```
+
+- **Fehlerantwort bei Nichtgefundenem Datei:**
+
+  ```json
+  { "message": "Datei mit gesperrten E-Mails nicht gefunden" }
+  ```
+
+---
+
+### Aktualisieren der Gesperrten E-Mails
+
+- **Endpoint:** `/banned_emails`
+- **Methode:** `PUT`
+
+Diese Route ermöglicht das Aktualisieren der Liste der gesperrten E-Mail-Adressen. Die Liste enthält E-Mail-Adressen, die aufgrund von Verstoß gegen die Nutzungsrichtlinien gesperrt wurden. Sie können eine neue Liste von gesperrten E-Mails senden, um die bestehende Liste zu ersetzen.
+
+**Anforderungs-JSON-Format:**
+
+```json
+{
+    "banned_emails": ["gesperrte_email1@example.com", "gesperrte_email2@example.com"]
+}
+```
+
+**Erfolgsantwort:**
+
+- **Code:** 200 (OK)
+- **Inhalt:** 
+  ```json
+  { "message": "Gesperrte E-Mails erfolgreich aktualisiert" }
+  ```
+
+**Fehlerantwort bei fehlender Nutzlast oder ungültigem Format:**
+
+- **Code:** 400 (Bad Request)
+- **Inhalt:** 
+  ```json
+  { "message": "Bitte geben Sie eine 'banned_emails' Nutzlast an." }
+  ```
+  oder
+  ```json
+  { "message": "Die 'banned_emails' muss eine Liste von E-Mails sein." }
+  ```
+
+**Fehlerantwort bei Fehler beim Aktualisieren:**
+
+- **Code:** 500 (Internal Server Error)
+- **Inhalt:** 
+  ```json
+  { "message": "Beim Aktualisieren der gesperrten E-Mails ist ein Fehler aufgetreten" }
+  ```
+
+**Beispiel:**
+
+- **Anfrage:**
+
+  ```json
+  {
+      "banned_emails": ["gesperrte_email3@example.com", "gesperrte_email4@example.com"]
+  }
+  ```
+
+- **Erfolgsantwort:**
+
+  ```json
+  { "message": "Gesperrte E-Mails erfolgreich aktualisiert" }
+  ```
+
+- **Fehlerantwort bei fehlender Nutzlast:**
+
+  ```json
+  { "message": "Bitte geben Sie eine 'banned_emails' Nutzlast an." }
+  ```
+
+- **Fehlerantwort bei ungültigem Format:**
+
+  ```json
+  { "message": "Die 'banned_emails' muss eine Liste von E-Mails sein." }
+  ```
+
+- **Fehlerantwort bei Fehler beim Aktualisieren:**
+
+  ```json
+  { "message": "Beim Aktualisieren der gesperrten E-Mails ist ein Fehler aufgetreten" }
+  ```
+
+## Gruppen (Groups)
+### Erstellen einer neuen Gruppe
 
 - **Endpoint:** `/groups`
 - **Methode:** `POST`
 
-Erstellt eine neue Lerngruppe und gibt eine Bestätigungsnachricht zurück.
+Diese Route ermöglicht das Erstellen einer neuen Gruppe. Sie müssen als Benutzer authentifiziert sein, um eine Gruppe erstellen zu können. Sie müssen die folgenden Informationen im JSON-Format bereitstellen, um eine Gruppe zu erstellen:
 
-**JSON-Daten:**
-
-
+**Anforderungs-JSON-Format:**
 
 ```json
 {
     "ownerID": 1,
-    "title": "Mathematik Lerngruppe",
-    "description": "Eine Gruppe für Mathematikstudenten",
+    "title": "Gruppenname",
+    "description": "Beschreibung der Gruppe",
     "maxUsers": 10
 }
 ```
 
----
+- `ownerID`: Die Benutzer-ID des Gruppeneigentümers.
+- `title`: Der Name der Gruppe.
+- `description`: Eine Beschreibung der Gruppe.
+- `maxUsers`: Die maximale Anzahl der Benutzer, die der Gruppe beitreten können.
 
+**Erfolgsantwort:**
+
+- **Code:** 201 (Created)
+- **Inhalt:** 
+  ```json
+  { "message": "Neue Gruppe erstellt", "groupID": 123 }
+  ```
+
+  - `message`: Eine Erfolgsmeldung.
+  - `groupID`: Die eindeutige ID der neu erstellten Gruppe.
+
+**Fehlerantwort bei fehlenden Informationen oder ungültigem Format:**
+
+- **Code:** 400 (Bad Request)
+- **Inhalt:** 
+  ```json
+  { "message": "Bitte geben Sie alle erforderlichen Informationen an." }
+  ```
+
+**Beispiel:**
+
+- **Anfrage:**
+
+  ```json
+  {
+      "ownerID": 1,
+      "title": "Meine Gruppe",
+      "description": "Eine tolle Gruppe für alle!",
+      "maxUsers": 20
+  }
+  ```
+
+- **Erfolgsantwort:**
+
+  ```json
+  { "message": "Neue Gruppe erstellt", "groupID": 123 }
+  ```
+
+- **Fehlerantwort bei fehlenden Informationen:**
+
+  ```json
+  { "message": "Bitte geben Sie alle erforderlichen Informationen an." }
+  ```
+
+---
 ### Abrufen aller Gruppen
 
 - **Endpoint:** `/groups`
 - **Methode:** `GET`
 
-Gibt eine Liste aller Lerngruppen zurück.
+Diese Route ermöglicht das Abrufen aller existierenden Gruppen. Es werden Informationen zu jeder Gruppe zurückgegeben, darunter:
+
+- `groupID`: Die eindeutige ID der Gruppe.
+- `ownerID`: Die Benutzer-ID des Gruppeneigentümers.
+- `title`: Der Name der Gruppe.
+- `description`: Eine Beschreibung der Gruppe.
+- `maxUsers`: Die maximale Anzahl der Benutzer, die der Gruppe beitreten können.
+
+**Erfolgsantwort:**
+
+- **Code:** 200 (OK)
+- **Inhalt:** 
+  ```json
+  [
+    {
+        "groupID": 1,
+        "ownerID": 2,
+        "title": "Gruppe 1",
+        "description": "Beschreibung der Gruppe 1",
+        "maxUsers": 10
+    },
+    {
+        "groupID": 2,
+        "ownerID": 3,
+        "title": "Gruppe 2",
+        "description": "Beschreibung der Gruppe 2",
+        "maxUsers": 15
+    }
+  ]
+  ```
+
+**Beispiel:**
+
+- **Erfolgsantwort:**
+
+  ```json
+  [
+    {
+        "groupID": 1,
+        "ownerID": 2,
+        "title": "Gruppe 1",
+        "description": "Beschreibung der Gruppe 1",
+        "maxUsers": 10
+    },
+    {
+        "groupID": 2,
+        "ownerID": 3,
+        "title": "Gruppe 2",
+        "description": "Beschreibung der Gruppe 2",
+        "maxUsers": 15
+    }
+  ]
+  ```
 
 ---
-
-### Abrufen einer einzelnen Gruppe
+### Abrufen einer einzelnen Gruppe nach `groupID`
 
 - **Endpoint:** `/groups/<groupID>`
 - **Methode:** `GET`
 
-Gibt die Details einer einzelnen Lerngruppe anhand ihrer `groupID` zurück.
+Diese Route ermöglicht das Abrufen von Informationen zu einer einzelnen Gruppe anhand ihrer eindeutigen `groupID`. Es werden Informationen zur Gruppe zurückgegeben, darunter:
+
+- `groupID`: Die eindeutige ID der Gruppe.
+- `ownerID`: Die Benutzer-ID des Gruppeneigentümers.
+- `title`: Der Name der Gruppe.
+- `description`: Eine Beschreibung der Gruppe.
+- `maxUsers`: Die maximale Anzahl der Benutzer, die der Gruppe beitreten können.
+
+**Erfolgsantwort:**
+
+- **Code:** 200 (OK)
+- **Inhalt:** 
+  ```json
+  {
+      "groupID": 1,
+      "ownerID": 2,
+      "title": "Gruppe 1",
+      "description": "Beschreibung der Gruppe 1",
+      "maxUsers": 10
+  }
+  ```
+
+**Fehlerantwort bei nicht gefundener Gruppe:**
+
+- **Code:** 404 (Not Found)
+- **Inhalt:** 
+  ```json
+  { "message": "Gruppe nicht gefunden" }
+  ```
+
+**Beispiel:**
+
+- **Erfolgsantwort:**
+
+  ```json
+  {
+      "groupID": 1,
+      "ownerID": 2,
+      "title": "Gruppe 1",
+      "description": "Beschreibung der Gruppe 1",
+      "maxUsers": 10
+  }
+  ```
+
+- **Fehlerantwort bei nicht gefundener Gruppe:**
+
+  ```json
+  { "message": "Gruppe nicht gefunden" }
+  ```
 
 ---
 
-### Aktualisieren einer Gruppe
+### Aktualisieren einer Gruppe nach `groupID`
 
 - **Endpoint:** `/groups/<groupID>`
 - **Methode:** `PUT`
 
-Aktualisiert die Details einer Lerngruppe anhand ihrer `groupID`. Geben Sie die zu aktualisierenden Felder im JSON-Format an.
+Diese Route ermöglicht das Aktualisieren von Informationen zu einer Gruppe anhand ihrer eindeutigen `groupID`. Die Aktualisierung kann nur vom Eigentümer der Gruppe oder von einem Administrator durchgeführt werden. Es können verschiedene Gruppendetails aktualisiert werden, darunter:
 
-**JSON-Daten:**
+- `ownerID` (optional): Die Benutzer-ID des neuen Gruppeneigentümers.
+- `title` (optional): Der neue Name der Gruppe.
+- `description` (optional): Die neue Beschreibung der Gruppe.
+- `maxUsers` (optional): Die maximale Anzahl der Benutzer, die der Gruppe beitreten können.
+
+**Anforderungs-JSON-Format:**
 
 ```json
 {
+    "ownerID": 3,
     "title": "Neuer Gruppenname",
-    "description": "Neue Beschreibung",
+    "description": "Neue Gruppenbeschreibung",
     "maxUsers": 15
 }
 ```
 
+**Erfolgsantwort:**
+
+- **Code:** 200 (OK)
+- **Inhalt:** 
+  ```json
+  { "message": "Gruppe aktualisiert" }
+  ```
+
+**Fehlerantwort bei nicht autorisiertem Zugriff:**
+
+- **Code:** 403 (Forbidden)
+- **Inhalt:** 
+  ```json
+  { "message": "Sie sind nicht authorisiert um diese Gruppe zu bearbeiten!" }
+  ```
+
+**Fehlerantwort bei nicht gefundener Gruppe:**
+
+- **Code:** 404 (Not Found)
+- **Inhalt:** 
+  ```json
+  { "message": "Gruppe nicht gefunden" }
+  ```
+
+**Beispiel:**
+
+- **Anfrage:**
+
+  ```json
+  {
+      "title": "Neuer Gruppenname",
+      "description": "Neue Gruppenbeschreibung",
+      "maxUsers": 15
+  }
+  ```
+
+- **Erfolgsantwort:**
+
+  ```json
+  { "message": "Gruppe aktualisiert" }
+  ```
+
+- **Fehlerantwort bei nicht autorisiertem Zugriff:**
+
+  ```json
+  { "message": "Sie sind nicht authorisiert um diese Gruppe zu bearbeiten!" }
+  ```
+
+- **Fehlerantwort bei nicht gefundener Gruppe:**
+
+  ```json
+  { "message": "Gruppe nicht gefunden" }
+  ```
+
 ---
 
-### Löschen einer Gruppe
+### Löschen einer Gruppe nach `groupID`
 
 - **Endpoint:** `/groups/<groupID>`
 - **Methode:** `DELETE`
 
-Löscht eine Lerngruppe anhand ihrer `groupID`.
+Diese Route ermöglicht das Löschen einer Gruppe anhand ihrer eindeutigen `groupID`. Das Löschen kann nur vom Eigentümer der Gruppe oder von einem Administrator durchgeführt werden.
+
+**Erfolgsantwort:**
+
+- **Code:** 200 (OK)
+- **Inhalt:** 
+  ```json
+  { "message": "Gruppe gelöscht" }
+  ```
+
+**Fehlerantwort bei nicht autorisiertem Zugriff:**
+
+- **Code:** 403 (Forbidden)
+- **Inhalt:** 
+  ```json
+  { "message": "Sie sind nicht authorisiert um diese Gruppe zu löschen!" }
+  ```
+
+**Fehlerantwort bei nicht gefundener Gruppe:**
+
+- **Code:** 404 (Not Found)
+- **Inhalt:** 
+  ```json
+  { "message": "Gruppe nicht gefunden" }
+  ```
+
+**Beispiel:**
+
+- **Erfolgsantwort:**
+
+  ```json
+  { "message": "Gruppe gelöscht" }
+  ```
+
+- **Fehlerantwort bei nicht autorisiertem Zugriff:**
+
+  ```json
+  { "message": "Sie sind nicht authorisiert um diese Gruppe zu löschen!" }
+  ```
+
+- **Fehlerantwort bei nicht gefundener Gruppe:**
+
+  ```json
+  { "message": "Gruppe nicht gefunden" }
+  ```
+
+---
+
+### Abrufen aller Mitglieder einer Gruppe nach `groupID`
+
+- **Endpoint:** `/groups/<groupID>/members`
+- **Methode:** `GET`
+
+Diese Route ermöglicht das Abrufen aller Mitglieder einer Gruppe anhand ihrer eindeutigen `groupID`. Hierbei handelt es sich um eine geschützte Route, die eine JWT-Authentifizierung erfordert.
+
+**Erfolgsantwort:**
+
+- **Code:** 200 (OK)
+- **Inhalt:** Eine Liste von Mitgliedern mit ihren Daten, wobei jeder Datensatz die `userID`, `groupID` und `startingDate` enthält.
+
+**Fehlerantwort bei nicht autorisiertem Zugriff:**
+
+- **Code:** 403 (Forbidden)
+- **Inhalt:** 
+  ```json
+  { "message": "Sie sind nicht authorisiert um die Mitglieder dieser Gruppe abzurufen!" }
+  ```
+
+**Fehlerantwort bei nicht gefundener Gruppe:**
+
+- **Code:** 404 (Not Found)
+- **Inhalt:** 
+  ```json
+  { "message": "Gruppe nicht gefunden" }
+  ```
+
+**Beispiel:**
+
+- **Erfolgsantwort:**
+
+  ```json
+  [
+      {
+          "userID": 1,
+          "groupID": 123,
+          "startingDate": "2023-01-15T10:30:00Z"
+      },
+      {
+          "userID": 2,
+          "groupID": 123,
+          "startingDate": "2023-01-16T09:45:00Z"
+      }
+  ]
+  ```
+
+- **Fehlerantwort bei nicht autorisiertem Zugriff:**
+
+  ```json
+  { "message": "Sie sind nicht authorisiert um die Mitglieder dieser Gruppe abzurufen!" }
+  ```
+
+- **Fehlerantwort bei nicht gefundener Gruppe:**
+
+  ```json
+  { "message": "Gruppe nicht gefunden" }
+  ```
 
 ## Termine (Dates)
 
@@ -435,18 +1129,79 @@ Löscht eine Lerngruppe anhand ihrer `groupID`.
 - **Endpoint:** `/dates`
 - **Methode:** `POST`
 
-Erstellt einen neuen Termin für eine Lerngruppe und gibt eine Bestätigungsnachricht zurück.
+Diese Route ermöglicht das Erstellen eines neuen Termins für eine Gruppe. Die Route erfordert eine JWT-Authentifizierung.
 
-**JSON-Daten:**
+**Anforderungs-JSON-Format:**
 
 ```json
 {
-    "groupID": 1,
-    "date": "2023-12-25 14:00:00",
-    "place": "Raum A",
-    "maxUsers": 20
+    "groupID": 123,
+    "date": "2023-01-20T14:30:00Z",
+    "place": "Treffpunkt A",
+    "maxUsers": 10
 }
 ```
+
+- `groupID`: Die eindeutige ID der Gruppe, für die der Termin erstellt werden soll.
+- `date`: Das Datum und die Uhrzeit des Termins im ISO-8601-Format.
+- `place`: Der Ort des Termins.
+- `maxUsers`: Die maximale Anzahl von Benutzern, die an diesem Termin teilnehmen können.
+
+**Erfolgsantwort:**
+
+- **Code:** 201 (Created)
+- **Inhalt:** 
+  ```json
+  { "message": "Neuer Termin erstellt" }
+  ```
+
+**Fehlerantwort bei ungültigem Datum:**
+
+- **Code:** 400 (Bad Request)
+- **Inhalt:** 
+  ```json
+  { "message": "Ungültiges Datumsformat" }
+  ```
+
+**Fehlerantwort bei nicht autorisierter Erstellung des Termins:**
+
+- **Code:** 403 (Forbidden)
+- **Inhalt:** 
+  ```json
+  { "message": "Sie sind nicht authorisiert einen Termin für diese Gruppe zu erstellen" }
+  ```
+
+**Beispiel:**
+
+- **Anfrage:**
+
+  ```json
+  {
+      "groupID": 123,
+      "date": "2023-01-20T14:30:00Z",
+      "place": "Treffpunkt A",
+      "maxUsers": 10
+  }
+  ```
+
+- **Antwort bei Erfolg:**
+
+  ```json
+  { "message": "Neuer Termin erstellt" }
+  ```
+
+- **Antwort bei ungültigem Datum:**
+
+  ```json
+  { "message": "Ungültiges Datumsformat" }
+  ```
+
+- **Antwort bei nicht autorisierter Erstellung des Termins:**
+
+  ```json
+  { "message": "Sie sind nicht authorisiert einen Termin für diese Gruppe zu erstellen" }
+  ```
+
 
 ---
 
@@ -455,16 +1210,102 @@ Erstellt einen neuen Termin für eine Lerngruppe und gibt eine Bestätigungsnach
 - **Endpoint:** `/dates`
 - **Methode:** `GET`
 
-Gibt eine Liste aller Termine zurück.
+Diese Route ermöglicht das Abrufen aller Termine aus der Datenbank. Die Route erfordert eine JWT-Authentifizierung.
+
+**Erfolgsantwort:**
+
+- **Code:** 200 (OK)
+- **Inhalt:** Eine Liste aller Termine, wobei jeder Termin die folgenden Informationen enthält:
+  ```json
+  {
+      "id": 1,
+      "groupID": 123,
+      "date": "2023-01-20T14:30:00Z",
+      "place": "Treffpunkt A",
+      "maxUsers": 10
+  }
+  ```
+
+**Beispiel:**
+
+- **Antwort bei Erfolg:**
+
+  ```json
+  [
+      {
+          "id": 1,
+          "groupID": 123,
+          "date": "2023-01-20T14:30:00Z",
+          "place": "Treffpunkt A",
+          "maxUsers": 10
+      },
+      {
+          "id": 2,
+          "groupID": 124,
+          "date": "2023-02-15T16:00:00Z",
+          "place": "Treffpunkt B",
+          "maxUsers": 8
+      }
+  ]
+  ```
+
 
 ---
 
-### Abrufen eines einzelnen Termins
+### Abrufen eines einzelnen Termins anhand der DateID
 
 - **Endpoint:** `/dates/<dateID>`
 - **Methode:** `GET`
 
-Gibt die Details eines einzelnen Termins anhand seiner `dateID` zurück.
+Diese Route ermöglicht das Abrufen eines einzelnen Termins anhand seiner DateID. Die Route erfordert eine JWT-Authentifizierung.
+
+**Parameter:**
+
+- `dateID`: Die eindeutige ID des gewünschten Termins.
+
+**Erfolgsantwort:**
+
+- **Code:** 200 (OK)
+- **Inhalt:** Die Informationen des abgerufenen Termins, einschließlich:
+  ```json
+  {
+      "id": 1,
+      "groupID": 123,
+      "date": "2023-01-20T14:30:00Z",
+      "place": "Treffpunkt A",
+      "maxUsers": 10
+  }
+  ```
+
+**Fehlerantwort bei nicht gefundener DateID:**
+
+- **Code:** 404 (Not Found)
+- **Inhalt:** 
+  ```json
+  { "message": "Termin mit dieser ID wurde nicht gefunden" }
+  ```
+
+**Beispiel:**
+
+- **Antwort bei Erfolg:**
+
+  ```json
+  {
+      "id": 1,
+      "groupID": 123,
+      "date": "2023-01-20T14:30:00Z",
+      "place": "Treffpunkt A",
+      "maxUsers": 10
+  }
+  ```
+
+- **Antwort bei nicht gefundener DateID:**
+
+  ```json
+  { "message": "Termin mit dieser ID wurde nicht gefunden" }
+  ```
+
+
 
 ---
 
@@ -473,18 +1314,74 @@ Gibt die Details eines einzelnen Termins anhand seiner `dateID` zurück.
 - **Endpoint:** `/dates/<dateID>`
 - **Methode:** `PUT`
 
-Aktualisiert die Details eines Termins anhand seiner `dateID`. Geben Sie die zu aktualisierenden Felder im JSON-Format an.
+Diese Route ermöglicht das Aktualisieren eines Termins anhand seiner DateID. Die Route erfordert eine JWT-Authentifizierung.
 
-**JSON-Daten:**
+**Parameter:**
 
-```json
-{
-    "date": "2023-12-26 15:30:00",
-    "place": "Raum B",
-    "maxUsers": 25
-}
-```
+- `dateID`: Die eindeutige ID des zu aktualisierenden Termins.
 
+**Anforderungs-JSON-Format:**
+
+Sie können jedes oder alle der folgenden Felder im JSON-Format senden, um die Informationen des Termins zu aktualisieren:
+
+- `groupID` (optional): Die ID der Gruppe, zu der der Termin gehört.
+- `date` (optional): Das Datum und die Uhrzeit des Termins im ISO-Format (z.B., "2023-01-20T14:30:00Z").
+- `place` (optional): Der Ort des Termins.
+- `maxUsers` (optional): Die maximale Anzahl von Teilnehmern für den Termin.
+
+**Erfolgsantwort:**
+
+- **Code:** 200 (OK)
+- **Inhalt:** 
+  ```json
+  { "message": "Termin bearbeitet" }
+  ```
+
+**Fehlerantwort bei nicht gefundener DateID:**
+
+- **Code:** 404 (Not Found)
+- **Inhalt:** 
+  ```json
+  { "message": "Termin mit dieser ID wurde nicht gefunden" }
+  ```
+
+**Fehlerantwort bei ungültigem Datum:**
+
+- **Code:** 400 (Bad Request)
+- **Inhalt:** 
+  ```json
+  { "message": "Ungültiges Datumsformat" }
+  ```
+
+**Beispiel:**
+
+- **Anfrage:**
+
+  ```json
+  {
+      "date": "2023-01-25T15:00:00Z",
+      "place": "Treffpunkt B",
+      "maxUsers": 15
+  }
+  ```
+
+- **Antwort bei Erfolg:**
+
+  ```json
+  { "message": "Termin bearbeitet" }
+  ```
+
+- **Antwort bei nicht gefundener DateID:**
+
+  ```json
+  { "message": "Termin mit dieser ID wurde nicht gefunden" }
+  ```
+
+- **Antwort bei ungültigem Datum:**
+
+  ```json
+  { "message": "Ungültiges Datumsformat" }
+  ```
 ---
 
 ### Löschen eines Termins
@@ -492,66 +1389,295 @@ Aktualisiert die Details eines Termins anhand seiner `dateID`. Geben Sie die zu 
 - **Endpoint:** `/dates/<dateID>`
 - **Methode:** `DELETE`
 
-Löscht einen Termin anhand seiner `dateID`.
+Diese Route ermöglicht das Löschen eines Termins anhand seiner DateID. Die Route erfordert eine JWT-Authentifizierung.
 
-## Benutzer in Gruppen (UsersInGroups)
+**Parameter:**
 
-### Hinzufügen eines Benutzers zu einer Gruppe
+- `dateID`: Die eindeutige ID des zu löschenden Termins.
+
+**Erfolgsantwort:**
+
+- **Code:** 200 (OK)
+- **Inhalt:** 
+  ```json
+  { "message": "Termin gelöscht" }
+  ```
+
+**Fehlerantwort bei nicht gefundener DateID:**
+
+- **Code:** 404 (Not Found)
+- **Inhalt:** 
+  ```json
+  { "message": "Termin mit dieser ID wurde nicht gefunden" }
+  ```
+
+**Fehlerantwort bei fehlenden Berechtigungen:**
+
+- **Code:** 403 (Forbidden)
+- **Inhalt:** 
+  ```json
+  { "message": "Sie sind nicht authorisiert diesen Termin zu löschen!" }
+  ```
+
+**Beispiel:**
+
+- **Anfrage:**
+
+  Kein spezifischer Inhalt erforderlich.
+
+- **Antwort bei Erfolg:**
+
+  ```json
+  { "message": "Termin gelöscht" }
+  ```
+
+- **Antwort bei nicht gefundener DateID:**
+
+  ```json
+  { "message": "Termin mit dieser ID wurde nicht gefunden" }
+  ```
+
+- **Antwort bei fehlenden Berechtigungen:**
+
+  ```json
+  { "message": "Sie sind nicht authorisiert diesen Termin zu löschen!" }
+  ```
+
+## Benutzer in Gruppen (UsersinGroups)
+
+### Erstellen eines neuen Benutzers in einer Gruppe
 
 - **Endpoint:** `/users_in_groups`
 - **Methode:** `POST`
 
-Fügt einen Benutzer zu einer Lerngruppe hinzu und gibt eine Bestätigungsnachricht zurück.
+Diese Route ermöglicht das Hinzufügen eines Benutzers zu einer Gruppe. Die Route erfordert eine JWT-Authentifizierung.
 
-**JSON-Daten:**
+**Anforderungs-JSON-Format:**
 
 ```json
 {
-    "userID": 1,
-    "groupID": 1,
-    "startingDate": "2023-12-01"
+    "userID": "ID des Benutzers",
+    "groupID": "ID der Gruppe"
 }
 ```
 
+**Erfolgsantwort:**
+
+- **Code:** 201 (Created)
+- **Inhalt:** 
+  ```json
+  { "message": "Benutzer wurde der Gruppe hinzugefügt" }
+  ```
+
+**Fehlerantwort bei nicht gefundener Benutzer-ID:**
+
+- **Code:** 404 (Not Found)
+- **Inhalt:** 
+  ```json
+  { "message": "Benutzer nicht gefunden" }
+  ```
+
+**Fehlerantwort bei nicht gefundener Gruppen-ID:**
+
+- **Code:** 404 (Not Found)
+- **Inhalt:** 
+  ```json
+  { "message": "Gruppe nicht gefunden" }
+  ```
+
+**Fehlerantwort bei voller Gruppe (maximale Anzahl von Benutzern erreicht):**
+
+- **Code:** 400 (Bad Request)
+- **Inhalt:** 
+  ```json
+  { "message": "Gruppe ist bereits voll" }
+  ```
+
+**Beispiel:**
+
+- **Anfrage:**
+
+  ```json
+  {
+      "userID": "123",
+      "groupID": "456"
+  }
+  ```
+
+- **Antwort bei Erfolg:**
+
+  ```json
+  { "message": "Benutzer wurde der Gruppe hinzugefügt" }
+  ```
+
+- **Antwort bei nicht gefundener Benutzer-ID:**
+
+  ```json
+  { "message": "Benutzer nicht gefunden" }
+  ```
+
+- **Antwort bei nicht gefundener Gruppen-ID:**
+
+  ```json
+  { "message": "Gruppe nicht gefunden" }
+  ```
+
+- **Antwort bei voller Gruppe (maximale Anzahl von Benutzern erreicht):**
+
+  ```json
+  { "message": "Gruppe ist bereits voll" }
+  ```
+
 ---
 
-### Abrufen aller Gruppen denen ein User zugewiesen ist
+
+### Abrufen aller Benutzer in allen Gruppen
+
+- **Endpoint:** `/users_in_groups`
+- **Methode:** `GET`
+
+Diese Route ermöglicht das Abrufen aller Benutzer in allen Gruppen. Die Route erfordert eine JWT-Authentifizierung.
+
+**Erfolgsantwort:**
+
+- **Code:** 200 (OK)
+- **Inhalt:** Eine Liste von Benutzern in Gruppen, wobei jeder Benutzer die folgenden Informationen enthält:
+
+```json
+[
+    {
+        "userID": "ID des Benutzers",
+        "groupID": "ID der Gruppe",
+        "startingDate": "Startdatum der Mitgliedschaft in der Gruppe"
+    },
+    // Weitere Benutzer in Gruppen
+]
+```
+
+**Beispiel:**
+
+- **Antwort bei Erfolg:**
+
+  ```json
+  [
+      {
+          "userID": "123",
+          "groupID": "456",
+          "startingDate": "2023-01-15T08:00:00Z"
+      },
+      {
+          "userID": "789",
+          "groupID": "456",
+          "startingDate": "2023-02-20T10:30:00Z"
+      },
+      // Weitere Benutzer in Gruppen
+  ]
+  ```
+
+---
+
+### Abrufen eines einzelnen Benutzers in einer Gruppe nach Benutzer-ID und Gruppen-ID
+
+- **Endpoint:** `/users_in_groups/<userID>/<groupID>`
+- **Methode:** `GET`
+
+Diese Route ermöglicht das Abrufen eines einzelnen Benutzers in einer Gruppe anhand seiner Benutzer-ID und Gruppen-ID. Die Route erfordert eine JWT-Authentifizierung.
+
+**Erfolgsantwort:**
+
+- **Code:** 200 (OK)
+- **Inhalt:** Informationen über den Benutzer in der Gruppe, einschließlich der folgenden Daten:
+
+```json
+{
+    "userID": "ID des Benutzers",
+    "groupID": "ID der Gruppe",
+    "startingDate": "Startdatum der Mitgliedschaft in der Gruppe"
+}
+```
+
+**Beispiel:**
+
+- **Antwort bei Erfolg:**
+
+  ```json
+  {
+      "userID": "123",
+      "groupID": "456",
+      "startingDate": "2023-01-15T08:00:00Z"
+  }
+  ```
+
+---
+
+### Abrufen aller Gruppen für einen Benutzer nach Benutzer-ID
 
 - **Endpoint:** `/users_in_groups/<userID>`
 - **Methode:** `GET`
 
-Gibt eine Liste aller Lerngruppen zurück, denen ein Benutzer basierend auf seiner `userID` zugewiesen ist.
+Diese Route ermöglicht das Abrufen aller Gruppen, in denen ein Benutzer anhand seiner Benutzer-ID Mitglied ist. Die Route erfordert eine JWT-Authentifizierung.
 
----
+**Erfolgsantwort:**
 
-### Abrufen aller Benutzer die in einer Gruppe sind 
-Siehe /groups/members TODO
-
----
-
-### Aktualisieren des Startdatums eines Benutzers in einer Gruppe
-
-- **Endpoint:** `/users_in_groups/<userID>/<groupID>`
-- **Methode:** `PUT`
-
-Aktualisiert das Startdatum eines Benutzers in einer Lerngruppe basierend auf seiner `userID` und `groupID`. Geben Sie das neue Datum im JSON-Format an.
-
-**JSON-Daten:**
+- **Code:** 200 (OK)
+- **Inhalt:** Eine Liste von Informationen über die Gruppen, in denen der Benutzer Mitglied ist. Jede Information enthält:
 
 ```json
 {
-    "startingDate": "2023-12-02"
+    "userID": "ID des Benutzers",
+    "groupID": "ID der Gruppe",
+    "startingDate": "Startdatum der Mitgliedschaft in der Gruppe"
 }
 ```
 
+**Beispiel:**
+
+- **Antwort bei Erfolg:**
+
+  ```json
+  [
+      {
+          "userID": "123",
+          "groupID": "456",
+          "startingDate": "2023-01-15T08:00:00Z"
+      },
+      {
+          "userID": "123",
+          "groupID": "789",
+          "startingDate": "2023-02-10T12:30:00Z"
+      }
+  ]
+  ```
+
 ---
 
-### Entfernen eines Benutzers aus einer Gruppe
+### Löschen eines Benutzers aus einer Gruppe
 
 - **Endpoint:** `/users_in_groups/<userID>/<groupID>`
 - **Methode:** `DELETE`
 
-Entfernt einen Benutzer aus einer Lerngruppe basierend auf seiner `userID` und `groupID`.
+Diese Route ermöglicht das Entfernen eines Benutzers aus einer Gruppe anhand seiner Benutzer-ID und der Gruppen-ID. Die Route erfordert eine JWT-Authentifizierung.
+
+**Erfolgsantwort:**
+
+- **Code:** 200 (OK)
+- **Inhalt:** Eine Bestätigungsnachricht:
+
+```json
+{
+    "message": "Benutzer wurde aus der Gruppe entfernt"
+}
+```
+
+**Beispiel:**
+
+- **Antwort bei Erfolg:**
+
+  ```json
+  {
+      "message": "Benutzer wurde aus der Gruppe entfernt"
+  }
+  ```
 
 ## Authentifizierung
 
@@ -822,6 +1948,76 @@ Wir haben einen Dekorator `log_access` definiert, der für jede API-Funktion ang
 Um eine konsistente Protokollierung über alle API-Endpunkte zu gewährleisten, wenden wir den `log_access`-Dekorator automatisch auf jede REST-Methode in unserer Flask-Anwendung an. Dies wird durch Iterieren über alle URL-Regeln in `app.url_map` und Anwenden des Dekorators auf die entsprechenden Ansichtsfunktionen erreicht. Dadurch wird sichergestellt, dass jeder API-Zugriff protokolliert wird, ohne dass für jede Methode manuell Code hinzugefügt werden muss.
 
 Diese Protokollierungsfunktion bietet eine wertvolle Übersicht über die API-Nutzung und erleichtert die Fehlerbehebung und Leistungsoptimierung in unserer Flask-Anwendung.
+
+### Abrufen der API-Zugriffsprotokolle
+
+- **Endpoint:** `/api_logs`
+- **Methode:** `GET`
+- **Berechtigung:** Administrator (admin_required)
+
+Diese Route ermöglicht das Abrufen der API-Zugriffsprotokolle. Die Protokolle enthalten Informationen über die API-Zugriffe, einschließlich Benutzer-ID, Zeitstempel, aufgerufene Route und verwendete HTTP-Methode.
+
+**Erfolgsantwort:**
+
+- **Code:** 200 (OK)
+- **Inhalt:** 
+  ```json
+  {
+      "logs": [
+          "2023-12-29 00:05:37,528:INFO:{"user_id": 5, "time": "2023-12-29T00:05:37.528104", "route": "/profile_picture/5", "method": "GET", "data": "N/A"}",
+          "2023-12-29 00:05:37,531:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:05:37.531190", "route": "/dashboard", "method": "GET", "data": "N/A"}",
+          // Weitere Protokolle...
+      ]
+  }
+  ```
+
+**Fehlerantwort bei Protokolldatei nicht gefunden:**
+
+- **Code:** 404 (Not Found)
+- **Inhalt:** 
+  ```json
+  { "message": "API-Zugriffsprotokolldatei nicht gefunden" }
+  ```
+
+**Fehlerantwort bei anderen Fehlern:**
+
+- **Code:** 500 (Internal Server Error)
+- **Inhalt:** 
+  ```json
+  { "message": "Interner Serverfehler" }
+  ```
+
+**Hinweise:**
+
+- Diese Route erfordert Administratorberechtigungen (admin_required).
+- Die Protokolldatei enthält Informationen über API-Zugriffe, die Benutzer-ID, Zeitstempel, aufgerufene Route und verwendete HTTP-Methode.
+- Die Protokolle werden im JSON-Format zurückgegeben.
+
+**Beispiel:**
+
+- **Erfolgsantwort:**
+
+  ```json
+  {
+      "logs": [
+          "2023-12-29 00:05:37,528:INFO:{"user_id": 5, "time": "2023-12-29T00:05:37.528104", "route": "/profile_picture/5", "method": "GET", "data": "N/A"}",
+          "2023-12-29 00:05:37,531:INFO:{"user_id": "Anonymous", "time": "2023-12-29T00:05:37.531190", "route": "/dashboard", "method": "GET", "data": "N/A"}",
+          // Weitere Protokolle...
+      ]
+  }
+  ```
+
+- **Fehlerantwort bei Protokolldatei nicht gefunden:**
+
+  ```json
+  { "message": "API-Zugriffsprotokolldatei nicht gefunden" }
+  ```
+
+- **Fehlerantwort bei anderen Fehlern:**
+
+  ```json
+  { "message": "Interner Serverfehler" }
+  ```
 
 # Doku TODO
 - Profile Picture

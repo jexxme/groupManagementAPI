@@ -801,3 +801,40 @@ INFO:api_access_logger:{"user_id": 5, "time": "2023-12-29T01:06:48.714203", "rou
 INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 01:06:48] "GET /banned_emails HTTP/1.1" 200 -
 INFO:api_access_logger:{"user_id": 5, "time": "2023-12-29T01:06:55.571766", "route": "/banned_emails", "method": "GET", "data": "N/A"}
 INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 01:06:55] "GET /banned_emails HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 5, "time": "2023-12-29T01:09:38.698606", "route": "/whoami", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 01:09:38] "GET /whoami HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2023-12-29T01:25:07.703863", "route": "/dashboard", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 01:25:07] "GET /dashboard HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 01:25:07] "[31m[1mGET /whoami HTTP/1.1[0m" 401 -
+INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 01:25:07] "[31m[1mGET /profile_picture/5 HTTP/1.1[0m" 401 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2023-12-29T01:25:07.828102", "route": "/dashboard", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 01:25:07] "GET /dashboard HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2023-12-29T01:25:07.845309", "route": "/login", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 01:25:07] "GET /login HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2023-12-29T01:25:07.854165", "route": "/", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 01:25:07] "GET / HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2023-12-29T01:25:07.926827", "route": "/login", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 01:25:07] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 01:25:07] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 01:25:07] "[36mGET /static/login.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 01:25:08] "[36mGET /static/favicon.ico HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 01:25:08] "[36mGET /static/favicon.ico HTTP/1.1[0m" 304 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2023-12-29T01:25:09.127590", "route": "/login", "method": "POST", "data": {"email": "jerome@admin.admin", "password": "jerome28092000"}}
+INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 01:25:09] "POST /login HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2023-12-29T01:25:09.141129", "route": "/dashboard", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 01:25:09] "GET /dashboard HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 5, "time": "2023-12-29T01:25:09.199418", "route": "/whoami", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 01:25:09] "GET /whoami HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 5, "time": "2023-12-29T01:25:09.204110", "route": "/profile_picture/5", "method": "GET", "data": "N/A"}
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2023-12-29T01:25:09.204620", "route": "/dashboard", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 01:25:09] "[36mGET /profile_picture/5 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 01:25:09] "GET /dashboard HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [29/Dec/2023 01:25:09] "[36mGET /static/favicon.ico HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'c:\\Users\\Sommerfeldt\\Documents\\Coding\\Python\\groupManagementAPI\\app.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 988-872-787
+INFO:werkzeug: * Detected change in 'c:\\Users\\Sommerfeldt\\Documents\\Coding\\Python\\groupManagementAPI\\app.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 988-872-787

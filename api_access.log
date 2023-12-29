@@ -274,3 +274,14 @@
 2023-12-29 01:06:44,392:INFO:{"user_id": 5, "time": "2023-12-29T01:06:44.392695", "route": "/blacklist", "method": "GET", "data": "N/A"}
 2023-12-29 01:06:48,714:INFO:{"user_id": 5, "time": "2023-12-29T01:06:48.714203", "route": "/banned_emails", "method": "GET", "data": "N/A"}
 2023-12-29 01:06:55,571:INFO:{"user_id": 5, "time": "2023-12-29T01:06:55.571766", "route": "/banned_emails", "method": "GET", "data": "N/A"}
+2023-12-29 01:09:38,698:INFO:{"user_id": 5, "time": "2023-12-29T01:09:38.698606", "route": "/whoami", "method": "GET", "data": "N/A"}
+2023-12-29 01:25:07,703:INFO:{"user_id": "Anonymous", "time": "2023-12-29T01:25:07.703863", "route": "/dashboard", "method": "GET", "data": "N/A"}
+2023-12-29 01:25:07,828:INFO:{"user_id": "Anonymous", "time": "2023-12-29T01:25:07.828102", "route": "/dashboard", "method": "GET", "data": "N/A"}
+2023-12-29 01:25:07,845:INFO:{"user_id": "Anonymous", "time": "2023-12-29T01:25:07.845309", "route": "/login", "method": "GET", "data": "N/A"}
+2023-12-29 01:25:07,854:INFO:{"user_id": "Anonymous", "time": "2023-12-29T01:25:07.854165", "route": "/", "method": "GET", "data": "N/A"}
+2023-12-29 01:25:07,927:INFO:{"user_id": "Anonymous", "time": "2023-12-29T01:25:07.926827", "route": "/login", "method": "GET", "data": "N/A"}
+2023-12-29 01:25:09,128:INFO:{"user_id": "Anonymous", "time": "2023-12-29T01:25:09.127590", "route": "/login", "method": "POST", "data": {"email": "jerome@admin.admin", "password": "jerome28092000"}}
+2023-12-29 01:25:09,141:INFO:{"user_id": "Anonymous", "time": "2023-12-29T01:25:09.141129", "route": "/dashboard", "method": "GET", "data": "N/A"}
+2023-12-29 01:25:09,199:INFO:{"user_id": 5, "time": "2023-12-29T01:25:09.199418", "route": "/whoami", "method": "GET", "data": "N/A"}
+2023-12-29 01:25:09,204:INFO:{"user_id": 5, "time": "2023-12-29T01:25:09.204110", "route": "/profile_picture/5", "method": "GET", "data": "N/A"}
+2023-12-29 01:25:09,204:INFO:{"user_id": "Anonymous", "time": "2023-12-29T01:25:09.204620", "route": "/dashboard", "method": "GET", "data": "N/A"}
