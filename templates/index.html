@@ -654,7 +654,6 @@
 
 
 
-
 <button id="triggerServerLogsModalButton" type="button"
     class="btn btn-outline-dark d-flex align-items-center justify-content-center mr-1" data-toggle="modal"
     data-target="#serverLogsModal" data-toggle="tooltip" data-placement="top" title="Serverprotokoll">
@@ -712,7 +711,6 @@ document.addEventListener('DOMContentLoaded', function () {
     let logIndex = 0;
     const logsPerPage = 15;
     let currentLogType = 'access';
-    let totalLogs = 0;
     const ipColumn = document.getElementById('ipColumn');
 
     function extractDateFromMessage(message) {
@@ -725,9 +723,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function toggleIPColumn(show) {
         ipColumn.style.display = show ? '' : 'none';
-        Array.from(document.querySelectorAll('#serverLogsTableBody tr td:first-child')).forEach(cell => {
-            cell.style.display = show ? '' : 'none';
-        });
     }
 
     function loadServerLogs(resetIndex = false) {
@@ -744,7 +739,6 @@ document.addEventListener('DOMContentLoaded', function () {
             return response.json();
         })
         .then(data => {
-            totalLogs = data.logs.length;
             if (resetIndex) {
                 logIndex = 0;
                 document.getElementById('serverLogsTableBody').innerHTML = '';
@@ -756,16 +750,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 const messageWithoutDate = log.replace(/\[.*?\]|\d{4}\/\d{2}\/\d{2}/, '').trim();
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${log.split(' ')[0]}</td>
+                    <td style="display: ${currentLogType === 'access' ? '' : 'none'}">${log.split(' ')[0]}</td>
                     <td>${date}</td>
                     <td>${messageWithoutDate}</td>
                 `;
-                if(currentLogType === 'error') tr.children[0].style.display = 'none';
                 tbody.appendChild(tr);
             });
 
             logIndex += logsPerPage;
-            document.getElementById('loadMoreLogs').style.display = logIndex >= totalLogs ? 'none' : 'block';
+            document.getElementById('loadMoreLogs').style.display = logIndex >= data.logs.length ? 'none' : 'block';
         })
         .catch(error => {
             console.error('Fehler:', error);
@@ -803,6 +796,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+
 
 
 
