@@ -10,6 +10,7 @@
 ![SQLite](https://img.shields.io/badge/Sqlite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
 ![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-000000?style=for-the-badge&logo=sqlalchemy&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=json-web-tokens&logoColor=white)
+![Bcrypt](https://img.shields.io/badge/Bcrypt-004880?style=for-the-badge&logo=bcrypt&logoColor=white)
 ![Nginx](https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)
 
 
@@ -91,6 +92,7 @@ Die LBV-Webschnittstelle ist öffentlich verfügbar unter https://lbv.digital/.
 - Supervisor
 - Certbot
 - Python logging
+- Bcrypt
 
 ## Lokale Installation
 
@@ -1692,6 +1694,7 @@ Diese Route ermöglicht das Entfernen eines Benutzers aus einer Gruppe anhand se
 
 Die Authentifizierung in der LBV-API ist ein entscheidender Aspekt, um die Sicherheit und Integrität der Anwendung zu gewährleisten. Es wird ein JWT (JSON Web Token)-basiertes Authentifizierungssystem verwendet, das sicherstellt, dass nur berechtigte Benutzer Zugriff auf bestimmte Endpunkte haben. Nachfolgend finden Sie Details zur Implementierung und Verwendung der Authentifizierungsfunktionen.
 
+Bcrypt wird verwendet, um Passwörter zu verschlüsseln. Die verschlüsselten Passwörter werden in der Datenbank gespeichert. Beim Login wird das eingegebene Passwort mit dem verschlüsselten Passwort in der Datenbank verglichen. Wenn die Passwörter übereinstimmen, wird ein JWT-Token generiert, das für nachfolgende Anfragen verwendet wird.
 ---
 
 ### Login
@@ -2031,3 +2034,13 @@ Diese Route ermöglicht das Abrufen der API-Zugriffsprotokolle. Die Protokolle e
 # Doku TODO
 - Profile Picture
 - 
+
+
+
+
+
+# Login Daten
+
+can@admin.admin : can123
+jonas@admin.admin : jonas123
+martin@admin.admin : martin123

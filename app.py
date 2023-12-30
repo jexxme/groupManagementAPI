@@ -18,6 +18,7 @@ from flask import send_file
 import json
 import logging
 from flask import request
+from flask_bcrypt import Bcrypt
 
 
 load_dotenv()
@@ -33,6 +34,9 @@ app.config['MAX_CONTENT_LENGTH'] = 3 * 1024 * 1024  # 3 M
 jwt = JWTManager(app)
 db = SQLAlchemy(app)
 
+# Initialize Bcrypt
+bcrypt = Bcrypt(app)
+
 BLACKLIST_FILE_PATH = './static/blacklist.txt'
 BANNED_EMAILS_FILE_PATH = './static/banned_emails.txt'
 
@@ -47,7 +51,7 @@ class User(db.Model):
     userID = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
     firstName = db.Column(db.String(100), nullable=False)
-    password = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String(255), nullable=False)  # Adjust the length if necessary
     isAdmin = db.Column(db.Boolean, default=False)
     profile_picture = db.Column(db.String(255))  # Path to profile picture
 
@@ -181,27 +185,31 @@ def hello_world():
 def login_page():
     return render_template('login.html')
 
-
 @app.route('/login', methods=['POST'])
 @log_access
 def login():
     email = request.json.get('email', None)
     password = request.json.get('password', None)
 
-    # Validate user credentials
-    user = User.query.filter_by(email=email, password=password).first()
+    # Find user by email (without checking password yet)
+    user = User.query.filter_by(email=email).first()
     if user is None:
         return jsonify({"message": "Bad username or password"}), 401
 
-    # Create JWT token with additional user information
-    user_claims = {
-        "is_admin": user.isAdmin,
-        "user_id": user.userID,
-        "email": user.email,
-        # You can add more user-specific information here if needed
-    }
-    access_token = create_access_token(identity=user.userID, additional_claims=user_claims)
-    return jsonify(access_token=access_token)
+    # Use bcrypt to check the hashed password
+    if bcrypt.check_password_hash(user.password, password):
+        # Password is correct, proceed with token creation
+        user_claims = {
+            "is_admin": user.isAdmin,
+            "user_id": user.userID,
+            "email": user.email,
+            # Add more user-specific information here if needed
+        }
+        access_token = create_access_token(identity=user.userID, additional_claims=user_claims)
+        return jsonify(access_token=access_token)
+    else:
+        # Password is incorrect
+        return jsonify({"message": "Bad username or password"}), 401
 
 
 # Protected route for users
@@ -374,8 +382,6 @@ def update_banned_emails():
         return jsonify(message='Beim Aktualisieren der gesperrten E-Mails ist ein Fehler aufgetreten'), 500
 
 
-# CRUD Routes for Users
-# Create new user
 @app.route('/users', methods=['POST'])
 @log_access
 def create_user():
@@ -395,16 +401,18 @@ def create_user():
         banned_emails = file.read().splitlines()
     if data['email'] in banned_emails:
         return jsonify({'message': 'Diese E-Mail-Adresse ist gesperrt'}), 403
-    
+
+    # Hash the password before storing
+    hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
 
     new_user = User(email=data['email'], firstName=data['firstName'],
-                    password=data['password'], isAdmin=False)
+                    password=hashed_password, isAdmin=False)  # Use hashed password
     db.session.add(new_user)
     db.session.commit()
     return jsonify({'message': 'Neuer Benutzer erstellt'}), 201
 
 
-# Create new admin user
+
 @app.route('/admin', methods=['POST'])
 @admin_required
 @log_access
@@ -416,11 +424,15 @@ def create_admin():
     if existing_admin:
         return jsonify({'message': 'Ein Admin mit dieser E-Mail-Adresse existiert bereits'}), 409  # 409 Conflict
 
+    # Hash the password before storing
+    hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
+
     new_user = User(email=data['email'], firstName=data['firstName'],
-                    password=data['password'], isAdmin=True)
+                    password=hashed_password, isAdmin=True)  # Use hashed password
     db.session.add(new_user)
     db.session.commit()
     return jsonify({'message': 'Neuer Admin erstellt'}), 201
+
 
 # Read all users
 @app.route('/users', methods=['GET'])
@@ -444,7 +456,7 @@ def get_user(id):
     return jsonify({'userID': user.userID, 'email': user.email, 
                     'firstName': user.firstName, 'isAdmin': user.isAdmin})
 
-
+# Update a user
 @app.route('/users/<id>', methods=['PUT'])
 @jwt_required()
 @log_access
@@ -469,7 +481,11 @@ def update_user(id):
     if is_admin:
         user.email = data.get('email', user.email)
         user.firstName = data.get('firstName', user.firstName)
-        user.password = data.get('password', user.password)  # Consider hashing the password
+        
+        # Hash the new password if provided
+        if 'password' in data and data['password']:
+            user.password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
+
         user.isAdmin = data.get('isAdmin', user.isAdmin)
 
     db.session.commit()
@@ -487,8 +503,7 @@ def delete_user(id):
 
 
 
-# CRUD Routes for Groups 
-
+# CRUD Routes for Groups
 # Create a new group
 @app.route('/groups', methods=['POST'])
 @jwt_required()

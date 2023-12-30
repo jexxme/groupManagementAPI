@@ -19,7 +19,7 @@ def test_admin_route(email, password):
         print("Failed to authenticate")
 
 # Replace with the credentials of an admin user
-admin_email = "admin"
+admin_email = "admin@admin.admin"
 admin_password = "admin"
 
 # Replace with the credentials of a regular user
