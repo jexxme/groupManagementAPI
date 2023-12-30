@@ -100,16 +100,23 @@ def log_access(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         user_id = get_jwt_identity() if verify_jwt_in_request(optional=True) else 'Anonymous'
+        data = 'N/A'
+        if request.method == 'POST':
+            if request.content_type == 'application/json':
+                data = request.json
+            else:
+                data = 'Non-JSON POST request'
         log_data = {
             "user_id": user_id,
             "time": datetime.now().isoformat(),
             "route": request.path,
             "method": request.method,
-            "data": request.json if request.method == 'POST' else 'N/A'
+            "data": data
         }
         api_logger.info(json.dumps(log_data))  # Use the separate logger for API access logs
         return func(*args, **kwargs)
     return wrapper
+
 
 # Apply the decorator to every REST method
 for rule in app.url_map.iter_rules():
