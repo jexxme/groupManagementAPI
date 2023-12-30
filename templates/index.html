@@ -357,7 +357,7 @@
 
 
 
-    <div class="d-flex">
+    <div class="d-flex mt-2">
 
 
 
@@ -365,7 +365,7 @@
             class="btn btn-outline-dark d-flex align-items-center justify-content-center mr-1" data-toggle="modal"
             data-target="#blacklistModal" data-toggle="tooltip" data-placement="top" title="Verbotene Wörter verwalten">
             <i class="bi bi-envelope-exclamation mr-1"></i>
-            Verbotene Wörter
+            Gesperrte Wörter
         </button>
 
         <div class="modal fade" id="blacklistModal" tabindex="-1" role="dialog" aria-labelledby="blacklistModalLabel"
@@ -976,6 +976,13 @@ document.addEventListener('DOMContentLoaded', function () {
                                         return response.json().then(data => {
                                             showErrorToast(data.message);
                                         });
+                                    
+                                    } else if (response.status === 403) {
+                                        // Handle specific error response (403 Forbidden)
+                                        return response.json().then(data => {
+                                            showErrorToast(data.message);
+                                        });
+
                                     } else {
                                         // Handle other unexpected statuses
                                         throw new Error('Unexpected response status: ' + response.status);
@@ -1449,6 +1456,25 @@ document.addEventListener('DOMContentLoaded', function () {
                                         return response.json().then(data => {
                                             showErrorToast(data.message);
                                         });
+
+                                    } else if (response.status === 403) {
+                                        // Handle specific error response (403 Forbidden)
+                                        return response.json().then(data => {
+                                            showErrorToast(data.message);
+                                        });
+                                    
+                                    } else if (response.status === 404) {
+                                        // Handle specific error response (404 Not Found)
+                                        return response.json().then(data => {
+                                            showErrorToast(data.message);
+                                        });
+
+                                    } else if (response.status === 403) {
+                                        // Handle specific error response Titel oder Beschreibung enthalten gesperrte Wörter
+                                        return response.json().then(data => {
+                                            showErrorToast(data.message);
+                                        });
+                                    
                                     } else {
                                         // Handle other unexpected statuses
                                         throw new Error('Unexpected response status: ' + response.status);

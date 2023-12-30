@@ -390,6 +390,13 @@ def create_user():
     if existing_user:
         return jsonify({'message': 'Ein Benutzer mit dieser E-Mail-Adresse existiert bereits'}), 409  # 409 Conflict
 
+    # Check if email is banned
+    with open(BANNED_EMAILS_FILE_PATH, 'r') as file:
+        banned_emails = file.read().splitlines()
+    if data['email'] in banned_emails:
+        return jsonify({'message': 'Diese E-Mail-Adresse ist gesperrt'}), 403
+    
+
     new_user = User(email=data['email'], firstName=data['firstName'],
                     password=data['password'], isAdmin=False)
     db.session.add(new_user)
@@ -488,6 +495,20 @@ def delete_user(id):
 @log_access
 def create_group():
     data = request.get_json()
+
+    # Check if the owner exists
+    try:
+        owner = User.query.filter_by(userID=data['ownerID']).one()
+    except NoResultFound:
+        return jsonify({'message': 'Benutzer nicht gefunden'}), 404
+    
+    # Check if the title or description contain any banned words
+    with open(BLACKLIST_FILE_PATH, 'r') as file:
+        blacklist = file.read().splitlines()
+    if data['title'] in blacklist or data['description'] in blacklist:
+        return jsonify({'message': 'Titel oder Beschreibung enthalten gesperrte Wörter'}), 403
+    
+    # Create the new group
     new_group = Group(ownerID=data['ownerID'], title=data['title'],
                       description=data['description'], maxUsers=data['maxUsers'])
     db.session.add(new_group)
