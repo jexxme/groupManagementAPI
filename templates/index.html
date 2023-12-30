@@ -324,7 +324,9 @@
                                         if (response.ok) {
                                             return response.json();
                                         } else {
+                                            showErrorToast(response.statusText);
                                             throw new Error('Fehler beim Hochladen des Profilbildes');
+                                            
                                         }
                                     })
                                     .then(data => {
