@@ -9,9 +9,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
     <!-- include favicon -->
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS in static\bootstrap.css-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
         integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
+
+
     <style>
         .badge-post {
             background-color: #ffcc00;
@@ -119,7 +122,7 @@
             LBV-API Admin Dashboard
             <span class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-primary text-light"
                 style="font-size: 0.35em;">
-                v1.0
+                v1.1
             </span>
         </h1>
         <div class="d-flex align-items-center justify-content-between">
@@ -221,143 +224,143 @@
     </script>
 
     <!-- Profilbild -->
-        <style>
-            .img-container {
-                max-height: 400px;
-                /* Anpassen basierend auf der Modalgröße */
-                overflow: hidden;
-                /* Scrollen hinzufügen, wenn das Bild zu hoch ist */
-                max-width: 100%;
-                    display: none;
-                    /* Hide the container by default */
-            }
-        </style>
+    <style>
+        .img-container {
+            max-height: 400px;
+            /* Anpassen basierend auf der Modalgröße */
+            overflow: hidden;
+            /* Scrollen hinzufügen, wenn das Bild zu hoch ist */
+            max-width: 100%;
+            display: none;
+            /* Hide the container by default */
+        }
+    </style>
 
-            <div class="modal fade" id="profilePictureModal" tabindex="-1" role="dialog"
-                aria-labelledby="profilePictureModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="profilePictureModalLabel">Profilbild aktualisieren</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Schließen">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body d-flex flex-column align-items-center">
-                            <div class="img-container" style="display: none;">
-                                <img id="imagePreview" src="#" alt="Dein Profilbild" style="display: none;">
-                            </div>
-                            <input type="file" id="profilePictureInput" accept="image/jpeg, image/jpg, image/png" hidden>
-                            <button class="btn btn-secondary mt-3"
-                                onclick="document.getElementById('profilePictureInput').click();">
-                                Bild auswählen
-                            </button>
-                        </div>
-                        <div class="modal-footer justify-content-center">
-                            <button type="button" class="btn btn-primary" id="saveProfilePicture">Speichern</button>
-                        </div>
+    <div class="modal fade" id="profilePictureModal" tabindex="-1" role="dialog"
+        aria-labelledby="profilePictureModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="profilePictureModalLabel">Profilbild aktualisieren</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Schließen">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body d-flex flex-column align-items-center">
+                    <div class="img-container" style="display: none;">
+                        <img id="imagePreview" src="#" alt="Dein Profilbild" style="display: none;">
                     </div>
+                    <input type="file" id="profilePictureInput" accept="image/jpeg, image/jpg, image/png" hidden>
+                    <button class="btn btn-secondary mt-3"
+                        onclick="document.getElementById('profilePictureInput').click();">
+                        Bild auswählen
+                    </button>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary" id="saveProfilePicture">Speichern</button>
                 </div>
             </div>
+        </div>
+    </div>
 
 
 
-            <script>
-                let cropper;
-                document.getElementById('profilePictureInput').addEventListener('change', function (event) {
-                    const [file] = event.target.files;
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function (e) {
-                            const imagePreview = document.getElementById('imagePreview');
-                            const imgContainer = document.querySelector('.img-container');
-                            imagePreview.src = e.target.result;
-                            imgContainer.style.display = 'block'; // Display the image container
-                            imagePreview.style.display = 'block'; // Display the image preview
+    <script>
+        let cropper;
+        document.getElementById('profilePictureInput').addEventListener('change', function (event) {
+            const [file] = event.target.files;
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const imagePreview = document.getElementById('imagePreview');
+                    const imgContainer = document.querySelector('.img-container');
+                    imagePreview.src = e.target.result;
+                    imgContainer.style.display = 'block'; // Display the image container
+                    imagePreview.style.display = 'block'; // Display the image preview
 
-                            if (cropper) {
-                                cropper.destroy();
-                            }
-                            cropper = new Cropper(imagePreview, {
-                                aspectRatio: 1,
-                                viewMode: 1,
-                                scalable: false,
-                                zoomable: false,
-                                minContainerHeight: 400, // Mindesthöhe für den Container festlegen
-                                minCanvasHeight: 400, // Mindesthöhe für die Leinwand festlegen
-                            });
-
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                });
-
-                document.getElementById('saveProfilePicture').addEventListener('click', function () {
                     if (cropper) {
-                        // Get cropped image data as a data URL
-                        const croppedImageData = cropper.getCroppedCanvas().toDataURL();
-                        // Convert data URL to blob
-                        fetch(croppedImageData)
-                            .then(res => res.blob())
-                            .then(blob => {
-                                // Create form data
-                                const formData = new FormData();
-                                formData.append('file', blob, 'profile_picture.png'); // Second parameter is the blob, third parameter is filename
-
-                                // Get user ID from JWT token
-                                const adminToken = localStorage.getItem('jwtToken');
-                                const decodedToken = jwt_decode(adminToken); // Use a suitable JWT decode library
-                                const userId = decodedToken.user_id; // Adjust this according to your token structure
-
-                                // Append user ID to form data
-                                formData.append('user_id', userId);
-
-                                // Make the POST request to the server
-                                fetch('/upload_profile_picture', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Authorization': `Bearer ${adminToken}`
-                                    },
-                                    body: formData
-                                })
-                                    .then(response => {
-                                        if (response.ok) {
-                                            return response.json();
-                                        } else {
-                                            showErrorToast(response.statusText);
-                                            throw new Error('Fehler beim Hochladen des Profilbildes');
-                                            
-                                        }
-                                    })
-                                    .then(data => {
-                                        // close the modal
-                                        $('#profilePictureModal').modal('hide');
-                                        // Display success toast
-                                        showSuccessToast(data.message);
-
-                                        // Update the profile picture
-                                        fetchProfilePicture();
-
-                                    })
-                                    .catch(error => {
-                                        console.error('Error:', error);
-                                        alert(error.message); // Or display the error message in the UI
-                                    });
-                            });
+                        cropper.destroy();
                     }
-                });
+                    cropper = new Cropper(imagePreview, {
+                        aspectRatio: 1,
+                        viewMode: 1,
+                        scalable: false,
+                        zoomable: false,
+                        minContainerHeight: 400, // Mindesthöhe für den Container festlegen
+                        minCanvasHeight: 400, // Mindesthöhe für die Leinwand festlegen
+                    });
+
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('saveProfilePicture').addEventListener('click', function () {
+            if (cropper) {
+                // Get cropped image data as a data URL
+                const croppedImageData = cropper.getCroppedCanvas().toDataURL();
+                // Convert data URL to blob
+                fetch(croppedImageData)
+                    .then(res => res.blob())
+                    .then(blob => {
+                        // Create form data
+                        const formData = new FormData();
+                        formData.append('file', blob, 'profile_picture.png'); // Second parameter is the blob, third parameter is filename
+
+                        // Get user ID from JWT token
+                        const adminToken = localStorage.getItem('jwtToken');
+                        const decodedToken = jwt_decode(adminToken); // Use a suitable JWT decode library
+                        const userId = decodedToken.user_id; // Adjust this according to your token structure
+
+                        // Append user ID to form data
+                        formData.append('user_id', userId);
+
+                        // Make the POST request to the server
+                        fetch('/upload_profile_picture', {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${adminToken}`
+                            },
+                            body: formData
+                        })
+                            .then(response => {
+                                if (response.ok) {
+                                    return response.json();
+                                } else {
+                                    showErrorToast(response.statusText);
+                                    throw new Error('Fehler beim Hochladen des Profilbildes');
+
+                                }
+                            })
+                            .then(data => {
+                                // close the modal
+                                $('#profilePictureModal').modal('hide');
+                                // Display success toast
+                                showSuccessToast(data.message);
+
+                                // Update the profile picture
+                                fetchProfilePicture();
+
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert(error.message); // Or display the error message in the UI
+                            });
+                    });
+            }
+        });
 
 
 
 
 
-            </script>
+    </script>
 
 
 
 
 
-    <div class="d-flex mt-2">
+    <div class="button-container d-flex mt-2">
 
 
 
@@ -365,7 +368,9 @@
             class="btn btn-outline-dark d-flex align-items-center justify-content-center mr-1" data-toggle="modal"
             data-target="#blacklistModal" data-toggle="tooltip" data-placement="top" title="Verbotene Wörter verwalten">
             <i class="bi bi-envelope-exclamation mr-1"></i>
-            Gesperrte Wörter
+            <span>
+                Gesperrte Wörter
+            </span>
         </button>
 
         <div class="modal fade" id="blacklistModal" tabindex="-1" role="dialog" aria-labelledby="blacklistModalLabel"
@@ -449,7 +454,9 @@
             data-target="#bannedEmailsModal" data-toggle="tooltip" data-placement="top"
             title="Gesperrte E-Mails verwalten">
             <i class="bi bi-person-exclamation mr-1"></i>
-            Gesperrte E-Mails
+            <span>
+                Gesperrte E-Mails
+            </span>
         </button>
 
 
@@ -525,8 +532,10 @@
         <button id="triggerApiLogsModalButton" type="button"
             class="btn btn-outline-dark d-flex align-items-center justify-content-center mr-1" data-toggle="modal"
             data-target="#apiLogsModal" data-toggle="tooltip" data-placement="top" title="API Access Logs">
-            <i class="bi bi-journal-text mr-1"></i>
-            API-Protokoll
+            <i class="bi bi-door-open mr-1"></i>
+            <span>
+                API-Protokoll
+            </span>
         </button>
         <div class="modal fade" id="apiLogsModal" tabindex="-1" role="dialog" aria-labelledby="apiLogsModalLabel"
             aria-hidden="true">
@@ -646,140 +655,165 @@
 
 
 
-<button id="triggerServerLogsModalButton" type="button"
-    class="btn btn-outline-dark d-flex align-items-center justify-content-center mr-1" data-toggle="modal"
-    data-target="#serverLogsModal" data-toggle="tooltip" data-placement="top" title="Serverprotokoll">
-    <i class="bi bi-journal-text mr-1"></i>
-    Serverprotokoll
-</button>
+        <button id="triggerServerLogsModalButton" type="button"
+            class="btn btn-outline-dark d-flex align-items-center justify-content-center mr-1" data-toggle="modal"
+            data-target="#serverLogsModal" data-toggle="tooltip" data-placement="top" title="Serverprotokoll">
+            <i class="bi bi-journal-text mr-1"></i>
+            <span>
+                Serverprotokoll
+            </span>
+        </button>
 
-<div class="modal fade" id="serverLogsModal" tabindex="-1" role="dialog" aria-labelledby="serverLogsModalLabel"
-aria-hidden="true">
-<div class="modal-dialog modal-xl" role="document">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="serverLogsModalLabel">Serverprotokoll</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="btn-group" role="group" aria-label="Protokolle anzeigen">
-                <button type="button" class="btn btn-outline-dark active" id="viewAccessLogsButton">Zugriffsprotokolle</button>
-                <button type="button" class="btn btn-outline-dark" id="viewErrorLogsButton">Fehlerprotokolle</button>
+        <div class="modal fade" id="serverLogsModal" tabindex="-1" role="dialog" aria-labelledby="serverLogsModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="serverLogsModalLabel">Serverprotokoll</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="btn-group" role="group" aria-label="Protokolle anzeigen">
+                            <button type="button" class="btn btn-outline-dark active"
+                                id="viewAccessLogsButton">Zugriffsprotokolle</button>
+                            <button type="button" class="btn btn-outline-dark"
+                                id="viewErrorLogsButton">Fehlerprotokolle</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th id="ipColumn">IP-Adresse</th>
+                                        <th>Datum</th>
+                                        <th>Nachricht</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="serverLogsTableBody">
+                                    <!-- Logeinträge werden hier eingefügt -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="refreshLogs" type="button" class="btn btn-outline-dark">
+                            <i class="bi bi-arrow-clockwise"></i> Aktualisieren
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
+                    </div>
+                </div>
             </div>
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th id="ipColumn">IP-Adresse</th>
-                            <th>Datum</th>
-                            <th>Nachricht</th>
-                        </tr>
-                    </thead>
-                    <tbody id="serverLogsTableBody">
-                        <!-- Logeinträge werden hier eingefügt -->
-                    </tbody>
-                </table>
-            </div>
         </div>
-        <div class="modal-footer">
-            <button id="refreshLogs" type="button" class="btn btn-outline-dark">
-                <i class="bi bi-arrow-clockwise"></i> Aktualisieren
-            </button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
-        </div>
-    </div>
-</div>
-</div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const logsPerPage = 100; // Load the newest 100 last entries
-    let currentLogType = 'access';
-    const ipColumn = document.getElementById('ipColumn');
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const logsPerPage = 100; // Load the newest 100 last entries
+                let currentLogType = 'access';
+                const ipColumn = document.getElementById('ipColumn');
 
-    function extractDateFromMessage(message) {
-        let dateMatch = message.match(/\[(\d{2}\/\w{3}\/\d{4}:\d{2}:\d{2}:\d{2} \+\d{4})\]/);
-        if (!dateMatch) {
-            dateMatch = message.match(/(\d{4}\/\d{2}\/\d{2})/);
-        }
-        return dateMatch ? dateMatch[1] : 'Unbekanntes Datum';
-    }
+                function extractDateFromMessage(message) {
+                    let dateMatch = message.match(/\[(\d{2}\/\w{3}\/\d{4}:\d{2}:\d{2}:\d{2} \+\d{4})\]/);
+                    if (!dateMatch) {
+                        dateMatch = message.match(/(\d{4}\/\d{2}\/\d{2})/);
+                    }
+                    return dateMatch ? dateMatch[1] : 'Unbekanntes Datum';
+                }
 
-    function toggleIPColumn(show) {
-        ipColumn.style.display = show ? '' : 'none';
-    }
+                function toggleIPColumn(show) {
+                    ipColumn.style.display = show ? '' : 'none';
+                }
 
-    function loadServerLogs() {
-        const logType = currentLogType === 'access' ? 'access_logs' : 'error_logs';
-        fetch(`/${logType}`, {
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP-Fehler! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            document.getElementById('serverLogsTableBody').innerHTML = ''; // Clear previous entries
-            const tbody = document.getElementById('serverLogsTableBody');
-            data.logs.slice(-logsPerPage).reverse().forEach(log => { // Get the last 100 entries
-                const date = extractDateFromMessage(log);
-                const messageWithoutDate = log.replace(/\[.*?\]|\d{4}\/\d{2}\/\d{2}/, '').trim();
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
+                function loadServerLogs() {
+                    const logType = currentLogType === 'access' ? 'access_logs' : 'error_logs';
+                    fetch(`/${logType}`, {
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+                        }
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP-Fehler! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            document.getElementById('serverLogsTableBody').innerHTML = ''; // Clear previous entries
+                            const tbody = document.getElementById('serverLogsTableBody');
+                            data.logs.slice(-logsPerPage).reverse().forEach(log => { // Get the last 100 entries
+                                const date = extractDateFromMessage(log);
+                                const messageWithoutDate = log.replace(/\[.*?\]|\d{4}\/\d{2}\/\d{2}/, '').trim();
+                                const tr = document.createElement('tr');
+                                tr.innerHTML = `
                     <td>${log.split(' ')[0]}</td>
                     <td>${date}</td>
                     <td>${messageWithoutDate}</td>
                 `;
-                if(currentLogType === 'error') {
-                    tr.children[0].style.display = 'none'; // Hide IP address for error logs
+                                if (currentLogType === 'error') {
+                                    tr.children[0].style.display = 'none'; // Hide IP address for error logs
+                                }
+                                tbody.appendChild(tr);
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Fehler:', error);
+                        });
                 }
-                tbody.appendChild(tr);
+
+                document.getElementById('triggerServerLogsModalButton').addEventListener('click', function () {
+                    currentLogType = 'access';
+                    toggleIPColumn(true);
+                    loadServerLogs();
+                });
+
+                document.getElementById('viewAccessLogsButton').addEventListener('click', function () {
+                    currentLogType = 'access';
+                    toggleIPColumn(true);
+                    loadServerLogs();
+                    this.classList.add('active');
+                    document.getElementById('viewErrorLogsButton').classList.remove('active');
+                });
+
+                document.getElementById('viewErrorLogsButton').addEventListener('click', function () {
+                    currentLogType = 'error';
+                    toggleIPColumn(false);
+                    loadServerLogs();
+                    this.classList.add('active');
+                    document.getElementById('viewAccessLogsButton').classList.remove('active');
+                });
+
+                document.getElementById('refreshLogs').addEventListener('click', function () {
+                    loadServerLogs();
+                });
             });
-        })
-        .catch(error => {
-            console.error('Fehler:', error);
-        });
-    }
+        </script>
+        <style>
+            @media (max-width: 768px) {
+                .button-container .btn {
+                    width: 100%;
+                    margin-top: 10px;
+                    /* Add some space between the buttons */
+                }
 
-    document.getElementById('triggerServerLogsModalButton').addEventListener('click', function() {
-        currentLogType = 'access';
-        toggleIPColumn(true);
-        loadServerLogs();
-    });
+                .button-container .btn:last-child {
+                    margin-bottom: 10px;
+                    /* Add additional space below the last button */
+                }
 
-    document.getElementById('viewAccessLogsButton').addEventListener('click', function() {
-        currentLogType = 'access';
-        toggleIPColumn(true);
-        loadServerLogs();
-        this.classList.add('active');
-        document.getElementById('viewErrorLogsButton').classList.remove('active');
-    });
+                .button-container .btn>span {
+                    display: none;
+                }
 
-    document.getElementById('viewErrorLogsButton').addEventListener('click', function() {
-        currentLogType = 'error';
-        toggleIPColumn(false);
-        loadServerLogs();
-        this.classList.add('active');
-        document.getElementById('viewAccessLogsButton').classList.remove('active');
-    });
-
-    document.getElementById('refreshLogs').addEventListener('click', function() {
-        loadServerLogs();
-    });
-});
-</script>
-
-
-
-
+                .button-container .btn>i {
+                    font-size: 1.25em;
+                }
+            }
+        </style>
 
     </div>
+
+
+
     <h2 class="mt-4">Benutzer</h2>
     <!-- Users Section -->
     <div class="accordion" id="usersAccordion">
@@ -805,8 +839,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <th>Benutzer-ID</th>
                                 <th>Vorname</th>
                                 <th>E-Mail</th>
-                                <th>Passwort</th>
-                                <th>Admin</th>
+                                <th>Admin</th> <!-- Removed the Password column -->
                             </tr>
                         </thead>
                         <tbody id="usersTableBody">
@@ -820,8 +853,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-        <script>
-            function fetchUsers() {
+        <script>function fetchUsers() {
                 fetch('/users', {
                     headers: { 'Authorization': 'Bearer ' + adminToken }
                 })
@@ -834,9 +866,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                         <td>${user.userID}</td>
                                         <td>${user.firstName}</td>
                                         <td>${user.email}</td>
-                                        <td>${user.password}</td>
                                         <td>${user.isAdmin ? 'Ja' : 'Nein'}</td>
-                                     </tr>`;
+                                     </tr>`; // Removed the Password field
                             tableBody.innerHTML += row;
                         });
                     })
@@ -846,9 +877,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             document.getElementById('headingUsers').addEventListener('click', fetchUsers);
+
         </script>
-
-
 
 
 
@@ -888,11 +918,10 @@ document.addEventListener('DOMContentLoaded', function () {
                                     var display = document.getElementById('userInfoDisplay');
                                     if (data) {
                                         display.innerHTML = `
-                                                     <p>Benutzer-ID: ${data.userID}</p>
-                                                     <p>Vorname: ${data.firstName}</p>
-                                                     <p>Email: ${data.email}</p>
-                                                     <p>Passwort: ${data.password}</p>
-                                                     <p>Admin: ${data.isAdmin ? 'Ja' : 'Nein'}</p>`;
+                                                 <p>Benutzer-ID: ${data.userID}</p>
+                                                 <p>Vorname: ${data.firstName}</p>
+                                                 <p>Email: ${data.email}</p>
+                                                 <p>Admin: ${data.isAdmin ? 'Ja' : 'Nein'}</p>`; // Removed password display
                                     } else {
                                         display.innerHTML = `<p>Benutzer nicht gefunden.</p>`;
                                     }
@@ -905,6 +934,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             </div>
         </div>
+
 
 
         <!-- User Operations -->
@@ -976,7 +1006,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                         return response.json().then(data => {
                                             showErrorToast(data.message);
                                         });
-                                    
+
                                     } else if (response.status === 403) {
                                         // Handle specific error response (403 Forbidden)
                                         return response.json().then(data => {
@@ -1462,7 +1492,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                         return response.json().then(data => {
                                             showErrorToast(data.message);
                                         });
-                                    
+
                                     } else if (response.status === 404) {
                                         // Handle specific error response (404 Not Found)
                                         return response.json().then(data => {
@@ -1474,7 +1504,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                         return response.json().then(data => {
                                             showErrorToast(data.message);
                                         });
-                                    
+
                                     } else {
                                         // Handle other unexpected statuses
                                         throw new Error('Unexpected response status: ' + response.status);
