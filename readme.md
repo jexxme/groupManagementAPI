@@ -2034,3 +2034,13 @@ Diese Route ermöglicht das Abrufen der API-Zugriffsprotokolle. Die Protokolle e
 # Doku TODO
 - Profile Picture
 - 
+
+
+
+
+
+# Login Daten
+
+can@admin.admin : can123
+jonas@admin.admin : jonas123
+martin@admin.admin : martin123
