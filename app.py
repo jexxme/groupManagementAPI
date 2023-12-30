@@ -19,6 +19,7 @@ import json
 import logging
 from flask import request
 from flask_bcrypt import Bcrypt
+from datetime import timedelta
 
 
 load_dotenv()
@@ -205,7 +206,7 @@ def login():
             "email": user.email,
             # Add more user-specific information here if needed
         }
-        access_token = create_access_token(identity=user.userID, additional_claims=user_claims)
+        access_token = create_access_token(identity=user.userID, additional_claims=user_claims, expires_delta=timedelta(days=30))
         return jsonify(access_token=access_token)
     else:
         # Password is incorrect
