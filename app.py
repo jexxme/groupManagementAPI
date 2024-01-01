@@ -20,6 +20,10 @@ import logging
 from flask import request
 from flask_bcrypt import Bcrypt
 from datetime import timedelta
+from flask import Flask, request, jsonify
+import requests
+from werkzeug.datastructures import FileStorage
+from flask_jwt_extended import create_access_token, JWTManager
 
 
 load_dotenv()
@@ -382,6 +386,9 @@ def update_banned_emails():
     except IOError as e:
         return jsonify(message='Beim Aktualisieren der gesperrten E-Mails ist ein Fehler aufgetreten'), 500
 
+from flask import request
+import requests
+from io import BytesIO
 
 @app.route('/users', methods=['POST'])
 @log_access
@@ -406,10 +413,36 @@ def create_user():
     # Hash the password before storing
     hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
 
+
+    # Create new user
     new_user = User(email=data['email'], firstName=data['firstName'],
-                    password=hashed_password, isAdmin=False)  # Use hashed password
+                    password=hashed_password, isAdmin=False)
     db.session.add(new_user)
-    db.session.commit()
+    db.session.commit()  # Commit to assign an ID
+
+    # Generate avatar
+    initials = ''.join([name[0].upper() for name in data['firstName'].split() if name])
+    avatar_url = f'https://ui-avatars.com/api/?name={initials}&background=random&color=fff&bold=true'
+    avatar_response = requests.get(avatar_url)
+    if avatar_response.status_code == 200:
+        avatar_file = FileStorage(
+            stream=BytesIO(avatar_response.content),
+            filename=secure_filename(f'{new_user.userID}_avatar.png'),
+            content_type='image/png'
+        )
+        data = {
+            'file': avatar_file,
+            'user_id': new_user.userID
+        }
+        with app.test_client() as client:
+            token = create_access_token(identity=new_user.userID)
+            headers = {
+                'Authorization': f'Bearer {token}',
+                'Content-Type': 'multipart/form-data'
+            }
+            # Perform the internal API call to upload the profile picture
+            client.post('/upload_profile_picture', data=data, headers=headers)
+
     return jsonify({'message': 'Neuer Benutzer erstellt'}), 201
 
 
