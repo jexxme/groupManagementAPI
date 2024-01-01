@@ -125,79 +125,13 @@
                 v1.1
             </span>
         </h1>
+
         <div class="d-flex align-items-center justify-content-between">
             <span class="mr-2"><span id="timeOfDayGreeting">Guten Tag</span>, <span id="username">User</span></span>
-
-            <script>
-                function updateTimeOfDayGreeting() {
-                    const now = new Date();
-                    const hours = now.getHours();
-                    let greeting = "Guten Tag"; // Default greeting
-
-                    if (hours < 12) {
-                        greeting = "Guten Morgen";
-                    } else if (hours < 14) {
-                        greeting = "Guten Mittag";
-                    } else if (hours < 17) {
-                        greeting = "Guten Nachmittag";
-                    } else {
-                        greeting = "Guten Abend";
-                    }
-
-                    document.getElementById('timeOfDayGreeting').textContent = greeting;
-                }
-
-                // Update greeting on page load
-                updateTimeOfDayGreeting();
-            </script>
-
-
-
             <img id="profilePicture" class="rounded-circle mr-1" style="height: 38px; width: 38px; object-fit: cover;"
                 data-toggle="modal" data-target="#profilePictureModal" alt="Click to update profile picture"
                 role="button" aria-controls="profilePictureModal" data-toggle="tooltip" data-placement="top"
                 title="Profilbild ändern">
-            <script>
-                // Function to fetch and display the profile picture
-                function fetchProfilePicture() {
-                    // Get the user ID from the JWT token
-                    let adminToken = localStorage.getItem('jwtToken');
-
-                    // Assuming the user ID is stored as a claim in the JWT token
-                    // Decode the token to extract the user ID
-                    let decodedToken = jwt_decode(adminToken); // Use a suitable JWT decode library
-                    let userId = decodedToken.user_id; // Adjust this according to your token structure
-
-                    // API endpoint to fetch the profile picture
-                    let profilePictureUrl = `/profile_picture/${userId}`;
-
-                    // Fetch the profile picture
-                    fetch(profilePictureUrl, {
-                        headers: { 'Authorization': `Bearer ${adminToken}` }
-                    })
-                        .then(response => {
-                            if (response.ok) {
-                                return response.blob(); // If image is found, response will be a blob
-                            } else {
-                                throw new Error('Profilbild nicht gefunden');
-                            }
-                        })
-                        .then(imageBlob => {
-                            // Convert the blob to a URL and set it as the src of the image element
-                            let imageUrl = URL.createObjectURL(imageBlob);
-                            document.getElementById('profilePicture').src = imageUrl;
-                        })
-                        .catch(error => {
-                            console.error('Error:', error.message);
-                        });
-                }
-
-                // Call the function on page load or at a suitable time
-                fetchProfilePicture();
-            </script>
-
-
-
             <a href="https://github.com/jexxme/groupManagementAPI/blob/main/readme.md" target="_blank">
                 <button id="documentionButton"
                     class="btn btn-outline-dark d-flex align-items-center justify-content-center mr-1"
@@ -213,6 +147,66 @@
 
     </div>
 
+    <script>
+        function updateTimeOfDayGreeting() {
+            const now = new Date();
+            const hours = now.getHours();
+            let greeting = "Guten Tag"; // Default greeting
+
+            if (hours < 12) {
+                greeting = "Guten Morgen";
+            } else if (hours < 14) {
+                greeting = "Guten Mittag";
+            } else if (hours < 17) {
+                greeting = "Guten Nachmittag";
+            } else {
+                greeting = "Guten Abend";
+            }
+
+            document.getElementById('timeOfDayGreeting').textContent = greeting;
+        }
+
+        // Update greeting on page load
+        updateTimeOfDayGreeting();
+    </script>
+    <script>
+        // Function to fetch and display the profile picture
+        function fetchProfilePicture() {
+            // Get the user ID from the JWT token
+            let adminToken = localStorage.getItem('jwtToken');
+
+            // Assuming the user ID is stored as a claim in the JWT token
+            // Decode the token to extract the user ID
+            let decodedToken = jwt_decode(adminToken); // Use a suitable JWT decode library
+            let userId = decodedToken.user_id; // Adjust this according to your token structure
+
+            // API endpoint to fetch the profile picture
+            let profilePictureUrl = `/profile_picture/${userId}`;
+
+            // Fetch the profile picture
+            fetch(profilePictureUrl, {
+                headers: { 'Authorization': `Bearer ${adminToken}` }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.blob(); // If image is found, response will be a blob
+                    } else {
+                        throw new Error('Profilbild nicht gefunden');
+                    }
+                })
+                .then(imageBlob => {
+                    // Convert the blob to a URL and set it as the src of the image element
+                    let imageUrl = URL.createObjectURL(imageBlob);
+                    document.getElementById('profilePicture').src = imageUrl;
+                })
+                .catch(error => {
+                    console.error('Error:', error.message);
+                });
+        }
+
+        // Call the function on page load or at a suitable time
+        fetchProfilePicture();
+    </script>
     <script>
         document.getElementById('logoutButton').addEventListener('click', function () {
             // Remove the JWT token from local storage
@@ -349,11 +343,6 @@
                     });
             }
         });
-
-
-
-
-
     </script>
 
 
