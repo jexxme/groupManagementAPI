@@ -24,7 +24,9 @@ from flask import Flask, request, jsonify
 import requests
 from werkzeug.datastructures import FileStorage
 from flask_jwt_extended import create_access_token, JWTManager
-
+from flask import request
+import requests
+from io import BytesIO
 
 load_dotenv()
 
@@ -385,10 +387,6 @@ def update_banned_emails():
         return jsonify(message='Gesperrte E-Mails erfolgreich aktualisiert'), 200
     except IOError as e:
         return jsonify(message='Beim Aktualisieren der gesperrten E-Mails ist ein Fehler aufgetreten'), 500
-
-from flask import request
-import requests
-from io import BytesIO
 
 @app.route('/users', methods=['POST'])
 @log_access

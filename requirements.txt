@@ -1,6 +1,9 @@
 Flask
+Flask-Bcrypt
+Flask-JWT-Extended
 Flask-SQLAlchemy
-flask_jwt_extended
 python-dotenv
+requests
+SQLAlchemy
+Werkzeug
 python-dateutil
-Bcrypt
