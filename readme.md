@@ -1,9 +1,5 @@
 # LBV - Lerngruppen Bildung und Verwaltung API
 
-![GitHub](https://img.shields.io/github/license/jexxme/groupManagementAPI?style=for-the-badge)
-![GitHub last commit](https://img.shields.io/github/last-commit/jexxme/groupManagementAPI?style=for-the-badge)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/jexxme/groupManagementAPI?style=for-the-badge)
-
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
