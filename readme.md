@@ -1,4 +1,13 @@
-# LBV - Lerngruppen Bildung und Verwaltung API
+<div align="center">
+
+<a href="https://lbv.digital" target="_blank" title="LBV-API"><img width="100px" alt="lbv logo" src="./media/logo.png"></a>
+<a name="readme-top"></a>
+
+# **LBV** - **L**erngruppen **B**ildung & **V**erwaltung API
+
+</div>
+
+
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
@@ -11,7 +20,7 @@
 
 
 
-Die LBV (Lerngruppen Bildung und Verwaltung) API ist eine RESTful-Webanwendung, die entwickelt wurde, um die Verwaltung von Lerngruppen und Benutzern zu erleichtern. Sie ermöglicht die Erstellung, Aktualisierung und Löschung von Benutzern, Gruppen, Terminen und Beziehungen zwischen Benutzern und Gruppen. Diese Dokumentation bietet eine umfassende Übersicht über die verfügbaren Endpunkte, ihre Verwendung und die erwarteten Datenstrukturen.
+Die **LBV** (**L**erngruppen **B**ildung & **V**erwaltung) API ist eine RESTful-Webanwendung, die entwickelt wurde, um die Verwaltung von Lerngruppen und Benutzern zu erleichtern. Sie ermöglicht die Erstellung, Aktualisierung und Löschung von Benutzern, Gruppen, Terminen und Beziehungen zwischen Benutzern und Gruppen. Diese Dokumentation bietet eine umfassende Übersicht über die verfügbaren Endpunkte, ihre Verwendung und die erwarteten Datenstrukturen.
 
 ## Inhaltsverzeichnis
 
@@ -1691,7 +1700,7 @@ Diese Route ermöglicht das Entfernen eines Benutzers aus einer Gruppe anhand se
 Die Authentifizierung in der LBV-API ist ein entscheidender Aspekt, um die Sicherheit und Integrität der Anwendung zu gewährleisten. Es wird ein JWT (JSON Web Token)-basiertes Authentifizierungssystem verwendet, das sicherstellt, dass nur berechtigte Benutzer Zugriff auf bestimmte Endpunkte haben. Nachfolgend finden Sie Details zur Implementierung und Verwendung der Authentifizierungsfunktionen.
 
 Bcrypt wird verwendet, um Passwörter zu verschlüsseln. Die verschlüsselten Passwörter werden in der Datenbank gespeichert. Beim Login wird das eingegebene Passwort mit dem verschlüsselten Passwort in der Datenbank verglichen. Wenn die Passwörter übereinstimmen, wird ein JWT-Token generiert, das für nachfolgende Anfragen verwendet wird.
----
+
 
 ### Login
 
@@ -2027,16 +2036,3 @@ Diese Route ermöglicht das Abrufen der API-Zugriffsprotokolle. Die Protokolle e
   { "message": "Interner Serverfehler" }
   ```
 
-# Doku TODO
-- Profile Picture
-- 
-
-
-
-
-
-# Login Daten
-
-can@admin.admin : can123
-jonas@admin.admin : jonas123
-martin@admin.admin : martin123
