@@ -81,7 +81,6 @@ class Date(db.Model):
     place = db.Column(db.String(100), nullable=False)
     maxUsers = db.Column(db.Integer)
 
-
 # Custom decorator for admin-only routes
 def admin_required(fn):
     @wraps(fn)
