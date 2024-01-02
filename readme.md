@@ -137,7 +137,7 @@ Die API sollte nun auf `http://localhost:5000` gestartet sein.
 Das Dashboard ist unter `http://localhost:5000/` oder `http://localhost:5000/dashboard` erreichbar.
 
 ## Dashboard
-![Dashboard](media/lbv.digital_dashboard.png)
+![Dashboard](media/lbv.digital.dashboard.png)
 
 Das Dashboard ist eine webbasierte Benutzeroberfläche für Administratoren, mit der Sie die LBV-API verwalten können. Es bietet eine Übersicht über die Datenbank und ermöglicht das Erstellen, Aktualisieren und Löschen von Benutzern, Gruppen, Terminen und Benutzern in Gruppen. Das Dashboard ist unter `http://localhost:5000/dashboard` verfügbar.
 
