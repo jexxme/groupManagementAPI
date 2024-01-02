@@ -1,6 +1,6 @@
 <div align="center">
 
-<a href="https://lbv.digital" target="_blank" title="LBV-API"><img width="100px" alt="lbv logo" src="./media/logo.png"></a>
+<a href="https://lbv.digital" target="_blank" title="LBV-API"><img width="100px" alt="lbv logo" src="./static/favicon.svg"></a>
 <a name="readme-top"></a>
 
 # **LBV** - **L**erngruppen **B**ildung & **V**erwaltung API
