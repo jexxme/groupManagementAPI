@@ -5,7 +5,6 @@
 
 # **LBV** - **L**erngruppen **B**ildung & **V**erwaltung API
 
-</div>
 
 
 
@@ -21,6 +20,9 @@
 
 
 Die **LBV** (**L**erngruppen **B**ildung & **V**erwaltung) API ist eine RESTful-Webanwendung, die entwickelt wurde, um die Verwaltung von Lerngruppen und Benutzern zu erleichtern. Sie ermöglicht die Erstellung, Aktualisierung und Löschung von Benutzern, Gruppen, Terminen und Beziehungen zwischen Benutzern und Gruppen. Diese Dokumentation bietet eine umfassende Übersicht über die verfügbaren Endpunkte, ihre Verwendung und die erwarteten Datenstrukturen.
+
+</div>
+
 
 ## Inhaltsverzeichnis
 
