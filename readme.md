@@ -163,7 +163,7 @@ Die LBV-API ermöglicht die Verwaltung von Benutzern, Gruppen, Terminen und Benu
 - **Endpoint:** `/users`
 - **Methode:** `POST`
 
-Erstellt einen neuen Benutzer. Die E-Mail-Adresse des Benutzers muss das Format `@gso.schule.koeln` aufweisen. Außerdem wird überprüft, ob die E-Mail-Adresse bereits existiert. Wenn ja, wird ein Fehler zurückgegeben.
+Erstellt einen neuen Benutzer. Die E-Mail-Adresse des Benutzers muss das Format `@gso.schule.koeln` aufweisen. Außerdem wird überprüft, ob die E-Mail-Adresse bereits existiert. Wenn ja, wird ein Fehler zurückgegeben. Die Route erfordert KEINE [JWT-Authentifizierung](#authentifizierung).
 
 **Anforderungs-JSON-Format:**
 
@@ -302,11 +302,9 @@ Erstellt einen neuen Administrator. Diese Aktion erfordert Administratorrechte. 
 - **Endpoint:** `/users`
 - **Methode:** `GET`
 
-Ruft eine Liste aller Benutzer ab. Jeder Benutzer wird mit seiner Benutzer-ID, E-Mail-Adresse, dem Vornamen, dem Passwort und seinem Admin-Status zurückgegeben.
+Ruft eine Liste aller Benutzer ab. Jeder Benutzer wird mit seiner Benutzer-ID, E-Mail-Adresse, dem Vornamen, dem Passwort (hashed) und seinem Admin-Status zurückgegeben.
 
-**Anforderungen:**
-
-- Wird noch herausgefunden...
+Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
 
 **Erfolgsantwort:**
 
@@ -314,21 +312,28 @@ Ruft eine Liste aller Benutzer ab. Jeder Benutzer wird mit seiner Benutzer-ID, E
 - **Inhalt:** Liste aller Benutzer in JSON-Format
   ```json
   [
-      {
-          "userID": 1,
-          "email": "benutzer1@example.com",
-          "firstName": "Max",
-          "password": "passwort123",
-          "isAdmin": false
-      },
-      {
-          "userID": 2,
-          "email": "benutzer2@example.com",
-          "firstName": "Anna",
-          "password": "passwort321",
-          "isAdmin": true
-      }
-      // Weitere Benutzer...
+    {
+        "email": "admin@admin.admin",
+        "firstName": "Admin",
+        "isAdmin": true,
+        "password": "$2a$12$NOV3dujPdwprOKofh7Jowe6olAqfATFVJQyN1jHRZGSBNyKYmR9G",
+        "userID": 1
+    },
+    {
+        "email": "test1",
+        "firstName": "Test 1",
+        "isAdmin": true,
+        "password": "$2a$12$yjK319u56HDVDU9Chgvu2uKFMD201I9VjMQBvgN98U6SzAO4olDC",
+        "userID": 2
+    },
+    {
+        "email": "test2@test.com",
+        "firstName": "Test 2",
+        "isAdmin": false,
+        "password": "$2b$12$L27ZpIwias0CXmwrgvU1tu6KC6t61D4zxKfU8wwLcPzXiqGadxzy",
+        "userID": 3
+    },
+    //Weitere Benutzer
   ]
   ```
 
@@ -347,7 +352,7 @@ curl -X GET http://127.0.0.1:5000/users
 - **Endpoint:** `/users/<userID>`
 - **Methode:** `GET`
 
-Gibt die Details eines einzelnen Benutzers anhand seiner `userID` zurück.
+Gibt die Details eines einzelnen Benutzers anhand seiner `userID` zurück. Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
 
 ---
 
@@ -356,7 +361,7 @@ Gibt die Details eines einzelnen Benutzers anhand seiner `userID` zurück.
 - **Endpoint:** `/users/<userID>`
 - **Methode:** `PUT`
 
-Aktualisiert die Details eines Benutzers anhand seiner `userID`. Geben Sie die zu aktualisierenden Felder im JSON-Format an.
+Aktualisiert die Details eines Benutzers anhand seiner `userID`. Geben Sie die zu aktualisierenden Felder im JSON-Format an. Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
 
 **JSON-Daten:**
 
@@ -376,7 +381,7 @@ Aktualisiert die Details eines Benutzers anhand seiner `userID`. Geben Sie die z
 - **Endpoint:** `/users/<userID>`
 - **Methode:** `DELETE`
 
-Löscht einen Benutzer anhand seiner `userID`.
+Löscht einen Benutzer anhand seiner `userID`. Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
 
 ## Profilbild (ProfilePicture)
 
@@ -386,7 +391,7 @@ Löscht einen Benutzer anhand seiner `userID`.
 - **Methode:** `POST`
 - **Berechtigung:** Erforderliche JWT-Token (jwt_required)
 
-Diese Route ermöglicht das Hochladen eines Profilbilds für den aktuellen Benutzer. Der Benutzer muss authentifiziert sein und ein gültiges JWT-Token bereitstellen. Die Berechtigungen werden über das Token überprüft.
+Diese Route ermöglicht das Hochladen eines Profilbilds für den aktuellen Benutzer. Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
 
 **Anforderungs-Formulardaten:**
 
@@ -492,7 +497,7 @@ Diese Route ermöglicht das Hochladen eines Profilbilds für den aktuellen Benut
 - **Endpoint:** `/profile_picture/<int:user_id>`
 - **Methode:** `GET`
 
-Diese Route ermöglicht das Herunterladen des Profilbilds eines bestimmten Benutzers anhand seiner Benutzer-ID.
+Diese Route ermöglicht das Herunterladen des Profilbilds eines bestimmten Benutzers anhand seiner Benutzer-ID. Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
 
 **Parameter:**
 
@@ -529,7 +534,7 @@ Diese Route ermöglicht das Herunterladen des Profilbilds eines bestimmten Benut
 - **Endpoint:** `/blacklist`
 - **Methode:** `GET`
 
-Diese Route ermöglicht das Abrufen der aktuellen Blacklist, die von Administratoren verwaltet wird. Die Blacklist enthält gesperrte Benutzer oder Entitäten.
+Diese Route ermöglicht das Abrufen der aktuellen Blacklist, die von Administratoren verwaltet wird. Die Blacklist enthält gesperrte Benutzer oder Entitäten. Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
 
 **Erfolgsantwort:**
 
@@ -571,7 +576,7 @@ Diese Route ermöglicht das Abrufen der aktuellen Blacklist, die von Administrat
 - **Endpoint:** `/blacklist`
 - **Methode:** `PUT`
 
-Diese Route ermöglicht das Aktualisieren der Blacklist, die von Administratoren verwaltet wird. Die Blacklist enthält gesperrte Benutzer oder Entitäten.
+Diese Route ermöglicht das Aktualisieren der Blacklist, die von Administratoren verwaltet wird. Die Blacklist enthält gesperrte Benutzer oder Entitäten. Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
 
 **Anforderungs-JSON-Format:**
 
@@ -654,6 +659,8 @@ Diese Route ermöglicht das Aktualisieren der Blacklist, die von Administratoren
 
 Diese Route ermöglicht das Abrufen der Liste der gesperrten E-Mail-Adressen. Die Liste enthält E-Mail-Adressen, die aufgrund von Verstoß gegen die Nutzungsrichtlinien gesperrt wurden.
 
+Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
+
 **Erfolgsantwort:**
 
 - **Code:** 200 (OK)
@@ -691,7 +698,11 @@ Diese Route ermöglicht das Abrufen der Liste der gesperrten E-Mail-Adressen. Di
 - **Endpoint:** `/banned_emails`
 - **Methode:** `PUT`
 
-Diese Route ermöglicht das Aktualisieren der Liste der gesperrten E-Mail-Adressen. Die Liste enthält E-Mail-Adressen, die aufgrund von Verstoß gegen die Nutzungsrichtlinien gesperrt wurden. Sie können eine neue Liste von gesperrten E-Mails senden, um die bestehende Liste zu ersetzen.
+Diese Route ermöglicht das Aktualisieren der Liste der gesperrten E-Mail-Adressen. Die Liste enthält E-Mail-Adressen, die aufgrund von Verstoß gegen die Nutzungsrichtlinien gesperrt wurden. 
+
+Die Route erfordert eine Admin [JWT-Authentifizierung](#authentifizierung).
+
+Sie können eine neue Liste von gesperrten E-Mails senden, um die bestehende Liste zu ersetzen.
 
 **Anforderungs-JSON-Format:**
 
@@ -769,7 +780,11 @@ Diese Route ermöglicht das Aktualisieren der Liste der gesperrten E-Mail-Adress
 - **Endpoint:** `/groups`
 - **Methode:** `POST`
 
-Diese Route ermöglicht das Erstellen einer neuen Gruppe. Sie müssen als Benutzer authentifiziert sein, um eine Gruppe erstellen zu können. Sie müssen die folgenden Informationen im JSON-Format bereitstellen, um eine Gruppe zu erstellen:
+Diese Route ermöglicht das Erstellen einer neuen Gruppe. Sie müssen als Benutzer authentifiziert sein, um eine Gruppe erstellen zu können. 
+Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
+
+
+Sie müssen die folgenden Informationen im JSON-Format bereitstellen, um eine Gruppe zu erstellen:
 
 **Anforderungs-JSON-Format:**
 
@@ -837,7 +852,10 @@ Diese Route ermöglicht das Erstellen einer neuen Gruppe. Sie müssen als Benutz
 - **Endpoint:** `/groups`
 - **Methode:** `GET`
 
-Diese Route ermöglicht das Abrufen aller existierenden Gruppen. Es werden Informationen zu jeder Gruppe zurückgegeben, darunter:
+Diese Route ermöglicht das Abrufen aller existierenden Gruppen.
+Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
+
+ Es werden Informationen zu jeder Gruppe zurückgegeben, darunter:
 
 - `groupID`: Die eindeutige ID der Gruppe.
 - `ownerID`: Die Benutzer-ID des Gruppeneigentümers.
@@ -897,7 +915,9 @@ Diese Route ermöglicht das Abrufen aller existierenden Gruppen. Es werden Infor
 - **Endpoint:** `/groups/<groupID>`
 - **Methode:** `GET`
 
-Diese Route ermöglicht das Abrufen von Informationen zu einer einzelnen Gruppe anhand ihrer eindeutigen `groupID`. Es werden Informationen zur Gruppe zurückgegeben, darunter:
+Diese Route ermöglicht das Abrufen von Informationen zu einer einzelnen Gruppe anhand ihrer eindeutigen `groupID`. Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
+
+Es werden Informationen zur Gruppe zurückgegeben, darunter:
 
 - `groupID`: Die eindeutige ID der Gruppe.
 - `ownerID`: Die Benutzer-ID des Gruppeneigentümers.
@@ -954,7 +974,10 @@ Diese Route ermöglicht das Abrufen von Informationen zu einer einzelnen Gruppe 
 - **Endpoint:** `/groups/<groupID>`
 - **Methode:** `PUT`
 
-Diese Route ermöglicht das Aktualisieren von Informationen zu einer Gruppe anhand ihrer eindeutigen `groupID`. Die Aktualisierung kann nur vom Eigentümer der Gruppe oder von einem Administrator durchgeführt werden. Es können verschiedene Gruppendetails aktualisiert werden, darunter:
+Diese Route ermöglicht das Aktualisieren von Informationen zu einer Gruppe anhand ihrer eindeutigen `groupID`. Die Aktualisierung kann nur vom Eigentümer der Gruppe oder von einem Administrator durchgeführt werden.
+Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
+
+Es können verschiedene Gruppendetails aktualisiert werden, darunter:
 
 - `ownerID` (optional): Die Benutzer-ID des neuen Gruppeneigentümers.
 - `title` (optional): Der neue Name der Gruppe.
@@ -1033,7 +1056,7 @@ Diese Route ermöglicht das Aktualisieren von Informationen zu einer Gruppe anha
 - **Endpoint:** `/groups/<groupID>`
 - **Methode:** `DELETE`
 
-Diese Route ermöglicht das Löschen einer Gruppe anhand ihrer eindeutigen `groupID`. Das Löschen kann nur vom Eigentümer der Gruppe oder von einem Administrator durchgeführt werden.
+Diese Route ermöglicht das Löschen einer Gruppe anhand ihrer eindeutigen `groupID`. Das Löschen kann nur vom Eigentümer der Gruppe oder von einem Administrator durchgeführt werden. Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
 
 **Erfolgsantwort:**
 
@@ -1086,7 +1109,7 @@ Diese Route ermöglicht das Löschen einer Gruppe anhand ihrer eindeutigen `grou
 - **Endpoint:** `/groups/<groupID>/members`
 - **Methode:** `GET`
 
-Diese Route ermöglicht das Abrufen aller Mitglieder einer Gruppe anhand ihrer eindeutigen `groupID`. Hierbei handelt es sich um eine geschützte Route, die eine JWT-Authentifizierung erfordert.
+Diese Route ermöglicht das Abrufen aller Mitglieder einer Gruppe anhand ihrer eindeutigen `groupID`. Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
 
 **Erfolgsantwort:**
 
@@ -1147,7 +1170,7 @@ Diese Route ermöglicht das Abrufen aller Mitglieder einer Gruppe anhand ihrer e
 - **Endpoint:** `/dates`
 - **Methode:** `POST`
 
-Diese Route ermöglicht das Erstellen eines neuen Termins für eine Gruppe. Die Route erfordert eine JWT-Authentifizierung.
+Diese Route ermöglicht das Erstellen eines neuen Termins für eine Gruppe. Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
 
 **Anforderungs-JSON-Format:**
 
@@ -1228,7 +1251,7 @@ Diese Route ermöglicht das Erstellen eines neuen Termins für eine Gruppe. Die 
 - **Endpoint:** `/dates`
 - **Methode:** `GET`
 
-Diese Route ermöglicht das Abrufen aller Termine aus der Datenbank. Die Route erfordert eine JWT-Authentifizierung.
+Diese Route ermöglicht das Abrufen aller Termine aus der Datenbank. Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
 
 **Erfolgsantwort:**
 
@@ -1275,7 +1298,7 @@ Diese Route ermöglicht das Abrufen aller Termine aus der Datenbank. Die Route e
 - **Endpoint:** `/dates/<dateID>`
 - **Methode:** `GET`
 
-Diese Route ermöglicht das Abrufen eines einzelnen Termins anhand seiner DateID. Die Route erfordert eine JWT-Authentifizierung.
+Diese Route ermöglicht das Abrufen eines einzelnen Termins anhand seiner DateID. Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
 
 **Parameter:**
 
@@ -1332,7 +1355,7 @@ Diese Route ermöglicht das Abrufen eines einzelnen Termins anhand seiner DateID
 - **Endpoint:** `/dates/<dateID>`
 - **Methode:** `PUT`
 
-Diese Route ermöglicht das Aktualisieren eines Termins anhand seiner DateID. Die Route erfordert eine JWT-Authentifizierung.
+Diese Route ermöglicht das Aktualisieren eines Termins anhand seiner DateID. Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
 
 **Parameter:**
 
@@ -1407,7 +1430,7 @@ Sie können jedes oder alle der folgenden Felder im JSON-Format senden, um die I
 - **Endpoint:** `/dates/<dateID>`
 - **Methode:** `DELETE`
 
-Diese Route ermöglicht das Löschen eines Termins anhand seiner DateID. Die Route erfordert eine JWT-Authentifizierung.
+Diese Route ermöglicht das Löschen eines Termins anhand seiner DateID. Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
 
 **Parameter:**
 
@@ -1468,7 +1491,7 @@ Diese Route ermöglicht das Löschen eines Termins anhand seiner DateID. Die Rou
 - **Endpoint:** `/users_in_groups`
 - **Methode:** `POST`
 
-Diese Route ermöglicht das Hinzufügen eines Benutzers zu einer Gruppe. Die Route erfordert eine JWT-Authentifizierung.
+Diese Route ermöglicht das Hinzufügen eines Benutzers zu einer Gruppe. Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
 
 **Anforderungs-JSON-Format:**
 
@@ -1554,7 +1577,7 @@ Diese Route ermöglicht das Hinzufügen eines Benutzers zu einer Gruppe. Die Rou
 - **Endpoint:** `/users_in_groups`
 - **Methode:** `GET`
 
-Diese Route ermöglicht das Abrufen aller Benutzer in allen Gruppen. Die Route erfordert eine JWT-Authentifizierung.
+Diese Route ermöglicht das Abrufen aller Benutzer in allen Gruppen. Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
 
 **Erfolgsantwort:**
 
@@ -1599,7 +1622,7 @@ Diese Route ermöglicht das Abrufen aller Benutzer in allen Gruppen. Die Route e
 - **Endpoint:** `/users_in_groups/<userID>/<groupID>`
 - **Methode:** `GET`
 
-Diese Route ermöglicht das Abrufen eines einzelnen Benutzers in einer Gruppe anhand seiner Benutzer-ID und Gruppen-ID. Die Route erfordert eine JWT-Authentifizierung.
+Diese Route ermöglicht das Abrufen eines einzelnen Benutzers in einer Gruppe anhand seiner Benutzer-ID und Gruppen-ID. Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
 
 **Erfolgsantwort:**
 
@@ -1633,7 +1656,7 @@ Diese Route ermöglicht das Abrufen eines einzelnen Benutzers in einer Gruppe an
 - **Endpoint:** `/users_in_groups/<userID>`
 - **Methode:** `GET`
 
-Diese Route ermöglicht das Abrufen aller Gruppen, in denen ein Benutzer anhand seiner Benutzer-ID Mitglied ist. Die Route erfordert eine JWT-Authentifizierung.
+Diese Route ermöglicht das Abrufen aller Gruppen, in denen ein Benutzer anhand seiner Benutzer-ID Mitglied ist. Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
 
 **Erfolgsantwort:**
 
@@ -1674,7 +1697,7 @@ Diese Route ermöglicht das Abrufen aller Gruppen, in denen ein Benutzer anhand 
 - **Endpoint:** `/users_in_groups/<userID>/<groupID>`
 - **Methode:** `DELETE`
 
-Diese Route ermöglicht das Entfernen eines Benutzers aus einer Gruppe anhand seiner Benutzer-ID und der Gruppen-ID. Die Route erfordert eine JWT-Authentifizierung.
+Diese Route ermöglicht das Entfernen eines Benutzers aus einer Gruppe anhand seiner Benutzer-ID und der Gruppen-ID. Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
 
 **Erfolgsantwort:**
 
@@ -1699,7 +1722,9 @@ Diese Route ermöglicht das Entfernen eines Benutzers aus einer Gruppe anhand se
 
 ## Authentifizierung
 
-Die Authentifizierung in der LBV-API ist ein entscheidender Aspekt, um die Sicherheit und Integrität der Anwendung zu gewährleisten. Es wird ein JWT (JSON Web Token)-basiertes Authentifizierungssystem verwendet, das sicherstellt, dass nur berechtigte Benutzer Zugriff auf bestimmte Endpunkte haben. Nachfolgend finden Sie Details zur Implementierung und Verwendung der Authentifizierungsfunktionen.
+Die Authentifizierung in der LBV-API ist ein entscheidender Aspekt, um die Sicherheit und Integrität der Anwendung zu gewährleisten. Es wird ein [JWT](https://www.ionos.de/digitalguide/websites/web-entwicklung/json-web-token-jwt-vorgestellt/) (JSON Web Token)-basiertes Authentifizierungssystem verwendet, das sicherstellt, dass nur berechtigte Benutzer Zugriff auf bestimmte Endpunkte haben. Nachfolgend finden Sie Details zur Implementierung und Verwendung der Authentifizierungsfunktionen.
+
+Durch einen erfolgreichen POST-Request an die Login Route wird ein JWT-Token generiert, das für nachfolgende Anfragen verwendet wird. Das Token enthält die Benutzer-ID, E-Mail und die Rolle des Benutzers (Admin oder regulärer Benutzer). Das Token muss bei jeder Anfrage, die eine Authentifizierung erfordert, im `Authorization`-Header mit dem Präfix `Bearer` mitgeschickt werden. 
 
 Bcrypt wird verwendet, um Passwörter zu verschlüsseln. Die verschlüsselten Passwörter werden in der Datenbank gespeichert. Beim Login wird das eingegebene Passwort mit dem verschlüsselten Passwort in der Datenbank verglichen. Wenn die Passwörter übereinstimmen, wird ein JWT-Token generiert, das für nachfolgende Anfragen verwendet wird.
 
@@ -1720,7 +1745,15 @@ Beim Login wird ein JWT-Token generiert, das für nachfolgende Anfragen verwende
 }
 ```
 
----
+**JSON-Daten für erfolgreiche Antwort:**
+
+```json
+{
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwNzIxMTE4MywianRpIjoiNTE5YTA2MzgtYTJhMi00NzYzLTgwNDEtYWIzZjg0ZTk3NWVlIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6hgwibmJmIjoxNzA3MjExMTgzLCJjc3JmIjoiNTQzOWU3ZTctMWE5NC00ZDFjLWFkYzAtMmRkYTEyNGE5MjAyIiwiZXhwIjoxNzA5ODAzMTgzLCJpc19hZG1pbiI6dHJ1ZSwidXNlcl9pZCI6MSwiZW1haWwiOiJhZG1pbkBhZG1pbi5hZG1pbiJ9.8SeH9uNiy8jsRRoK2QFXm31O90t1rD86wI-B1rK_Kis"
+}
+```
+
+
 
 ### Benutzeridentität abrufen
 
