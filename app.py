@@ -479,6 +479,17 @@ def get_users():
         output.append(user_data)
     return jsonify(output)
 
+
+@app.route('/users/email/<email>', methods=['GET'])
+@log_access
+def get_user_by_email(email):
+    try:
+        user = User.query.filter_by(email=email).one()
+        return jsonify({'userID': user.userID, 'email': user.email, 
+                        'firstName': user.firstName, 'isAdmin': user.isAdmin})
+    except NoResultFound:
+        abort(404, description="User not found")
+
 # Read a single user by userID
 @app.route('/users/<id>', methods=['GET'])
 @log_access
