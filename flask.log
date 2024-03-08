@@ -1,0 +1,271 @@
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with watchdog (windowsapi)
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 143-778-911
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T08:15:07.115005", "route": "/", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 08:15:07] "GET / HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T08:15:07.468534", "route": "/", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 08:15:07] "GET / HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T08:15:07.494453", "route": "/login", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 08:15:07] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 08:15:07] "[32mGET /static//login.css HTTP/1.1[0m" 308 -
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 08:15:07] "GET /static/login.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 08:15:07] "GET /static/favicon.svg HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 08:15:07] "GET /static/favicon.ico HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T08:15:17.273223", "route": "/login", "method": "POST", "data": {"email": "admin@admin.admin", "password": "admin"}}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 08:15:17] "[31m[1mPOST /login HTTP/1.1[0m" 401 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T08:21:01.272085", "route": "/login", "method": "POST", "data": {"email": "admin@admin.admin", "password": "admin"}}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 08:21:01] "[31m[1mPOST /login HTTP/1.1[0m" 401 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T08:22:36.011370", "route": "/login", "method": "POST", "data": {"email": "admin@admin.admin", "password": "admin"}}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 08:22:36] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T08:22:39.150162", "route": "/login", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 08:22:39] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 08:22:39] "[32mGET /static//login.css HTTP/1.1[0m" 308 -
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 08:22:39] "[36mGET /static/login.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 08:22:39] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T08:22:47.839261", "route": "/login", "method": "POST", "data": {"email": "admin@admin.admin", "password": "admin"}}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 08:22:47] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with watchdog (windowsapi)
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 143-778-911
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T08:24:11.215962", "route": "/login", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 08:24:11] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 08:24:11] "[36mGET /static/login.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 08:24:11] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T08:24:14.362392", "route": "/login", "method": "POST", "data": {"email": "admin@admin.admin", "password": "admin"}}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 08:24:14] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T08:24:24.823926", "route": "/login", "method": "POST", "data": {"email": "admin@admin.admin", "password": "admin"}}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 08:24:24] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with watchdog (windowsapi)
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 143-778-911
+INFO:werkzeug: * Detected change in 'c:\\coding\\osp\\groupManagementAPI\\tests\\auth\\add_admin_to_db.py', reloading
+INFO:werkzeug: * Restarting with watchdog (windowsapi)
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 143-778-911
+INFO:werkzeug: * Detected change in 'c:\\coding\\osp\\groupManagementAPI\\tests\\auth\\test_admin_login.py', reloading
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T11:27:43.476194", "route": "/login", "method": "POST", "data": {"email": "admin@admin.admin", "password": "admin"}}
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\flask\\app.py', reloading
+INFO:werkzeug: * Detected change in 'c:\\coding\\osp\\groupManagementAPI\\app.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\flask_bcrypt.py', reloading
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:27:43] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\requests\\models.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Python311\\Lib\\json\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Python311\\Lib\\json\\decoder.py', reloading
+INFO:werkzeug: * Restarting with watchdog (windowsapi)
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 143-778-911
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with watchdog (windowsapi)
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 143-778-911
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T11:28:40.798914", "route": "/", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:28:41] "GET / HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T11:28:41.412995", "route": "/", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:28:41] "GET / HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T11:28:41.463941", "route": "/login", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:28:41] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:28:41] "[36mGET /static/login.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:28:41] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T11:28:50.360461", "route": "/login", "method": "POST", "data": {"email": "admin@admin.admin", "password": "admin"}}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:28:50] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T11:29:13.570749", "route": "/login", "method": "POST", "data": {"email": "admin@admin.admin", "password": "admin"}}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:29:13] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T11:29:19.482060", "route": "/login", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:29:19] "GET /login HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T11:29:22.559557", "route": "/login", "method": "POST", "data": {"email": "admin@admin.admin", "password": "admin"}}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:29:22] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T11:29:36.408293", "route": "/login", "method": "POST", "data": {"email": "admin@admin.admin", "password": "admin"}}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:29:36] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\flask\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\flask\\sansio\\app.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\flask\\sansio\\scaffold.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\dotenv\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\dotenv\\main.py', reloading
+INFO:werkzeug: * Restarting with watchdog (windowsapi)
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 143-778-911
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\sqlalchemy\\engine\\interfaces.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\sqlalchemy\\engine\\reflection.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\sqlalchemy\\pool\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\sqlalchemy\\pool\\base.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Python311\\Lib\\datetime.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\sqlalchemy\\sql\\_typing.py', reloading
+INFO:werkzeug: * Detected change in 'c:\\coding\\osp\\groupManagementAPI\\tests\\dates\\test_add_date.py', reloading
+INFO:werkzeug: * Detected change in 'c:\\coding\\osp\\groupManagementAPI\\tests\\dates\\test_delete_date.py', reloading
+INFO:werkzeug: * Detected change in 'c:\\coding\\osp\\groupManagementAPI\\tests\\dates\\test_get_dates.py', reloading
+INFO:werkzeug: * Detected change in 'c:\\coding\\osp\\groupManagementAPI\\tests\\dates\\test_get_single_date.py', reloading
+INFO:werkzeug: * Detected change in 'c:\\coding\\osp\\groupManagementAPI\\tests\\dates\\test_update_a_date.py', reloading
+INFO:werkzeug: * Detected change in 'c:\\coding\\osp\\groupManagementAPI\\tests\\groups\\test_create_group.py', reloading
+INFO:werkzeug: * Detected change in 'c:\\coding\\osp\\groupManagementAPI\\tests\\groups\\test_delete_group.py', reloading
+INFO:werkzeug: * Detected change in 'c:\\coding\\osp\\groupManagementAPI\\tests\\groups\\test_get_all_memers_of_group.py', reloading
+INFO:werkzeug: * Detected change in 'c:\\coding\\osp\\groupManagementAPI\\tests\\groups\\test_get_group.py', reloading
+INFO:werkzeug: * Detected change in 'c:\\coding\\osp\\groupManagementAPI\\tests\\groups\\test_get_groups.py', reloading
+INFO:werkzeug: * Detected change in 'c:\\coding\\osp\\groupManagementAPI\\tests\\groups\\test_update_group.py', reloading
+INFO:werkzeug: * Detected change in 'c:\\coding\\osp\\groupManagementAPI\\tests\\profilePictures\\test_upload_download.py', reloading
+INFO:werkzeug: * Restarting with watchdog (windowsapi)
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 143-778-911
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\pyfiglet\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\PySimpleGUI\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\simple_websocket\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\smmap\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\tlz\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\toolz\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\tzdata\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\pythonwin\\pywin\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Python311\\Lib\\site-packages\\aniso8601\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Python311\\Lib\\site-packages\\flasgger\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Python311\\Lib\\site-packages\\flask_swagger_ui\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Python311\\Lib\\site-packages\\gamepy\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Python311\\Lib\\site-packages\\mako\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Python311\\Lib\\site-packages\\mouseinfo\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Python311\\Lib\\site-packages\\pygetwindow\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Python311\\Lib\\site-packages\\pymsgbox\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Python311\\Lib\\site-packages\\pyrect\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Python311\\Lib\\site-packages\\pytweening\\__init__.py', reloading
+INFO:werkzeug: * Restarting with watchdog (windowsapi)
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 143-778-911
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with watchdog (windowsapi)
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 143-778-911
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T11:30:48.812673", "route": "/login", "method": "POST", "data": {"email": "admin@admin.admin", "password": "admin"}}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:30:48] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+INFO:werkzeug: * Detected change in 'C:\\Python311\\Lib\\re\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Python311\\Lib\\functools.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\flask\\json\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\flask\\wrappers.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\werkzeug\\wrappers\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\werkzeug\\wrappers\\response.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\werkzeug\\sansio\\response.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\flask\\templating.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\jinja2\\__init__.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\jinja2\\environment.py', reloading
+INFO:werkzeug: * Restarting with watchdog (windowsapi)
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 143-778-911
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\flask\\testing.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\werkzeug\\test.py', reloading
+INFO:werkzeug: * Restarting with watchdog (windowsapi)
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 143-778-911
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\_pytest\\cacheprovider.py', reloading
+INFO:werkzeug: * Detected change in 'C:\\Users\\JSOMMERFELDT\\AppData\\Roaming\\Python\\Python311\\site-packages\\_pytest\\fixtures.py', reloading
+INFO:werkzeug: * Restarting with watchdog (windowsapi)
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 143-778-911
+INFO:werkzeug: * Detected change in 'C:\\Python311\\Lib\\email\\__init__.py', reloading
+INFO:werkzeug: * Restarting with watchdog (windowsapi)
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 143-778-911
+INFO:werkzeug: * Detected change in 'C:\\Python311\\Lib\\typing.py', reloading
+INFO:werkzeug: * Restarting with watchdog (windowsapi)
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 143-778-911
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with watchdog (windowsapi)
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 143-778-911
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T11:37:08.359182", "route": "/login", "method": "POST", "data": {"email": "admin@admin.admin", "password": "admin"}}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:08] "POST /login HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T11:37:09.082735", "route": "/dashboard", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:09] "GET /dashboard HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:37:09.243477", "route": "/whoami", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:09] "GET /whoami HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T11:37:09.248720", "route": "/dashboard", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:09] "GET /dashboard HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:37:09.508593", "route": "/profile_picture/1", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:09] "[33mGET /profile_picture/1 HTTP/1.1[0m" 404 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:37:23.986669", "route": "/upload_profile_picture", "method": "POST", "data": "Non-JSON POST request"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:24] "POST /upload_profile_picture HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:37:24.052971", "route": "/profile_picture/1", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:24] "GET /profile_picture/1 HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:37:28.626462", "route": "/users", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:28] "GET /users HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:37:29.322158", "route": "/users", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:29] "GET /users HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:37:29.781049", "route": "/users", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:29] "GET /users HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:37:30.955539", "route": "/users", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:30] "GET /users HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:37:32.605889", "route": "/api_logs", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:32] "GET /api_logs HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:37:36.208018", "route": "/access_logs", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:36] "[33mGET /access_logs HTTP/1.1[0m" 404 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:37:37.840523", "route": "/error_logs", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:37] "[33mGET /error_logs HTTP/1.1[0m" 404 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:37:38.408966", "route": "/access_logs", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:38] "[33mGET /access_logs HTTP/1.1[0m" 404 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:37:40.827684", "route": "/access_logs", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:40] "[33mGET /access_logs HTTP/1.1[0m" 404 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:37:43.057444", "route": "/banned_emails", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:43] "GET /banned_emails HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:37:44.670438", "route": "/blacklist", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:44] "GET /blacklist HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:37:52.902479", "route": "/users", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:52] "GET /users HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:37:53.472209", "route": "/users", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:53] "GET /users HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:37:54.242889", "route": "/groups", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:54] "GET /groups HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:37:55.026260", "route": "/groups", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:55] "GET /groups HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:37:55.810570", "route": "/groups", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:55] "GET /groups HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:37:57.451837", "route": "/groups", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:57] "GET /groups HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:37:57.767506", "route": "/groups", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:37:57] "GET /groups HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:38:13.708376", "route": "/groups", "method": "POST", "data": {"ownerID": "1", "title": "Eine Gruppe!", "description": "Eine erste Gruppe!", "maxUsers": "5"}}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:38:13] "[35m[1mPOST /groups HTTP/1.1[0m" 201 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:38:16.217005", "route": "/groups", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:38:16] "GET /groups HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'c:\\coding\\osp\\groupManagementAPI\\tests\\auth\\test_user_login.py', reloading
+INFO:werkzeug: * Restarting with watchdog (windowsapi)
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 143-778-911
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:39:22.478165", "route": "/whoami", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:39:22] "GET /whoami HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T11:42:35.965940", "route": "/", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:42:36] "GET / HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T11:42:36.244428", "route": "/login", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:42:36] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:42:36] "[32mGET /static//login.css HTTP/1.1[0m" 308 -
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:42:36] "GET /static/login.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:42:36] "GET /static/favicon.svg HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T11:42:44.390432", "route": "/login", "method": "POST", "data": {"email": "admin@admin.admin", "password": "admin"}}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:42:45] "POST /login HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T11:42:45.112584", "route": "/dashboard", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:42:45] "GET /dashboard HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:42:45.188246", "route": "/whoami", "method": "GET", "data": "N/A"}
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T11:42:45.190722", "route": "/dashboard", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:42:45] "GET /whoami HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:42:45] "GET /dashboard HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:42:45.222793", "route": "/profile_picture/1", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:42:45] "[36mGET /profile_picture/1 HTTP/1.1[0m" 304 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:44:45.238705", "route": "/whoami", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:44:45] "GET /whoami HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": 1, "time": "2024-02-23T11:46:00.047369", "route": "/banned_emails", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:46:00] "GET /banned_emails HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T11:46:22.815569", "route": "/", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:46:22] "GET / HTTP/1.1" 200 -
+INFO:api_access_logger:{"user_id": "Anonymous", "time": "2024-02-23T11:46:23.000564", "route": "/login", "method": "GET", "data": "N/A"}
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:46:23] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:46:23] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Feb/2024 11:46:23] "[36mGET /static/login.css HTTP/1.1[0m" 304 -
