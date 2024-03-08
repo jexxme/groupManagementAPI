@@ -7,3 +7,4 @@ requests
 SQLAlchemy
 Werkzeug
 python-dateutil
+flask_cors
