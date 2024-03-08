@@ -35,6 +35,7 @@ Die **LBV** (**L**erngruppen **B**ildung & **V**erwaltung) API ist eine RESTful-
    - [Erstellen eines Administrators](#erstellen-eines-administrators)
    - [Abrufen aller Benutzer](#abrufen-aller-benutzer)
    - [Abrufen eines einzelnen Benutzers](#abrufen-eines-einzelnen-benutzers)
+   - [Abrufen eines einzelnen Benutzers anhand der E-Mail-Adresse](#abrufen-eines-einzelnen-benutzers-anhand-der-e-mail-adresse)
    - [Aktualisieren eines Benutzers](#aktualisieren-eines-benutzers)
    - [Löschen eines Benutzers](#löschen-eines-benutzers)
 6. [Profilbild (ProfilePicture)](#profilbild-profilepicture)
@@ -352,8 +353,21 @@ curl -X GET http://127.0.0.1:5000/users
 - **Endpoint:** `/users/<userID>`
 - **Methode:** `GET`
 
-Gibt die Details eines einzelnen Benutzers anhand seiner `userID` zurück. Die Route erfordert eine [JWT-Authentifizierung](#authentifizierung).
+Gibt die Details eines einzelnen Benutzers anhand seiner `userID` zurück. 
 
+**Erfolgsantwort:**
+
+- **Code:** 200 (OK)
+
+- **Inhalt:** 
+  ```json
+  {
+      "email": "test1",
+      "firstName": "Test 1",
+      "isAdmin": true,
+      "userID": 2
+  }
+  ```
 ---
 
 ### Aktualisieren eines Benutzers
@@ -373,6 +387,37 @@ Aktualisiert die Details eines Benutzers anhand seiner `userID`. Geben Sie die z
     "isAdmin": true
 }
 ```
+
+### Abrufer eines einzelnen Benutzers anhand der E-Mail-Adresse
+
+- **Endpoint:** `/users/email/<email>`
+- **Methode:** `GET`
+
+
+Gibt die Details eines einzelnen Benutzers anhand seiner `email` zurück. 
+
+**Erfolgsantwort:**
+
+- **Code:** 200 (OK)
+
+- **Inhalt:** 
+  ```json
+  {
+      "email": "
+      "firstName": "Vorname",
+      "isAdmin": true,
+      "userID": 1
+  }
+  ```
+**Fehlerantwort:**
+
+- **Code:** 404 (Not Found)
+
+- **Inhalt:** 
+  ```json
+  { "message": "Benutzer nicht gefunden" }
+  ```
+
 
 ---
 
