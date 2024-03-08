@@ -27,10 +27,12 @@ from flask_jwt_extended import create_access_token, JWTManager
 from flask import request
 import requests
 from io import BytesIO
+from flask_cors import CORS
 
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
 
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 app.config['UPLOAD_FOLDER'] = './userdata/pictures/profilepicture'
@@ -40,6 +42,7 @@ app.config['MAX_CONTENT_LENGTH'] = 3 * 1024 * 1024  # 3 M
 
 jwt = JWTManager(app)
 db = SQLAlchemy(app)
+
 
 # Initialize Bcrypt
 bcrypt = Bcrypt(app)
