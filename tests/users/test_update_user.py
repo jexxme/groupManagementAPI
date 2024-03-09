@@ -15,7 +15,7 @@ def update_user(user_id, token, updated_data):
     return response
 
 # Test data
-admin_email = "admin"  # Replace with actual admin email
+admin_email = "admin@admin.admin"  # Replace with actual admin email
 admin_password = "admin"   # Replace with actual admin password
 user_email = "newstuff@example.com"    # Replace with actual user email
 user_password = "newpassword"     # Replace with actual user password
