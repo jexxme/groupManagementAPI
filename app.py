@@ -279,7 +279,7 @@ def upload_profile_picture():
 
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        user_specific_path = os.path.join(app.config['UPLOAD_FOLDER'], str(current_user_id))
+        user_specific_path = os.path.join(app.config['UPLOAD_FOLDER'], str(user_id_from_request))
         
         # Create a directory for the user if it doesn't exist
         if not os.path.exists(user_specific_path):
@@ -292,7 +292,7 @@ def upload_profile_picture():
         normalized_file_path = os.path.normpath(file_path)
 
         # Update user profile to include the picture path
-        update_user_profile_picture_path(current_user_id, normalized_file_path)
+        update_user_profile_picture_path(user_id_from_request, normalized_file_path)
 
         return jsonify({'message': 'Profilbild erfolgreich hochgeladen'}), 200
     else:
