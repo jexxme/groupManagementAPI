@@ -680,6 +680,17 @@ def get_members(groupID):
         output.append(member_data)
     return jsonify(output)
 
+@app.route('/members_of_group/<groupID>', methods=['GET'])
+@log_access
+def get_members_of_group(groupID):
+    members = UsersInGroups.query.filter_by(groupID=groupID).all()
+    output = []
+    for member in members:
+        member_data = {'userID': member.userID, 'groupID': member.groupID, 
+                       'startingDate': member.startingDate}
+        output.append(member_data)
+    return jsonify(output)
+
 # CRUD Routes for UsersInGroups
 # Create a new user in group
 @app.route('/users_in_groups', methods=['POST'])
