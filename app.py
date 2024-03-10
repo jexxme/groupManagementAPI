@@ -541,9 +541,15 @@ def update_user(id):
 
 # Delete a user
 @app.route('/users/<id>', methods=['DELETE'])
-@admin_required
+@jwt_required()
 @log_access
 def delete_user(id):
+    
+    # Make sure the user can only delete their own account
+    current_user_id = get_jwt_identity()
+    if str(current_user_id) != id:
+        return jsonify({'message': 'Sie sind nicht authorisiert, um diesen Benutzer zu löschen!'}), 403
+    
     user = User.query.get_or_404(id)
     db.session.delete(user)
     db.session.commit()
