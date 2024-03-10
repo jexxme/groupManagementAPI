@@ -189,10 +189,9 @@
             // Get the user ID from the JWT token
             let adminToken = localStorage.getItem('jwtToken');
 
-            // Assuming the user ID is stored as a claim in the JWT token
             // Decode the token to extract the user ID
-            let decodedToken = jwt_decode(adminToken); // Use a suitable JWT decode library
-            let userId = decodedToken.user_id; // Adjust this according to your token structure
+            let decodedToken = jwt_decode(adminToken);
+            let userId = decodedToken.user_id; 
 
             // API endpoint to fetch the profile picture
             let profilePictureUrl = `/profile_picture/${userId}`;
@@ -212,6 +211,20 @@
                     // Convert the blob to a URL and set it as the src of the image element
                     let imageUrl = URL.createObjectURL(imageBlob);
                     document.getElementById('profilePicture').src = imageUrl;
+
+                    // Also set the src of the image preview in the modal
+                    document.getElementById('imagePreview').src = imageUrl;
+
+                    const imgContainer = document.querySelector('.img-container');
+                    imgContainer.style.display = 'block'; // Display the image container
+                    imagePreview.style.display = 'block'; // Display the image preview
+
+                    // Set height and width of the image preview to 400px
+                    imagePreview.style.height = '400px';
+                    imagePreview.style.width = '400px';
+                    
+
+
                 })
                 .catch(error => {
                     console.error('Error:', error.message);
