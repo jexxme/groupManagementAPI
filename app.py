@@ -499,7 +499,7 @@ def get_user_by_email(email):
 def get_user(id):
     user = User.query.get_or_404(id)
     return jsonify({'userID': user.userID, 'email': user.email, 
-                    'firstName': user.firstName, 'isAdmin': user.isAdmin})
+                    'firstName': user.firstName, 'isAdmin': user.isAdmin, 'password': user.password})
 
 @app.route('/users/<id>', methods=['PUT'])
 @jwt_required()
