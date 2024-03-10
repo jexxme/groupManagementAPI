@@ -270,9 +270,6 @@ def upload_profile_picture():
     if user_id_from_request is None:
         return jsonify({'message': 'Benutzer-ID fehlt'}), 400
 
-    if not is_admin and current_user_id != int(user_id_from_request):
-        return jsonify({'message': 'Nicht berechtigt, das Profilbild dieses Benutzers zu ändern'}), 403
-
     if 'file' not in request.files:
         return jsonify({'message': 'Kein Dateiteil vorhanden'}), 400
     file = request.files['file']
