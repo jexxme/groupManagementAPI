@@ -1184,6 +1184,7 @@
                                     showSuccessToast(data.message);
                                 })
                                 .catch((error) => {
+                                    showErrorToast('Ein Fehler ist aufgetreten.');
                                     console.error('Error:', error);
                                 });
                         });

@@ -501,7 +501,6 @@ def get_user(id):
     return jsonify({'userID': user.userID, 'email': user.email, 
                     'firstName': user.firstName, 'isAdmin': user.isAdmin})
 
-# Update a user
 @app.route('/users/<id>', methods=['PUT'])
 @jwt_required()
 @log_access
@@ -512,22 +511,25 @@ def update_user(id):
 
     # Check if the user is updating their own account or if they are an admin
     if str(current_user_id) != id and not is_admin:
-        return jsonify({'message': 'Sie sind nicht authorisiert um diesen Benutzer zu bearbeiten!'}), 403
+        return jsonify({'message': 'Sie sind nicht autorisiert, um diesen Benutzer zu bearbeiten!'}), 403
 
     user = User.query.get_or_404(id)
     data = request.get_json()
 
-    # Allow users to update their own email and first name. Admins can update everything.
+    # Allow users to update their own email, first name, and password
     if str(current_user_id) == id:
         user.email = data.get('email', user.email)
         user.firstName = data.get('firstName', user.firstName)
+        
+        # Allow users to change their own password
+        if 'password' in data and data['password']:
+            user.password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
 
-    # Only admins can change the 'isAdmin' field and passwords
+    # Admins can update everything, including other users' emails, first names, passwords, and isAdmin status
     if is_admin:
         user.email = data.get('email', user.email)
         user.firstName = data.get('firstName', user.firstName)
         
-        # Hash the new password if provided
         if 'password' in data and data['password']:
             user.password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
 
@@ -535,6 +537,7 @@ def update_user(id):
 
     db.session.commit()
     return jsonify({'message': 'Benutzer aktualisiert'})
+
 
 # Delete a user
 @app.route('/users/<id>', methods=['DELETE'])
