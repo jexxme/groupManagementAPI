@@ -871,5 +871,18 @@ def delete_date(dateID):
     return jsonify({'message': 'Termin gelöscht'})
 
 
+@app.route('/groups/<groupID>/dates', methods=['GET'])
+@log_access
+@jwt_required()
+def get_dates_for_group(groupID):
+    dates = Date.query.filter_by(groupID=groupID).all()
+    output = []
+    for date in dates:
+        date_data = {'id': date.id, 'groupID': date.groupID,
+                     'date': date.date, 'place': date.place,
+                     'maxUsers': date.maxUsers}
+        output.append(date_data)
+    return jsonify(output)
+
 if __name__ == '__main__':
     app.run(debug=True)
