@@ -800,7 +800,8 @@ def create_date():
                     place=data['place'], maxUsers=data['maxUsers'])
     db.session.add(new_date)
     db.session.commit()
-    return jsonify({'message': 'Neuer Termin erstellt'}), 201
+    # return jsonify({'message': 'Neuer Termin erstellt'}), 201
+    return jsonify({'message': 'Neuer Termin erstellt', 'dateID': new_date.id}), 201
 
 
 # Read all dates
