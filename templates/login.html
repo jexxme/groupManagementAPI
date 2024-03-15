@@ -84,12 +84,25 @@
           }
       })
       .then(data => {
-          // Speichern des JWT-Tokens im lokalen Speicher oder in einer Variablen
-          localStorage.setItem('jwtToken', data.access_token); // oder eine andere Speichermethode
+    // Speichern des JWT-Tokens im lokalen Speicher oder in einer Variablen
+    localStorage.setItem('jwtToken', data.access_token); // oder eine andere Speichermethode
 
-          // Weiterleitung zum Dashboard oder zur nächsten Seite
-          window.location.href = '/dashboard'; // URL anpassen
-      })
+    // Decoding the JWT Token to access the payload
+    const base64Url = data.access_token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const payload = JSON.parse(window.atob(base64));
+
+    // Checking if the user is an admin
+    if (payload.is_admin) {
+        // Weiterleitung zum Dashboard oder zur nächsten Seite
+        window.location.href = '/dashboard'; // URL anpassen
+    } else {
+        // If the user is not an admin, alert them and do not redirect
+        alert('Nur Administratoren haben Zugriff auf das Dashboard.');
+        // Optional: Clear the JWT token from local storage if not an admin
+        localStorage.removeItem('jwtToken');
+    }
+})
       .catch(error => {
           console.error('Error:', error);
           alert('Login fehlgeschlagen: ' + error.message);
