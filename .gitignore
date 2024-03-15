@@ -1,4 +1,4 @@
 data.db
-
 ./instance/
 instance/
+.env
