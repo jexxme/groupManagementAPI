@@ -1,4 +1,6 @@
-data.db
-./instance/
-instance/
-.env
+# data.db
+# ./instance/
+# instance/
+# .env
+
+# ONLY FOR DEMO PURPOSES
